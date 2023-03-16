@@ -1,10 +1,14 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur;
 
+import java.util.HashSet;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.IValidator;
+import de.hsrm.mi.ssche003.monsterbuilder.Zauber;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
@@ -28,11 +32,39 @@ public class Akteur {
     private byte ruestungsklasse;
     @PositiveOrZero //TODO: modulo 5
     private byte geschwindigkeit_ft; //Geschwindigkeit in 5-Fuß Abstufungen
+    
+    @ManyToMany
+    protected HashSet<Zauber> zauber = new HashSet<>();
 
     @OneToOne @Valid
     private AbilityScore abilityScore;
 
-    public boolean validiere(IValidator validator) {
-        return validator.validiere(this);
+    public HashSet<Zauber> getZauber() {
+        return zauber;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLebenspunkte(byte lebenspunkte) {
+        this.lebenspunkte = lebenspunkte;
+    }
+
+    public void setRuestungsklasse(byte ruestungsklasse) {
+        this.ruestungsklasse = ruestungsklasse;
+    }
+
+    public void setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
+        this.geschwindigkeit_ft = geschwindigkeit_ft;
+    }
+
+    public void setZauber(HashSet<Zauber> zauber) {
+        this.zauber = zauber;
+    }
+
+    public void setAbilityScore(AbilityScore abilityScore) {
+        this.abilityScore = abilityScore;
+    }
+
 }

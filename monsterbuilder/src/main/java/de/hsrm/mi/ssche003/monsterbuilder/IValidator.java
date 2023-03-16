@@ -1,7 +1,7 @@
 package de.hsrm.mi.ssche003.monsterbuilder;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 
 public interface IValidator {
-   boolean validiere(Akteur akteur);
+   boolean validiere(Monster monster);
 }
