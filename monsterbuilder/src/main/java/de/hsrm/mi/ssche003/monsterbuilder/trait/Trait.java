@@ -2,7 +2,7 @@ package de.hsrm.mi.ssche003.monsterbuilder.trait;
 
 import java.util.HashSet;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -23,5 +23,5 @@ public class Trait {
     private String beschreibung;
     
     @ManyToMany(mappedBy = "alleTraits")
-    private HashSet<@Valid Monster> alleMonster;
+    private HashSet<de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster> alleMonster;
 }
