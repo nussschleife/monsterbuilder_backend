@@ -2,15 +2,10 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur;
 
 import java.util.HashSet;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.validation.IValidator;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
@@ -23,14 +18,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 @MappedSuperclass	
 public class Akteur {
-    @Id @GeneratedValue @JsonIgnore
-    private Long id;
+
     @Version
     private Long version;
     @NotNull @NotEmpty
     private String name;
     @PositiveOrZero
-    private byte lebenspunkte;
+    private int lebenspunkte;
     @Positive
     private byte ruestungsklasse;
     @PositiveOrZero //TODO: modulo 5
@@ -48,11 +42,39 @@ public class Akteur {
         return zauber;
     }
 
+    public Long getVersion() {
+        return version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getLebenspunkte() {
+        return lebenspunkte;
+    }
+
+    public byte getRuestungsklasse() {
+        return ruestungsklasse;
+    }
+
+    public byte getGeschwindigkeit_ft() {
+        return geschwindigkeit_ft;
+    }
+
+    public HashSet<Sprache> getSprachen() {
+        return sprachen;
+    }
+
+    public AbilityScore getAbilityScore() {
+        return abilityScore;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setLebenspunkte(byte lebenspunkte) {
+    public void setLebenspunkte(int lebenspunkte) {
         this.lebenspunkte = lebenspunkte;
     }
 

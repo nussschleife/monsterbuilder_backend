@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur.abilityScore;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import jakarta.persistence.GeneratedValue;
