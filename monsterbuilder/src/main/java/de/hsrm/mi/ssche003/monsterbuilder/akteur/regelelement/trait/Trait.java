@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.trait;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait;
 
 import java.util.HashSet;
 

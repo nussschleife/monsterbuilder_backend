@@ -1,9 +1,9 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import de.hsrm.mi.ssche003.monsterbuilder.spielleiter.Spielleiter;
+import de.hsrm.mi.ssche003.monsterbuilder.nutzer.Spielleiter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

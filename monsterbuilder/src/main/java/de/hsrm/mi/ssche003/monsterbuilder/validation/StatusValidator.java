@@ -1,10 +1,12 @@
-package de.hsrm.mi.ssche003.monsterbuilder;
+package de.hsrm.mi.ssche003.monsterbuilder.validation;
 
 import java.util.ArrayList;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
-import de.hsrm.mi.ssche003.monsterbuilder.skill.Schadenszauber;
-import de.hsrm.mi.ssche003.monsterbuilder.trait.StatusTrait;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Schadenszauber;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait.StatusTrait;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 
 public class StatusValidator implements IValidator {
 

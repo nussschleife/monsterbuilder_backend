@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber;
 
 import java.util.HashSet;
 

@@ -1,6 +1,6 @@
-package de.hsrm.mi.ssche003.monsterbuilder.trait;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait;
 
-import de.hsrm.mi.ssche003.monsterbuilder.Schadensart;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import jakarta.persistence.Entity;
 
 @Entity

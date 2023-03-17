@@ -4,8 +4,11 @@ import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.hsrm.mi.ssche003.monsterbuilder.IValidator;
-import de.hsrm.mi.ssche003.monsterbuilder.Zauber;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.abilityScore.AbilityScore;
+import de.hsrm.mi.ssche003.monsterbuilder.validation.IValidator;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -32,6 +35,8 @@ public class Akteur {
     private byte ruestungsklasse;
     @PositiveOrZero //TODO: modulo 5
     private byte geschwindigkeit_ft; //Geschwindigkeit in 5-Fuß Abstufungen
+    @Enumerated(EnumType.STRING)
+    private HashSet<Sprache> sprachen = new HashSet<>();
     
     @ManyToMany
     protected HashSet<Zauber> zauber = new HashSet<>();
