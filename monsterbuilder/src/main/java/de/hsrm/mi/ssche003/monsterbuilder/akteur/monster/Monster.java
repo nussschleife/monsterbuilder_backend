@@ -38,14 +38,14 @@ public class Monster extends Akteur{
     @Min(-1) @Max(24) 
     private byte level;
 
-    @ManyToOne
+    /*@ManyToOne
     private Spielleiter spielleiter;
 
     @ManyToMany
     private HashSet<Trait> alleTraits = new HashSet<>();
 
     @ManyToMany
-    private HashSet<Skill> skills = new HashSet<>();
+    private HashSet<Skill> skills = new HashSet<>();*/
 
     @Transient
     private ArrayList<Schadensart> weaknesses = new ArrayList<>(); 
@@ -62,7 +62,7 @@ public class Monster extends Akteur{
         return bildpfad;
     }
 
-    public Spielleiter getSpielleiter() {
+   /* public Spielleiter getSpielleiter() {
         return spielleiter;
     }
 
@@ -72,7 +72,7 @@ public class Monster extends Akteur{
 
     public HashSet<Skill> getSkills() {
         return skills;
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -84,7 +84,7 @@ public class Monster extends Akteur{
 
     public void addSchadenszauber(Schadenszauber zauber) {
         if(!weaknesses.contains(zauber.getTyp())) {
-            this.zauber.add(zauber);
+          //  this.zauber.add(zauber);
         }
     }
 
@@ -101,9 +101,9 @@ public class Monster extends Akteur{
         result = prime * result + ((alignment == null) ? 0 : alignment.hashCode());
         result = prime * result + ((bildpfad == null) ? 0 : bildpfad.hashCode());
         result = prime * result + level;
-        result = prime * result + ((spielleiter == null) ? 0 : spielleiter.hashCode());
+       /* result = prime * result + ((spielleiter == null) ? 0 : spielleiter.hashCode());
         result = prime * result + ((alleTraits == null) ? 0 : alleTraits.hashCode());
-        result = prime * result + ((skills == null) ? 0 : skills.hashCode());
+        result = prime * result + ((skills == null) ? 0 : skills.hashCode());*/
         result = prime * result + ((weaknesses == null) ? 0 : weaknesses.hashCode());
         return result;
     }
@@ -131,7 +131,7 @@ public class Monster extends Akteur{
             return false;
         if (level != other.level)
             return false;
-        if (spielleiter == null) {
+       /* if (spielleiter == null) {
             if (other.spielleiter != null)
                 return false;
         } else if (!spielleiter.equals(other.spielleiter))
@@ -145,7 +145,7 @@ public class Monster extends Akteur{
             if (other.skills != null)
                 return false;
         } else if (!skills.equals(other.skills))
-            return false;
+            return false; */
         if (weaknesses == null) {
             if (other.weaknesses != null)
                 return false;

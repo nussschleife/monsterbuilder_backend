@@ -32,15 +32,15 @@ public class Akteur {
     @Enumerated(EnumType.STRING)
     private HashSet<Sprache> sprachen = new HashSet<>();
     
-    @ManyToMany
+   /* @ManyToMany
     protected HashSet<Zauber> zauber = new HashSet<>();
 
     @OneToOne @Valid
-    private AbilityScore abilityScore;
+    private AbilityScore abilityScore; 
 
     public HashSet<Zauber> getZauber() {
         return zauber;
-    }
+    }*/
 
     public Long getVersion() {
         return version;
@@ -66,32 +66,38 @@ public class Akteur {
         return sprachen;
     }
 
-    public AbilityScore getAbilityScore() {
+    /*public AbilityScore getAbilityScore() {
         return abilityScore;
-    }
+    }*/
 
-    public void setName(String name) {
+    public Akteur setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public void setLebenspunkte(int lebenspunkte) {
+    public Akteur setLebenspunkte(int lebenspunkte) {
         this.lebenspunkte = lebenspunkte;
+        return this;
     }
 
-    public void setRuestungsklasse(byte ruestungsklasse) {
+    public Akteur setRuestungsklasse(byte ruestungsklasse) {
         this.ruestungsklasse = ruestungsklasse;
+        return this;
     }
 
-    public void setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
+    public Akteur setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
         this.geschwindigkeit_ft = geschwindigkeit_ft;
+        return this;
     }
 
-    public void setZauber(HashSet<Zauber> zauber) {
+   /* public Akteur setZauber(HashSet<Zauber> zauber) {
         this.zauber = zauber;
+        return this;
     }
 
-    public void setAbilityScore(AbilityScore abilityScore) {
+    public Akteur setAbilityScore(AbilityScore abilityScore) {
         this.abilityScore = abilityScore;
-    }
+        return this;
+    }*/
 
 }

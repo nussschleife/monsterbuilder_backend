@@ -13,10 +13,13 @@ import jakarta.persistence.Enumerated;
 
 public class MonsterDTO {
     //TODO: Traits usw per id uebergeben vom frontend.
-    //TODO: schrittweise konstruktor wie ichs damals bei vanessa gesehen habe?
 
     public MonsterDTO(){
 
+    }
+
+    public MonsterDTO(String name) {
+        this.name = name;
     }
 
     public Long id;
@@ -50,48 +53,54 @@ public class MonsterDTO {
         return name;
     }
 
-    public void setName(String name) {
+    public MonsterDTO setName(String name) {
         this.name = name;
+        return this;
     }
 
     public int getLebenspunkte() {
         return lebenspunkte;
     }
 
-    public void setLebenspunkte(int lebenspunkte) {
+    public MonsterDTO setLebenspunkte(int lebenspunkte) {
         this.lebenspunkte = lebenspunkte;
+        return this;
     }
 
     public byte getRuestungsklasse() {
         return ruestungsklasse;
     }
 
-    public void setRuestungsklasse(byte ruestungsklasse) {
+    public MonsterDTO setRuestungsklasse(byte ruestungsklasse) {
         this.ruestungsklasse = ruestungsklasse;
+        return this;
     }
 
     public byte getGeschwindigkeit_ft() {
         return geschwindigkeit_ft;
     }
 
-    public void setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
+    public MonsterDTO setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
         this.geschwindigkeit_ft = geschwindigkeit_ft;
+        return this;
     }
 
     public Alignment getAlignment() {
         return alignment;
     }
 
-    public void setAlignment(Alignment alignment) {
+    public MonsterDTO setAlignment(Alignment alignment) {
         this.alignment = alignment;
+        return this;
     }
 
     public Sprache[] getSprachen() {
         return sprachen;
     }
 
-    public void setSprachen(Sprache[] sprachen) {
+    public MonsterDTO setSprachen(Sprache[] sprachen) {
         this.sprachen = sprachen;
+        return this;
     }
     
     
