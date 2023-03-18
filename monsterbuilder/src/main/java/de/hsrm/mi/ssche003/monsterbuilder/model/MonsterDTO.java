@@ -45,8 +45,9 @@ public class MonsterDTO {
         return id;
     }
 
-    public void setId(Long id) {
+    public MonsterDTO setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {

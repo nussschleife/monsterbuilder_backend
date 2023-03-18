@@ -29,7 +29,6 @@ public class MonsterServiceImpl implements MonsterService{
             Optional<Monster> monster = repo.findById(id);
                 return monster.isPresent() ?  monster.get() : null;
         }
-        
         return null;
     }
 
@@ -43,7 +42,6 @@ public class MonsterServiceImpl implements MonsterService{
     @Override
     @Transactional
     public Monster editMonster(MonsterDTO monster) throws MonsterServiceException {
-        //TODO: bekommt monsterdto
         Monster persistiertesMonster;
         persistiertesMonster = findeMonsterMitId(monster.getId());
         if(persistiertesMonster == null)

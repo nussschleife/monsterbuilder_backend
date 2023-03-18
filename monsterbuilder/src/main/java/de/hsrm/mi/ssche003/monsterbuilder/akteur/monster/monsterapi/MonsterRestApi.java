@@ -33,15 +33,15 @@ public class MonsterRestApi {
 
     @GetMapping("/hole/{id}")
     public Monster holeMonster(@PathVariable Long id) {
+        Monster monster = null;
         try{
-            Monster monster = monsterService.findeMonsterMitId(id); 
-            return monster;
+             monster = monsterService.findeMonsterMitId(id); 
         } catch(MonsterServiceException mse) {}
-        return null;
+        return monster;
     }
 
 
-    @PutMapping("/bearbeite/")
+    @PutMapping("/bearbeite")
     public ResponseEntity<MonsterDTO> bearbeiteMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
         if(!result.hasErrors()) {
             Monster monster = monsterService.editMonster(monsterdto);
@@ -50,10 +50,11 @@ public class MonsterRestApi {
         return ResponseEntity.badRequest().body(monsterdto);
     }
 
-    @PostMapping("/neu")
+    @PostMapping(value="/neu", consumes = {"application/json"})
     public ResponseEntity<MonsterDTO> addMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
         Monster monster = monsterService.editMonster(monsterdto);
-        MonsterDTO dto = new MonsterDTO();
+        MonsterDTO dto = new MonsterDTO().setId(monster.getId()).setGeschwindigkeit_ft(monster.getGeschwindigkeit_ft())
+        .setLebenspunkte(monster.getLebenspunkte()).setName(monster.getName()).setRuestungsklasse(monster.getRuestungsklasse());
         return ResponseEntity.ok().body(dto);
     }
 
