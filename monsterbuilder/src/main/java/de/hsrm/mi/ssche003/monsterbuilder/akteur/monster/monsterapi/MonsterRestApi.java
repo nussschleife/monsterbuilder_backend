@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.model.MonsterDTO;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/monster")
 public class MonsterRestApi {
 
@@ -50,7 +52,7 @@ public class MonsterRestApi {
         return ResponseEntity.badRequest().body(monsterdto);
     }
 
-    @PostMapping(value="/neu", consumes = {"application/json"})
+    @PostMapping("/neu")
     public ResponseEntity<MonsterDTO> addMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
         Monster monster = monsterService.editMonster(monsterdto);
         MonsterDTO dto = new MonsterDTO().setId(monster.getId()).setGeschwindigkeit_ft(monster.getGeschwindigkeit_ft())

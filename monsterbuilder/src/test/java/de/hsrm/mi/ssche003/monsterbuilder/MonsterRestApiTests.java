@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -46,6 +47,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.model.MonsterDTO;
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@EnableWebMvc
 public class MonsterRestApiTests {
 
     @Autowired MockMvc mockMvc;
@@ -98,7 +100,7 @@ public class MonsterRestApiTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String request = ow.writeValueAsString(erstelleDTO());
  
-        mockMvc.perform(post(PATH + "/neu").accept(MediaType.APPLICATION_JSON_VALUE).content(request)).andExpect(status().isOk());
+        mockMvc.perform(post(PATH + "/neu").accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andExpect(status().isOk());
         assertTrue(repo.count() == 1);
     }
 
@@ -130,7 +132,7 @@ public class MonsterRestApiTests {
         String request = ow.writeValueAsString(dto);
         
  
-        String response = mockMvc.perform(put(PATH + "/bearbeite").accept(MediaType.APPLICATION_JSON).content(request)).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        String response = mockMvc.perform(put(PATH + "/bearbeite").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON_VALUE).content(request)).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
         assertTrue(response.contains(dto.getName()));
     
     }   
