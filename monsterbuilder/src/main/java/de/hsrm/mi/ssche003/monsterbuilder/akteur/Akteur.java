@@ -4,13 +4,10 @@ import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.validation.IValidator;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
@@ -23,14 +20,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 @MappedSuperclass	
 public class Akteur {
-    @Id @GeneratedValue @JsonIgnore
-    private Long id;
-    @Version
+
+    @Version @JsonIgnore
     private Long version;
     @NotNull @NotEmpty
     private String name;
     @PositiveOrZero
-    private byte lebenspunkte;
+    private int lebenspunkte;
     @Positive
     private byte ruestungsklasse;
     @PositiveOrZero //TODO: modulo 5
@@ -38,38 +34,72 @@ public class Akteur {
     @Enumerated(EnumType.STRING)
     private HashSet<Sprache> sprachen = new HashSet<>();
     
-    @ManyToMany
+   /* @ManyToMany
     protected HashSet<Zauber> zauber = new HashSet<>();
 
     @OneToOne @Valid
-    private AbilityScore abilityScore;
+    private AbilityScore abilityScore; 
 
     public HashSet<Zauber> getZauber() {
         return zauber;
+    }*/
+
+    public Long getVersion() {
+        return version;
     }
 
-    public void setName(String name) {
+    public String getName() {
+        return name;
+    }
+
+    public int getLebenspunkte() {
+        return lebenspunkte;
+    }
+
+    public byte getRuestungsklasse() {
+        return ruestungsklasse;
+    }
+
+    public byte getGeschwindigkeit_ft() {
+        return geschwindigkeit_ft;
+    }
+
+    public HashSet<Sprache> getSprachen() {
+        return sprachen;
+    }
+
+    /*public AbilityScore getAbilityScore() {
+        return abilityScore;
+    }*/
+
+    public Akteur setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public void setLebenspunkte(byte lebenspunkte) {
+    public Akteur setLebenspunkte(int lebenspunkte) {
         this.lebenspunkte = lebenspunkte;
+        return this;
     }
 
-    public void setRuestungsklasse(byte ruestungsklasse) {
+    public Akteur setRuestungsklasse(byte ruestungsklasse) {
         this.ruestungsklasse = ruestungsklasse;
+        return this;
     }
 
-    public void setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
+    public Akteur setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
         this.geschwindigkeit_ft = geschwindigkeit_ft;
+        return this;
     }
 
-    public void setZauber(HashSet<Zauber> zauber) {
+   /* public Akteur setZauber(HashSet<Zauber> zauber) {
         this.zauber = zauber;
+        return this;
     }
 
-    public void setAbilityScore(AbilityScore abilityScore) {
+    public Akteur setAbilityScore(AbilityScore abilityScore) {
         this.abilityScore = abilityScore;
-    }
+        return this;
+    }*/
 
 }

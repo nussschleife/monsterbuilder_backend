@@ -12,7 +12,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
 import jakarta.validation.Valid;
 
-@Entity
 public class Gruppe {
 
     @Id @GeneratedValue

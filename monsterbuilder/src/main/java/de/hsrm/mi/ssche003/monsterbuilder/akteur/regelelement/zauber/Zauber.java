@@ -2,8 +2,6 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber;
 
 import java.util.HashSet;
 
-import org.hibernate.annotations.ManyToAny;
-
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.Valid;

@@ -17,22 +17,22 @@ public class StatusValidator implements IValidator {
      */
     public boolean validiere(Monster monster) {
         ArrayList<Schadensart> schwächen = new ArrayList<>();
-        monster.getAlleTraits().forEach(trait -> {
+      /*  monster.getAlleTraits().forEach(trait -> {
             if(trait instanceof StatusTrait) {
                 StatusTrait st = (StatusTrait) trait;
                 if(st.bestimmtSchwäche())
                     schwächen.add(st.getTyp());
             }
-        });
+        });*/
 
 
-        for(Zauber zauber : monster.getZauber()) {
+       /* for(Zauber zauber : monster.getZauber()) {
             if(zauber instanceof Schadenszauber) {
                 Schadenszauber sz = (Schadenszauber) zauber;
                 if(schwächen.contains(sz.getTyp()))
                     return false;
             }
-        }
+        }*/
       return true;
     }
     

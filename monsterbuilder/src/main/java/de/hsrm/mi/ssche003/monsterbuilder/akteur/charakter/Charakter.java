@@ -14,9 +14,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
-@Entity
 public class Charakter extends Akteur{
-
+/*
     @GeneratedValue(strategy = GenerationType.IDENTITY) @Id
     private Long id;
 
@@ -27,6 +26,6 @@ public class Charakter extends Akteur{
     private Gruppe gruppe;
 
     @ManyToMany
-    private HashSet<Skill> skills = new HashSet<>();
+    private HashSet<Skill> skills = new HashSet<>(); */
 
 }

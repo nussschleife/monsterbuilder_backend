@@ -3,7 +3,6 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import jakarta.persistence.Entity;
 
-@Entity
 public class StatusTrait extends Trait{
     
     private Schadensart typ;
