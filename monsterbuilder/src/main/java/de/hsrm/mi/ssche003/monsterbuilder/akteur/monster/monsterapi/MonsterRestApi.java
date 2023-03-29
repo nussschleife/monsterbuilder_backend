@@ -1,8 +1,8 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterapi;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,6 +27,8 @@ import jakarta.validation.Valid;
 public class MonsterRestApi {
 
     @Autowired MonsterService monsterService;
+    static final Logger logger = org.slf4j.LoggerFactory.getLogger(MonsterRestApi.class);
+
 
     @GetMapping("/alle")
     public List<Monster> holeAlleMonster() {
@@ -54,10 +56,13 @@ public class MonsterRestApi {
 
     @PostMapping("/neu")
     public ResponseEntity<MonsterDTO> addMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
+        logger.info("NEUES MONSTER ERHALTEN: "+monsterdto);
         Monster monster = monsterService.editMonster(monsterdto);
         MonsterDTO dto = new MonsterDTO().setId(monster.getId()).setGeschwindigkeit_ft(monster.getGeschwindigkeit_ft())
         .setLebenspunkte(monster.getLebenspunkte()).setName(monster.getName()).setRuestungsklasse(monster.getRuestungsklasse());
+        logger.info(String.valueOf(monsterService.findeAlleMonster().size()));
         return ResponseEntity.ok().body(dto);
+
     }
 
     @GetMapping("/validiere")

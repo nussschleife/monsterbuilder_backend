@@ -2,6 +2,8 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur;
 
 import java.util.HashSet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 import jakarta.persistence.EnumType;
@@ -19,7 +21,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 @MappedSuperclass	
 public class Akteur {
 
-    @Version
+    @Version @JsonIgnore
     private Long version;
     @NotNull @NotEmpty
     private String name;
