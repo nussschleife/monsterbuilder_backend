@@ -1,26 +1,17 @@
 package de.hsrm.mi.ssche003.monsterbuilder;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
-import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -35,29 +26,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.model.MonsterDTO;
+
 import org.python.core.Options;
 
 public class SimulationTests {
 
     final int[] AKTIONEN = { 1, 2, 3, 4, 5 };
-    final TestDTO TEST = new TestDTO(AKTIONEN);
     static final Logger logger = LoggerFactory.getLogger(SimulationTests.class);
-    private class TestDTO {
-        private int[] aktionsnummern;
-
-        TestDTO(int[] aktionen) {
-            this.aktionsnummern = aktionen;
-        }
-
-        public int[] getAktionsnummern() {
-            return aktionsnummern;
-        }
-
-        public void setAktionsnummern(int[] aktionsnummern) {
-            this.aktionsnummern = aktionsnummern;
-        }
-
-    }
+    String name = "Blizzard Arbor";
+    int hp = 11;
+    byte level = 4;
+    byte falschesLevel = -4;
+    int falsche_hp = -1;
+    byte ac = 18;
+    byte falsche_ac = -1;
+    byte geschwindigkeit = 30;
+    byte falscheGeschwindigeit = -1;
 
     @Test
     @DisplayName("Jython Engine Integriert, Lese Output aus Python Skript")
@@ -103,6 +89,34 @@ public class SimulationTests {
         int exitCode = process.waitFor();
         assertEquals(0, exitCode, "No errors should be detected");
     }
+
+    @Test
+    @DisplayName("Speichere MonsterDTO als .json Datei und greife in Skript darauf zu")
+    public void send_dto_to_script() throws Exception { 
+        //das mit in datei speichern ergibt nicht so viel sinn, sonst müsste für jeden Aufruf von jedem Nutzer eine Datei angelegt werden. Vllt doch json direkt senden?
+
+        //MonsterDTO erstellen
+        MonsterDTO monster = new MonsterDTO(name).setAlignment(Alignment.CHAOTIC_EVIL).setGeschwindigkeit_ft(geschwindigkeit).setLebenspunkte(hp).setRuestungsklasse(ac).setId(1l);
+
+        //Skript ausführen mit json String als Argument -> geht nicht wegen parser error
+        //Json in Datei speichern und auslesen
+        File file = new File("monster.json");
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.writeValue(file, monster );
+        ProcessBuilder processBuilder = new ProcessBuilder("python", "src/test/resources/objTest.py", file.getAbsolutePath()); //problem: ist string und wird von python nicht erkannt
+        processBuilder.redirectErrorStream(true);
+
+        Process process = processBuilder.start();
+        List<String> results = readProcessOutput(process.getInputStream());
+
+        assertFalse(results.isEmpty());
+        assertTrue(results.contains("stark"));
+        int exitCode = process.waitFor();
+        assertEquals(0, exitCode, "No errors should be detected");
+    }
+
+
 
 @Test
 @DisplayName("Schreibe in Python Skript mit ProcessBuilder")
