@@ -6,7 +6,6 @@ import java.util.HashSet;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.nutzer.Spielleiter;
-import de.hsrm.mi.ssche003.monsterbuilder.validation.IValidator;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Schadenszauber;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Skill;
@@ -50,10 +49,6 @@ public class Monster extends Akteur{
     @Transient
     private ArrayList<Schadensart> weaknesses = new ArrayList<>(); 
     
-    public boolean validiere(IValidator validator) {
-        return validator.validiere(this);
-    }
-
     public Alignment getAlignment() {
         return alignment;
     }

@@ -30,6 +30,9 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.model.MonsterDTO;
 
 import org.python.core.Options;
+import org.python.core.PyException;
+import org.python.core.PyObject;
+import org.python.util.PythonInterpreter;
 
 public class SimulationTests {
 
@@ -60,17 +63,21 @@ public class SimulationTests {
     }
 
     @Test
-    @DisplayName("Schreibe in Python Skript und erhalte entsprechende Antwort")
+    @DisplayName("Jython sende Java Objekt an Python und bekomme Objekt als Antwort zurück")
     public void testeJython_write() throws Exception {
+        String path = "src/test/resources/writeJythonTest.py";
+        String name = "writeJythonTest.py";
         Options.importSite = false;
-        StringWriter writer = new StringWriter();
-        ScriptContext context = new SimpleScriptContext();
-        context.setWriter(writer);
-
-        ScriptEngineManager manager = new ScriptEngineManager();
-        ScriptEngine engine = manager.getEngineByName("jython");
-        engine.eval(new FileReader(resolvePythonScriptPath("src/test/resources/test.py")), context);
-        assertEquals("test", writer.toString().trim());
+        PythonInterpreter interpreter = new PythonInterpreter();
+        MonsterDTO monster = new MonsterDTO(name).setAlignment(Alignment.CHAOTIC_EVIL).setGeschwindigkeit_ft(geschwindigkeit).setLebenspunkte(hp).setRuestungsklasse(ac).setId(1l);
+        interpreter.execfile(path);
+        interpreter.set("monster", monster);
+        PyObject someFunc = interpreter.get("calcAction");
+        assertTrue(	someFunc != null);
+        PyObject aktionPy = someFunc.__call__();
+        MonsterDTO aktion = (MonsterDTO) aktionPy.__tojava__(MonsterDTO.class);
+        assertTrue(aktion.getName() == "run");
+        interpreter.close();
     }
 
     @Test
@@ -115,8 +122,6 @@ public class SimulationTests {
         int exitCode = process.waitFor();
         assertEquals(0, exitCode, "No errors should be detected");
     }
-
-
 
 @Test
 @DisplayName("Schreibe in Python Skript mit ProcessBuilder")
