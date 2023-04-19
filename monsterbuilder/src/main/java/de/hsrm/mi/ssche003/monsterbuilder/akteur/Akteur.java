@@ -5,6 +5,7 @@ import java.util.HashSet;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow.SavingThrow;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -90,6 +91,14 @@ public class Akteur {
     public Akteur setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
         this.geschwindigkeit_ft = geschwindigkeit_ft;
         return this;
+    }
+
+    public int wuerfleInitiative() {
+        return (int) Math.random()*20; //+ini modifier wenn nötig
+    }
+
+    public boolean ausweichen(SavingThrow event, int schwierigkeit) {
+        return false;
     }
 
    /* public Akteur setZauber(HashSet<Zauber> zauber) {
