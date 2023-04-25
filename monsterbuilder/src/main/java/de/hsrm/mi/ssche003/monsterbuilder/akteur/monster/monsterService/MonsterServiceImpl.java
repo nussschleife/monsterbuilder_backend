@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.exception.MonsterServiceException;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.MonsterRepo;
-import de.hsrm.mi.ssche003.monsterbuilder.exception.MonsterServiceException;
-import de.hsrm.mi.ssche003.monsterbuilder.model.MonsterDTO;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 

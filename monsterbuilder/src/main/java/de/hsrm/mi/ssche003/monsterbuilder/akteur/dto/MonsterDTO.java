@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.model;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.dto;
 
 import jakarta.validation.constraints.PositiveOrZero;
 

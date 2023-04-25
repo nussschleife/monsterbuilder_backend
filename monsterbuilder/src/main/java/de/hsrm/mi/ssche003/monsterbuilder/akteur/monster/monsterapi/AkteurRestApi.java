@@ -15,27 +15,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.InitResponse;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.exception.MonsterServiceException;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterService.MonsterService;
-import de.hsrm.mi.ssche003.monsterbuilder.exception.MonsterServiceException;
-import de.hsrm.mi.ssche003.monsterbuilder.model.MonsterDTO;
 import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/monster")
-public class MonsterRestApi {
+@RequestMapping("/api/akteur")
+public class AkteurRestApi {
 
     @Autowired MonsterService monsterService;
-    static final Logger logger = org.slf4j.LoggerFactory.getLogger(MonsterRestApi.class);
+    static final Logger logger = org.slf4j.LoggerFactory.getLogger(AkteurRestApi.class);
 
 
-    @GetMapping("/alle")
+    @GetMapping("/monster/alle")
     public List<Monster> holeAlleMonster() {
         return monsterService.findeAlleMonster();
     }
 
-    @GetMapping("/hole/{id}")
+    @GetMapping("/monster/hole/{id}")
     public Monster holeMonster(@PathVariable Long id) {
         Monster monster = null;
         try{
@@ -45,16 +46,17 @@ public class MonsterRestApi {
     }
 
 
-    @PutMapping("/bearbeite")
+    @PutMapping("/monster/bearbeite")
     public ResponseEntity<MonsterDTO> bearbeiteMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
         if(!result.hasErrors()) {
             Monster monster = monsterService.editMonster(monsterdto);
+            //fehler!! unbearbeitetes dto wird zurüclkgegeben? sollte man nicht eher fielderrors geben
             return ResponseEntity.ok().body(monsterdto);
         }
         return ResponseEntity.badRequest().body(monsterdto);
     }
 
-    @PostMapping("/neu")
+    @PostMapping("/monster/neu")
     public ResponseEntity<MonsterDTO> addMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
         logger.info("NEUES MONSTER ERHALTEN: "+monsterdto);
         Monster monster = monsterService.editMonster(monsterdto);
@@ -65,9 +67,15 @@ public class MonsterRestApi {
 
     }
 
-    @GetMapping("/validiere")
+    @GetMapping("/monster/validiere")
     public ResponseEntity<ValidResponse> validateMonster() {
         return ResponseEntity.ok().body(new ValidResponse());
+    }
+
+    @GetMapping("/init")
+    public InitResponse getInitialValues() {
+        logger.info("INIT");
+        return new InitResponse();
     }
     
 }

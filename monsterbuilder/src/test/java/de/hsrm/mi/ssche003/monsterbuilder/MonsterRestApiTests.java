@@ -35,11 +35,11 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.MonsterRepo;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterService.MonsterService;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterapi.MonsterRestApi;
-import de.hsrm.mi.ssche003.monsterbuilder.model.MonsterDTO;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterapi.AkteurRestApi;
 
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.MOCK,
@@ -53,7 +53,7 @@ public class MonsterRestApiTests {
     @Autowired MockMvc mockMvc;
     @Autowired MonsterRepo repo;
     @Autowired MonsterService service;
-    @Autowired MonsterRestApi api;
+    @Autowired AkteurRestApi api;
     static final Logger logger = LoggerFactory.getLogger(MonsterRestApiTests.class);
 
     final String PATH = "/api/monster";
