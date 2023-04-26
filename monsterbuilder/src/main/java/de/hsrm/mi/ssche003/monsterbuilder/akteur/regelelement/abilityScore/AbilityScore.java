@@ -1,32 +1,65 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import java.util.HashSet;
+import java.util.Set;
+
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Version;
-import jakarta.validation.constraints.Max;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.Positive;
 
-public class AbilityScore {
+@Entity
+public class AbilityScore extends Regelelement{
     @Id @GeneratedValue
     private Long id;
-    @Version
-    private Long version;
-    @Positive @Max(30)
-    private byte charisma;
-    @Positive @Max(30)
-    private byte dexterity;
-    @Positive @Max(30)
-    private byte constitution;
-    @Positive @Max(30)
-    private byte strength;
-    @Positive @Max(30)
-    private byte wisdom;
-    @Positive @Max(30)
-    private byte intelligence;
 
-    @OneToOne
-    private Akteur akteur;
+    @Enumerated(EnumType.STRING)
+    private AbilityScoreName name;
+
+    @Positive
+    private int score;
+
+    @ManyToMany(mappedBy = "abilityScores")
+    private Set<Monster> akteure = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public AbilityScoreName getName() {
+        return name;
+    }
+
+    public void setName(AbilityScoreName name) {
+        this.name = name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public Set<Monster> getAkteur() {
+        return akteure;
+    }
+
+    public void setAkteur(Set<Monster> akteur) {
+        this.akteure = akteur;
+    }
+
+    
+    //Zauber, Angriff usw.
 }
  

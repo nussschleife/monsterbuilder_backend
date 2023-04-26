@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Sprache;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
@@ -40,6 +41,8 @@ public class MonsterDTO {
     Alignment alignment;
     
     private Sprache[] sprachen;
+
+    private AbilityScore[] abilityScores;
 
     public Long getId() {
         return id;
@@ -102,6 +105,14 @@ public class MonsterDTO {
     public MonsterDTO setSprachen(Sprache[] sprachen) {
         this.sprachen = sprachen;
         return this;
+    }
+
+    public AbilityScore[] getAbilityScores() {
+        return abilityScores;
+    }
+
+    public void setAbilityScores(AbilityScore[] abilityScores) {
+        this.abilityScores = abilityScores;
     }
     
     

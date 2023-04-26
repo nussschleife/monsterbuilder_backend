@@ -41,7 +41,7 @@ public class MonsterServiceImpl implements MonsterService{
 
     @Override
     @Transactional
-    public Monster editMonster(MonsterDTO monster) throws MonsterServiceException {
+    public Monster editMonster(Monster monster) throws MonsterServiceException {
         Monster persistiertesMonster;
         persistiertesMonster = findeMonsterMitId(monster.getId());
         if(persistiertesMonster == null)

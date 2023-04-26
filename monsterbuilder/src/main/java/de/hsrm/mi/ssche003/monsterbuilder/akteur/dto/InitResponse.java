@@ -2,22 +2,24 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur.dto;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Sprache;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait.Trait;
 
 public class InitResponse {
-    private Sprache[] sprachen; //TODO: Sprachen sollen eine Tabelle werden
+    private String[] sprachen;
     private Alignment[] alleAlignments;
     private Trait[] alleTraits;
+    private AbilityScoreName[] abilityScoreNamen;
 
     public InitResponse() {
-        sprachen = Sprache.values();
         alleAlignments = Alignment.values();
+        abilityScoreNamen = AbilityScoreName.values();
     }
 
-    public Sprache[] getSprachen() {
+    public String[] getSprachen() {
         return sprachen;
     }
-    public void setSprachen(Sprache[] sprachen) {
+    public void setSprachen(String[] sprachen) {
         this.sprachen = sprachen;
     }
     public Alignment[] getAlleAlignments() {
@@ -33,5 +35,13 @@ public class InitResponse {
         this.alleTraits = alleTraits;
     }
 
+    public AbilityScoreName[] getAbilityScoreNamen() {
+        return abilityScoreNamen;
+    }
+
+    public void setAbilityScoreNamen(AbilityScoreName[] abilityScoreNames) {
+        this.abilityScoreNamen = abilityScoreNames;
+    }
+    
     
 }
