@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.persistence.EnumType;
@@ -40,9 +41,11 @@ public class MonsterDTO {
     @Enumerated(EnumType.STRING)
     Alignment alignment;
     
-    private Sprache[] sprachen;
+    private String[] sprachen;
 
     private AbilityScore[] abilityScores;
+
+    private Trait[] traits; //TODO: dto hat eine liste für existierende und eine für neue?
 
     public Long getId() {
         return id;
@@ -98,11 +101,11 @@ public class MonsterDTO {
         return this;
     }
 
-    public Sprache[] getSprachen() {
+    public String[] getSprachen() {
         return sprachen;
     }
 
-    public MonsterDTO setSprachen(Sprache[] sprachen) {
+    public MonsterDTO setSprachen(String[] sprachen) {
         this.sprachen = sprachen;
         return this;
     }
@@ -114,6 +117,16 @@ public class MonsterDTO {
     public void setAbilityScores(AbilityScore[] abilityScores) {
         this.abilityScores = abilityScores;
     }
+
+    public Trait[] getTraits() {
+        return traits;
+    }
+
+    public void setTraits(Trait[] traits) {
+        this.traits = traits;
+    }
+
+    
     
     
 }

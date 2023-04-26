@@ -2,15 +2,15 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur.monster;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.nutzer.Spielleiter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Schadenszauber;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Skill;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait.StatusTrait;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait.Trait;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,12 +36,12 @@ public class Monster extends Akteur{
 
     @Min(-1) @Max(24) 
     private byte level;
+    
+    @ManyToMany
+    private Set<Trait> alleTraits = new HashSet<>();
 
     /*@ManyToOne
     private Spielleiter spielleiter;
-
-    @ManyToMany
-    private HashSet<Trait> alleTraits = new HashSet<>();
 
     @ManyToMany
     private HashSet<Skill> skills = new HashSet<>();*/
@@ -59,12 +59,12 @@ public class Monster extends Akteur{
 
    /* public Spielleiter getSpielleiter() {
         return spielleiter;
-    }
+    }*/
 
-    public HashSet<Trait> getAlleTraits() {
+    public Set<Trait> getAlleTraits() {
         return alleTraits;
     }
-
+    /*
     public HashSet<Skill> getSkills() {
         return skills;
     }*/
@@ -83,9 +83,12 @@ public class Monster extends Akteur{
         }
     }
 
-    public void addStatusTrait(StatusTrait trait) {
-        if(trait.bestimmtSchwäche())
-            this.weaknesses.add(trait.getTyp());
+    public void setLevel(byte level) {
+        this.level = level;
+    }
+
+    public void setAlleTraits(Set<Trait> alleTraits) {
+        this.alleTraits = alleTraits;
     }
 
     @Override
@@ -96,8 +99,9 @@ public class Monster extends Akteur{
         result = prime * result + ((alignment == null) ? 0 : alignment.hashCode());
         result = prime * result + ((bildpfad == null) ? 0 : bildpfad.hashCode());
         result = prime * result + level;
-       /* result = prime * result + ((spielleiter == null) ? 0 : spielleiter.hashCode());
         result = prime * result + ((alleTraits == null) ? 0 : alleTraits.hashCode());
+       /* result = prime * result + ((spielleiter == null) ? 0 : spielleiter.hashCode());
+        
         result = prime * result + ((skills == null) ? 0 : skills.hashCode());*/
         result = prime * result + ((weaknesses == null) ? 0 : weaknesses.hashCode());
         return result;
@@ -130,13 +134,13 @@ public class Monster extends Akteur{
             if (other.spielleiter != null)
                 return false;
         } else if (!spielleiter.equals(other.spielleiter))
-            return false;
+            return false;*/
         if (alleTraits == null) {
             if (other.alleTraits != null)
                 return false;
         } else if (!alleTraits.equals(other.alleTraits))
             return false;
-        if (skills == null) {
+        /*if (skills == null) {
             if (other.skills != null)
                 return false;
         } else if (!skills.equals(other.skills))

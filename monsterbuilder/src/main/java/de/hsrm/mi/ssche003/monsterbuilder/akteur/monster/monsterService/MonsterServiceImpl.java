@@ -12,6 +12,8 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.exception.MonsterServiceException;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.MonsterRepo;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.TraitRepository;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 
@@ -19,6 +21,7 @@ import jakarta.transaction.Transactional;
 public class MonsterServiceImpl implements MonsterService{
 
     @Autowired MonsterRepo repo;
+    @Autowired TraitRepository traitRepo;
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(MonsterServiceImpl.class);
 
     @Override
@@ -64,6 +67,14 @@ public class MonsterServiceImpl implements MonsterService{
     @Override
     public List<Monster> findeAlleMonster() {
         return repo.findAll();
+    }
+
+    public List<Trait> findeAlleTraits() {
+        return traitRepo.findAll();
+    }
+
+    public Optional<Trait> findeTraitMitNamen(String name) {
+        return traitRepo.findByName(name);
     }
     
 }

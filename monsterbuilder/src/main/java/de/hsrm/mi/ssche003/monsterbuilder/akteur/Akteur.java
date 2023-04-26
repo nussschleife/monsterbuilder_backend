@@ -103,7 +103,17 @@ public class Akteur {
         return false;
     }
 
-   /* public Akteur setZauber(HashSet<Zauber> zauber) {
+    
+
+   public void setSprachen(Set<Sprache> sprachen) {
+        this.sprachen = sprachen;
+    }
+
+    public void setAbilityScores(Set<AbilityScore> abilityScores) {
+        this.abilityScores = abilityScores;
+    }
+
+    /* public Akteur setZauber(HashSet<Zauber> zauber) {
         this.zauber = zauber;
         return this;
     }

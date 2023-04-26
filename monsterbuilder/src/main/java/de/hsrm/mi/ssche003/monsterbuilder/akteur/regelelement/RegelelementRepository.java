@@ -15,5 +15,7 @@ public interface RegelelementRepository <T extends Regelelement> extends JpaRepo
 
     @Query("SELECT DISTINCT r.name FROM #{#entityName} r")
     List<String> findeAlleNamen();
+
+    Optional<T> findByName(String name);
     
 }

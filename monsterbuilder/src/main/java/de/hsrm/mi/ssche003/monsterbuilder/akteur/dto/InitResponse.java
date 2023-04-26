@@ -1,8 +1,8 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.dto;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.trait.Trait;
 
 public class InitResponse {
     private String[] sprachen;
