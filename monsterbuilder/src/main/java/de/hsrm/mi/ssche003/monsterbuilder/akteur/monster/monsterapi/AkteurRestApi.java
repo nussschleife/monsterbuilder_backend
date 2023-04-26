@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Sprache;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.InitResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.exception.MonsterServiceException;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterService.MonsterService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.validation.Valid;
 
 @RestController
@@ -84,7 +84,7 @@ public class AkteurRestApi {
     public InitResponse getInitialValues() {
         logger.info("INIT");
         InitResponse init = new InitResponse();
-        init.setSprachen(regelelementService.findeSprachenNurNamen().toArray(new String[0]));
+        init.setSprachen(regelelementService.findeAlleNamenVonElement(new Sprache()).toArray(new String[0]));
         return init;
     }
 

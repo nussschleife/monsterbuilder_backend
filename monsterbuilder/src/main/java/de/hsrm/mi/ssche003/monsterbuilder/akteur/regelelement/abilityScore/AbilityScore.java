@@ -19,7 +19,7 @@ public class AbilityScore extends Regelelement{
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private AbilityScoreName name;
+    private AbilityScoreName scoreName;
 
     @Positive
     private int score;
@@ -35,12 +35,12 @@ public class AbilityScore extends Regelelement{
         this.id = id;
     }
 
-    public AbilityScoreName getName() {
-        return name;
+    public AbilityScoreName getScoreName() {
+        return scoreName;
     }
 
-    public void setName(AbilityScoreName name) {
-        this.name = name;
+    public void setScoreName(AbilityScoreName name) {
+        this.scoreName = name;
     }
 
     public int getScore() {
@@ -58,6 +58,7 @@ public class AbilityScore extends Regelelement{
     public void setAkteur(Set<Monster> akteur) {
         this.akteure = akteur;
     }
+
 
     
     //Zauber, Angriff usw.

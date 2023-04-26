@@ -1,9 +1,7 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,8 +21,6 @@ public class Sprache extends Regelelement{
     private Long id;
     @Version
     private Long version;
-    @Length(min = 0)
-    private String sprache;
 
     @ManyToMany(mappedBy = "sprachen") @JsonIgnore
     private Set<Monster> alleMonster = new HashSet<>();
@@ -41,12 +37,7 @@ public class Sprache extends Regelelement{
     public void setVersion(Long version) {
         this.version = version;
     }
-    public String getSprache() {
-        return sprache;
-    }
-    public void setSprache(String sprache) {
-        this.sprache = sprache;
-    }
+
     public Set<Monster> getAlleMonster() {
         return alleMonster;
     }
@@ -61,7 +52,6 @@ public class Sprache extends Regelelement{
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((version == null) ? 0 : version.hashCode());
-        result = prime * result + ((sprache == null) ? 0 : sprache.hashCode());
         return result;
     }
     @Override
@@ -82,11 +72,6 @@ public class Sprache extends Regelelement{
             if (other.version != null)
                 return false;
         } else if (!version.equals(other.version))
-            return false;
-        if (sprache == null) {
-            if (other.sprache != null)
-                return false;
-        } else if (!sprache.equals(other.sprache))
             return false;
         return true;
     }

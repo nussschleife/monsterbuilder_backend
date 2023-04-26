@@ -7,11 +7,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Sprache;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.SpracheRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.transaction.Transactional;
 
 @Transactional @Service
@@ -19,7 +18,6 @@ public class RegelelementServiceImpl implements RegelelementService{
 
     @Autowired RegelelementRepository<AbilityScore> abilityScoreRepo; 
     @Autowired RegelelementRepository<Sprache> spracheRepo;
-    @Autowired SpracheRepository spracheRepo_extended;
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(RegelelementServiceImpl.class);
 
     @SuppressWarnings("unused")
@@ -38,7 +36,9 @@ public class RegelelementServiceImpl implements RegelelementService{
         return repo == null ? new ArrayList<T>() : repo.findAll();
     }
 
-    public List<String> findeSprachenNurNamen() {
-        return spracheRepo_extended.findeAlleSprachenNamen();
+    @Override
+    public <T extends Regelelement> List<String> findeAlleNamenVonElement(T element) {
+        RegelelementRepository<T> repo = getRepository(element);
+        return repo == null ? new ArrayList<String>() : repo.findeAlleNamen();
     }
 }

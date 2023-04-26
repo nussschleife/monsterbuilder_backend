@@ -1,1 +1,1 @@
-INSERT INTO Sprache (sprache) VALUES ('Draconic'),('Elven'),('Common'),('Infernal'),('Goblin');
+INSERT INTO Sprache (name) VALUES ('Draconic'),('Elven'),('Common'),('Infernal'),('Goblin');
