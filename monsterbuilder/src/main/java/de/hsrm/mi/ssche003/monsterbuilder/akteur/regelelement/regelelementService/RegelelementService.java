@@ -15,4 +15,5 @@ public interface RegelelementService {
      public<T extends Regelelement> Optional<T> findeElementMitId(Long id, T element);
 
      public<T extends Regelelement> T bearbeiteElement(T element);
+
 }

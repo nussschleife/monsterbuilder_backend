@@ -45,6 +45,9 @@ public class Sprache extends Regelelement{
         this.alleMonster = alleMonster;
     }
     
+    public void addMonster(Monster monster) {
+        this.alleMonster.add(monster);
+    }
 
     @Override
     public int hashCode() {

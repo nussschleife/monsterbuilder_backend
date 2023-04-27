@@ -25,7 +25,7 @@ public class AbilityScore extends Regelelement{
     private int score;
 
     @ManyToMany(mappedBy = "abilityScores")
-    private Set<Monster> akteure = new HashSet<>();
+    private Set<Monster> monster = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -51,12 +51,16 @@ public class AbilityScore extends Regelelement{
         this.score = score;
     }
 
-    public Set<Monster> getAkteur() {
-        return akteure;
+    public Set<Monster> getMonster() {
+        return monster;
     }
 
-    public void setAkteur(Set<Monster> akteur) {
-        this.akteure = akteur;
+    public void setMonster(Set<Monster> akteur) {
+        this.monster = akteur;
+    }
+
+    public void addMonster(Monster monster) {
+        this.monster.add(monster);
     }
 
 

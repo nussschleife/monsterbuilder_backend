@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,7 @@ public class RegelelementServiceImpl implements RegelelementService{
 
     @Autowired RegelelementRepository<AbilityScore> abilityScoreRepo; 
     @Autowired RegelelementRepository<Sprache> spracheRepo;
+    @Autowired RegelelementRepository<Schadensart> schadensartRepo;
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(RegelelementServiceImpl.class);
 
     @SuppressWarnings("unused")
@@ -29,6 +31,8 @@ public class RegelelementServiceImpl implements RegelelementService{
             return (RegelelementRepository<T>) abilityScoreRepo;
         if(element instanceof Sprache)
             return (RegelelementRepository<T>) spracheRepo;
+        if(element instanceof Schadensart)
+        return (RegelelementRepository<T>) schadensartRepo;
         return null;
     }
 
@@ -66,4 +70,5 @@ public class RegelelementServiceImpl implements RegelelementService{
         RegelelementRepository<T> repo = getRepository(element);
         return repo == null ? null : repo.findById(id);
     }
+
 }

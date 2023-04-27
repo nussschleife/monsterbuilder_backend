@@ -1,16 +1,11 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.monster;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
-import de.hsrm.mi.ssche003.monsterbuilder.nutzer.Spielleiter;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Schadenszauber;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Skill;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,8 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -38,7 +31,7 @@ public class Monster extends Akteur{
     private byte level;
     
     @ManyToMany
-    private Set<Trait> alleTraits = new HashSet<>();
+    private Set<Trait> alleTraits = new HashSet<>();    
 
     /*@ManyToOne
     private Spielleiter spielleiter;
@@ -46,8 +39,10 @@ public class Monster extends Akteur{
     @ManyToMany
     private HashSet<Skill> skills = new HashSet<>();*/
 
-    @Transient
-    private ArrayList<Schadensart> weaknesses = new ArrayList<>(); 
+    /*@Transient
+    private ArrayList<Schadensart> weaknesses = new ArrayList<>(); */
+
+
     
     public Alignment getAlignment() {
         return alignment;
@@ -73,16 +68,6 @@ public class Monster extends Akteur{
         return id;
     }
 
-    public ArrayList<Schadensart> getWeaknesses() {
-        return weaknesses;
-    }
-
-    public void addSchadenszauber(Schadenszauber zauber) {
-        if(!weaknesses.contains(zauber.getTyp())) {
-          //  this.zauber.add(zauber);
-        }
-    }
-
     public void setLevel(byte level) {
         this.level = level;
     }
@@ -90,6 +75,11 @@ public class Monster extends Akteur{
     public void setAlleTraits(Set<Trait> alleTraits) {
         this.alleTraits = alleTraits;
     }
+
+    public void addTrait(Trait trait) {
+        this.alleTraits.add(trait);
+    }
+
 
     @Override
     public int hashCode() {
@@ -103,7 +93,6 @@ public class Monster extends Akteur{
        /* result = prime * result + ((spielleiter == null) ? 0 : spielleiter.hashCode());
         
         result = prime * result + ((skills == null) ? 0 : skills.hashCode());*/
-        result = prime * result + ((weaknesses == null) ? 0 : weaknesses.hashCode());
         return result;
     }
 
@@ -145,11 +134,6 @@ public class Monster extends Akteur{
                 return false;
         } else if (!skills.equals(other.skills))
             return false; */
-        if (weaknesses == null) {
-            if (other.weaknesses != null)
-                return false;
-        } else if (!weaknesses.equals(other.weaknesses))
-            return false;
         return true;
     }
 

@@ -4,7 +4,6 @@ import java.util.HashSet;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.skill.Skill;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

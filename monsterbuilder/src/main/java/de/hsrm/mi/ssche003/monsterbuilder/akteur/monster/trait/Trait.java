@@ -72,6 +72,10 @@ public class Trait {
         this.alleMonster = alleMonster;
     }
 
+    public void addMonster(Monster monster) {
+        this.alleMonster.add(monster);
+    }
+
     //TODO: elementverträglichkeit, ability usw.
 
     

@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
@@ -46,6 +46,8 @@ public class MonsterDTO {
     private AbilityScore[] abilityScores;
 
     private Trait[] traits; //TODO: dto hat eine liste für existierende und eine für neue?
+
+    private Angriff[] angriffe;
 
     public Long getId() {
         return id;
@@ -126,6 +128,7 @@ public class MonsterDTO {
         this.traits = traits;
     }
 
+    
     
     
     

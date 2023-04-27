@@ -1,20 +1,17 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow.SavingThrow;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -37,15 +34,35 @@ public class Akteur {
     @ManyToMany
     private Set<Sprache> sprachen = new HashSet<>();
     
-   /* @ManyToMany
-    protected HashSet<Zauber> zauber = new HashSet<>();
-    */
     @ManyToMany
-    private Set<AbilityScore> abilityScores = new HashSet<>(); 
-    /*
-    public HashSet<Zauber> getZauber() {
-        return zauber;
-    }*/
+    protected Set<Zauber> alleZauber = new HashSet<>();
+
+    @ManyToMany
+    protected Set<Angriff> alleAngriffe = new HashSet<>();
+    
+    @ManyToMany
+    protected Set<AbilityScore> abilityScores = new HashSet<>(); 
+    
+
+    public Set<Zauber> getAlleZauber() {
+        return alleZauber;
+    }
+
+    public void setAlleZauber(Set<Zauber> alleZauber) {
+        this.alleZauber = alleZauber;
+    }
+
+    public Set<Angriff> getAlleAngriffe() {
+        return alleAngriffe;
+    }
+
+    public void setAlleAngriffe(Set<Angriff> alleAngriffe) {
+        this.alleAngriffe = alleAngriffe;
+    }
+
+    public void addAngriff(Angriff angriff) {
+        this.alleAngriffe.add(angriff);
+    }
 
     public Long getVersion() {
         return version;
@@ -103,10 +120,13 @@ public class Akteur {
         return false;
     }
 
-    
 
    public void setSprachen(Set<Sprache> sprachen) {
         this.sprachen = sprachen;
+    }
+
+    public void addSprache(Sprache sprache) {
+        this.sprachen.add(sprache);
     }
 
     public void setAbilityScores(Set<AbilityScore> abilityScores) {
