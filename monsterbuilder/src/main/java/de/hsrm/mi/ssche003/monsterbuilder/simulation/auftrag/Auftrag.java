@@ -32,4 +32,8 @@ public class Auftrag {
         }
         return Optional.empty();
     }
+
+    public String getSimID() {
+        return this.simID;
+    }
 }

@@ -24,15 +24,8 @@ public class SimController {
     }
 
     /*@MessageMapping("/sim") 
-    public void sendSpecific(
-    @Payload Message msg, 
-    Principal user, 
-    @Header("simpSessionId") String sessionId) throws Exception { 
-        OutputMessage out = new OutputMessage(
-        msg.getFrom(), 
-        msg.getText(),
-        new SimpleDateFormat("HH:mm").format(new Date())); 
-        simpMessagingTemplate.convertAndSendToUser(
-        msg.getTo(), "/user/topic", out); 
+    public void sendSpecific( @Payload Message msg, Principal user, @Header("simpSessionId") String sessionId) throws Exception { 
+        OutputMessage out = new OutputMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date())); 
+        simpMessagingTemplate.convertAndSendToUser(msg.getTo(), "/user/topic", out); 
     }*/
 }

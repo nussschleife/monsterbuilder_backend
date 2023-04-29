@@ -2,14 +2,20 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter.Encounter;
 
 @Service
 public class SimServiceImpl implements SimService{
+
+    @Autowired SimpMessagingTemplate template;
+    final EncounterSimulationMaster MASTER = EncounterSimulationMaster.getInstance();
 
     @Override
     public void beendeSimulation(String simID) {
@@ -19,8 +25,8 @@ public class SimServiceImpl implements SimService{
 
     @Override
     public SimResponse starteSimulation(SimRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'starteSimulation'");
+        String simID = MASTER.addAuftrag(request, null, (SimResult res) -> sendeUpdate(res));
+        return new SimResponse(simID);
     }
 
     @Override
@@ -29,4 +35,7 @@ public class SimServiceImpl implements SimService{
         throw new UnsupportedOperationException("Unimplemented method 'findeEncounterMitId'");
     }
     
+    private void sendeUpdate(SimResult res) {
+        template.convertAndSendToUser(res.getUserSessionID(), "/user/queue", res); 
+    }
 }

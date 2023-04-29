@@ -6,6 +6,9 @@ public class SimResult {
     String simID;
     int runden;
     SimValue value;
+    String userSessionID;
+
+    
 
     public SimResult(int runden) {
         this.runden = runden;
@@ -33,6 +36,14 @@ public class SimResult {
 
     public void setValue(SimValue value) {
         this.value = value;
+    }
+
+    public String getUserSessionID() {
+        return userSessionID;
+    }
+
+    public void setUserSessionID(String userSessionID) {
+        this.userSessionID = userSessionID;
     }
 
     
