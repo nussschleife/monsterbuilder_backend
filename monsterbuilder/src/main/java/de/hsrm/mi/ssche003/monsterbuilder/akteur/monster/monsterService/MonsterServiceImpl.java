@@ -1,8 +1,10 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterService;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.Set;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,49 +57,48 @@ public class MonsterServiceImpl implements MonsterService{
             persistiertesMonster = new Monster();
         }
             //bidirektionale Verbindungen erstellen
-            
             //Angriffe 
+            Set<Angriff> angriffe = new HashSet<>();
             for(Angriff angriff : monster.getAlleAngriffe()) {
-                Optional<Angriff> optAngriff = regelService.findeElementMitId(angriff.getId(), angriff);
-                if( optAngriff.isEmpty() )
-                    throw new MonsterServiceException("Angriff wurde nicht gefunden.");
-                optAngriff.get().addMonster(persistiertesMonster);
-                persistiertesMonster.addAngriff(angriff);
+                Angriff optAngriff = regelService.bearbeiteElement(angriff);
+                optAngriff.addMonster(persistiertesMonster);
+                angriffe.add(optAngriff);
             }
             //Traits
+            Set<Trait> traits = new HashSet<>();
             for(Trait trait : monster.getAlleTraits()) {
                 Optional<Trait> optTrait = traitRepo.findById(trait.getId());
                 if( optTrait.isEmpty() )
                     throw new MonsterServiceException("Trait wurde nicht gefunden.");
                 optTrait.get().addMonster(persistiertesMonster);
-                persistiertesMonster.addTrait(trait);
+                traits.add(optTrait.get());
             }
             //Sprachen
-
+            Set<Sprache> sprachen = new HashSet<>();
             for(Sprache sprache : monster.getSprachen()) {
-                Optional<Sprache> optSprache = regelService.findeElementMitId(sprache.getId(), sprache);
-                if( optSprache.isEmpty() )
-                    throw new MonsterServiceException("Sprache wurde nicht gefunden.");
-                optSprache.get().addMonster(persistiertesMonster);
-                persistiertesMonster.addSprache(sprache);
+                Sprache optSprache = regelService.bearbeiteElement(sprache);
+                optSprache.addMonster(persistiertesMonster);
+                sprachen.add(optSprache);
             }
             //AbilityScores
+            Set<AbilityScore> scores = new HashSet<>();
 
             for(AbilityScore abilityScore : monster.getAbilityScores()) {
-                Optional<AbilityScore> optAbilityScore = regelService.findeElementMitId(abilityScore.getId(), abilityScore);
-                if( optAbilityScore.isEmpty() )
-                    throw new MonsterServiceException("AbilityScore wurde nicht gefunden.");
-                optAbilityScore.get().addMonster(persistiertesMonster);
-                persistiertesMonster.addAbilityScore(abilityScore);
+                AbilityScore optAbilityScore = regelService.bearbeiteElement(abilityScore);
+                optAbilityScore.addMonster(persistiertesMonster);
+                scores.add(optAbilityScore);
             }
 
             persistiertesMonster.setLebenspunkte(monster.getLebenspunkte());
             persistiertesMonster.setName(monster.getName());
             persistiertesMonster.setGeschwindigkeit_ft(monster.getGeschwindigkeit_ft());
             persistiertesMonster.setRuestungsklasse(monster.getRuestungsklasse());
-            persistiertesMonster.setAbilityScores(monster.getAbilityScores());
-            persistiertesMonster.setAlleTraits(monster.getAlleTraits());
-            persistiertesMonster.setAlleAngriffe(monster.getAlleAngriffe());
+            persistiertesMonster.setAbilityScores(scores);
+            persistiertesMonster.setAlleTraits(traits);
+            persistiertesMonster.setAlleAngriffe(angriffe);
+            persistiertesMonster.setSprachen(sprachen);
+            persistiertesMonster.setAlignment(monster.getAlignment());
+            persistiertesMonster.setLevel(monster.getLevel());
         
         try {
             persistiertesMonster = repo.save(persistiertesMonster);

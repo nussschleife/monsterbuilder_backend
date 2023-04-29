@@ -1,6 +1,6 @@
 import sys
 sys.path.append("java")
-from de.hsrm.mi.ssche003.monsterbuilder.model import MonsterDTO
+from de.hsrm.mi.ssche003.monsterbuilder.akteur.dto import MonsterDTO
 
 monster = MonsterDTO()
 

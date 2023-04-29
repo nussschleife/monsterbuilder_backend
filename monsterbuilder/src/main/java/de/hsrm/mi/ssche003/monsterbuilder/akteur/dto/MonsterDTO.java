@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
@@ -116,20 +117,27 @@ public class MonsterDTO {
         return abilityScores;
     }
 
-    public void setAbilityScores(AbilityScore[] abilityScores) {
+    public MonsterDTO setAbilityScores(AbilityScore[] abilityScores) {
         this.abilityScores = abilityScores;
+        return this;
     }
 
     public Trait[] getTraits() {
         return traits;
     }
 
-    public void setTraits(Trait[] traits) {
+    public MonsterDTO setTraits(Trait[] traits) {
         this.traits = traits;
+        return this;
     }
 
-    
-    
-    
-    
+    public Angriff[] getAngriffe() {
+        return angriffe;
+    }
+
+    public MonsterDTO setAngriffe(Angriff[] angriffe) {
+        this.angriffe = angriffe;
+        return this;
+    }
+
 }

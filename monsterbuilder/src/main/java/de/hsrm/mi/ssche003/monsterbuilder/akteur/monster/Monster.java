@@ -4,33 +4,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 
 @Entity
 public class Monster extends Akteur{
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private Alignment alignment;
     //TODO: Regex oder custom validator
     private String bildpfad;
 
-    @Min(-1) @Max(24) 
-    private byte level;
-    
     @ManyToMany
+    @JoinTable(
+        name = "monster_trait", 
+        joinColumns = @JoinColumn(name = "monster_id"), 
+        inverseJoinColumns = @JoinColumn(name = "trait_id"))
     private Set<Trait> alleTraits = new HashSet<>();    
 
     /*@ManyToOne
@@ -42,11 +32,6 @@ public class Monster extends Akteur{
     /*@Transient
     private ArrayList<Schadensart> weaknesses = new ArrayList<>(); */
 
-
-    
-    public Alignment getAlignment() {
-        return alignment;
-    }
 
     public String getBildpfad() {
         return bildpfad;
@@ -64,13 +49,6 @@ public class Monster extends Akteur{
         return skills;
     }*/
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setLevel(byte level) {
-        this.level = level;
-    }
 
     public void setAlleTraits(Set<Trait> alleTraits) {
         this.alleTraits = alleTraits;
@@ -84,15 +62,9 @@ public class Monster extends Akteur{
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((alignment == null) ? 0 : alignment.hashCode());
+        int result = super.hashCode();
         result = prime * result + ((bildpfad == null) ? 0 : bildpfad.hashCode());
-        result = prime * result + level;
         result = prime * result + ((alleTraits == null) ? 0 : alleTraits.hashCode());
-       /* result = prime * result + ((spielleiter == null) ? 0 : spielleiter.hashCode());
-        
-        result = prime * result + ((skills == null) ? 0 : skills.hashCode());*/
         return result;
     }
 
@@ -100,43 +72,27 @@ public class Monster extends Akteur{
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
         Monster other = (Monster) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (alignment != other.alignment)
-            return false;
         if (bildpfad == null) {
             if (other.bildpfad != null)
                 return false;
         } else if (!bildpfad.equals(other.bildpfad))
             return false;
-        if (level != other.level)
-            return false;
-       /* if (spielleiter == null) {
-            if (other.spielleiter != null)
-                return false;
-        } else if (!spielleiter.equals(other.spielleiter))
-            return false;*/
         if (alleTraits == null) {
             if (other.alleTraits != null)
                 return false;
         } else if (!alleTraits.equals(other.alleTraits))
             return false;
-        /*if (skills == null) {
-            if (other.skills != null)
-                return false;
-        } else if (!skills.equals(other.skills))
-            return false; */
         return true;
     }
 
-    
+    @Override 
+    public void setLevel(int level) {
+        this.level = level;
+    }
     
 }

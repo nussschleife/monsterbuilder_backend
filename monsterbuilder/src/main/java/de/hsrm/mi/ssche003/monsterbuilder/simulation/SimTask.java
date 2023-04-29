@@ -1,8 +1,6 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;

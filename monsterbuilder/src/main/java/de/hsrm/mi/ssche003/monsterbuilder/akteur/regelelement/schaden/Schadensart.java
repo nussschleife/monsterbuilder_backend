@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Angriffzauber;
@@ -18,11 +19,7 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 
 @Entity @Table(name="Schadensart", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-public class Schadensart extends Regelelement{
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @JsonIgnore
-    private Long id;
-    @Version @JsonIgnore
-    private Long version;
+public class Schadensart extends Regelelement implements SimValue {
 
     @OneToMany(mappedBy = "schadensart") @JsonIgnore
     private Set<Angriffzauber> angriffzauber = new HashSet<>();
@@ -30,23 +27,21 @@ public class Schadensart extends Regelelement{
     @OneToMany(mappedBy = "schadensart") @JsonIgnore
     private Set<Angriff> angriffe = new HashSet<>();
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Long getVersion() {
-        return version;
-    }
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+  
     public Set<Angriffzauber> getAngriffzauber() {
         return angriffzauber;
     }
     public void setAngriffzauber(Set<Angriffzauber> angriffzauber) {
         this.angriffzauber = angriffzauber;
+    }
+    @Override @JsonIgnore
+    public Regelelement getInstance() {
+        return new Schadensart();
+    }
+    @Override
+    public Schadensart übernehmeBasisWerteVon(Regelelement element) {
+        this.setName(element.getName());
+        return this;
     }
 
     

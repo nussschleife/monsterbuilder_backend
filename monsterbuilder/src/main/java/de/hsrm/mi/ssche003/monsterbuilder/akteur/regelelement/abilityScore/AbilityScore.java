@@ -3,6 +3,8 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import jakarta.persistence.Entity;
@@ -13,27 +15,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.Positive;
 
-@Entity
+@Entity(name = "AbilityScore")
 public class AbilityScore extends Regelelement{
-    @Id @GeneratedValue
-    private Long id;
-
+   
     @Enumerated(EnumType.STRING)
     private AbilityScoreName scoreName;
 
     @Positive
     private int score;
 
-    @ManyToMany(mappedBy = "abilityScores")
+    @ManyToMany(mappedBy = "abilityScores") @JsonIgnore
     private Set<Monster> monster = new HashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public AbilityScoreName getScoreName() {
         return scoreName;
@@ -51,6 +43,7 @@ public class AbilityScore extends Regelelement{
         this.score = score;
     }
 
+    @JsonIgnore
     public Set<Monster> getMonster() {
         return monster;
     }
@@ -63,7 +56,21 @@ public class AbilityScore extends Regelelement{
         this.monster.add(monster);
     }
 
+    @Override @JsonIgnore
+    public AbilityScore getInstance() {
+        return new AbilityScore();
+    }
 
+    @Override
+    public AbilityScore übernehmeBasisWerteVon(Regelelement element) {
+        if(element instanceof AbilityScore) {
+            this.score = ((AbilityScore) element).getScore();
+            this.setName(element.getName());
+            this.setScoreName(((AbilityScore) element).getScoreName());
+        }
+
+        return this;
+    }
     
     //Zauber, Angriff usw.
 }

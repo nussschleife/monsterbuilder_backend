@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.persistence.OptimisticLockException;
@@ -22,6 +23,8 @@ public class RegelelementServiceImpl implements RegelelementService{
     @Autowired RegelelementRepository<AbilityScore> abilityScoreRepo; 
     @Autowired RegelelementRepository<Sprache> spracheRepo;
     @Autowired RegelelementRepository<Schadensart> schadensartRepo;
+    @Autowired RegelelementRepository<Angriff> angriffRepo;
+
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(RegelelementServiceImpl.class);
 
     @SuppressWarnings("unused")
@@ -32,7 +35,9 @@ public class RegelelementServiceImpl implements RegelelementService{
         if(element instanceof Sprache)
             return (RegelelementRepository<T>) spracheRepo;
         if(element instanceof Schadensart)
-        return (RegelelementRepository<T>) schadensartRepo;
+            return (RegelelementRepository<T>) schadensartRepo;
+        if(element instanceof Angriff)
+            return (RegelelementRepository<T>) angriffRepo;
         return null;
     }
 
@@ -54,21 +59,25 @@ public class RegelelementServiceImpl implements RegelelementService{
         return repo == null ? null : repo.findByName(name);
     }
 
-    @Override
-    public <T extends Regelelement> T bearbeiteElement(T element) {
+    @Override @Transactional
+    public <T extends Regelelement> T bearbeiteElement(T element) { //TODO: testen. fliegt das in die luft wenn nested entities sich geändert haben? zB. schadensart/zauber
         RegelelementRepository<T> repo = getRepository(element);
+        Optional<T> persistiertOpt = findeElementMitId(element);
+        T persistiert = persistiertOpt.isEmpty() ? element.getInstance() : persistiertOpt.get();
+        persistiert.übernehmeBasisWerteVon(element);      
+        persistiert.setName(element.getName());  
         try {
-           return repo.save(element);
+           return repo.save(persistiert);
         } catch (OptimisticLockException ole) {
             logger.error("ELEMENT MIT NAMEN: "+element.getName()+ "KONNTE NICHT GESPEICHERT WERDEN");
         }
-        return null;
+        return null; //ODER THROW REGELELEMENTSERVICEEX
     }
 
     @Override
-    public <T extends Regelelement> Optional<T> findeElementMitId(Long id, T element) {
+    public <T extends Regelelement> Optional<T> findeElementMitId(T element) {
         RegelelementRepository<T> repo = getRepository(element);
-        return repo == null ? null : repo.findById(id);
+        return repo == null || element.getId() == null ? Optional.empty() : repo.findById(element.getId());
     }
 
 }

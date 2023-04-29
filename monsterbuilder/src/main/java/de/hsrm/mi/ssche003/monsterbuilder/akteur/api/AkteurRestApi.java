@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +25,10 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.exception.MonsterServiceExcepti
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterService.MonsterService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -62,12 +61,12 @@ public class AkteurRestApi {
         return false;
     }
 
-    @PostMapping("/monster/")
+    @PostMapping("/monster") @Transactional
     public ResponseEntity<Monster> addMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
         Monster monster = dtoZuMonster(monsterdto);
         if(!result.hasErrors()) {
            
-            logger.info("NEUES MONSTER ERHALTEN: "+monsterdto);
+            logger.info("NEUES MONSTER ERHALTEN: ");
             Set<Sprache> sprachen = new HashSet<>();
             Sprache elementSprache = new Sprache();
 
@@ -85,7 +84,8 @@ public class AkteurRestApi {
             try{
                 monster = monsterService.editMonster(monster);
             } catch(MonsterServiceException mse) {
-
+                logger.error("errorrr");
+                return ResponseEntity.badRequest().body(monster);
             }
            
             logger.info(String.valueOf(monsterService.findeAlleMonster().size()));
