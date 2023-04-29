@@ -38,3 +38,8 @@ out/
 
 ### Jython ###
 .jython_cache
+
+##db##
+*.db
+##test json##
+monster.json
