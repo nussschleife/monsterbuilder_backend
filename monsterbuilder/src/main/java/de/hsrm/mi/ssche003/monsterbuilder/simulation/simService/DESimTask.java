@@ -18,6 +18,12 @@ public class DESimTask implements SimTask {
     Monster monster;
     Gruppe gruppe;
     String simID;
+    String message;
+
+    public DESimTask(String id, String message) {
+        this.simID = simID;
+        this.message = message;
+    }
 
     public DESimTask(Gruppe gruppe, Monster monster, String id) {
         this.monster = monster;
@@ -32,11 +38,18 @@ public class DESimTask implements SimTask {
 
     @Override
     public SimResult call() {
-        while(!istEncounterVorbei()) {
+        /*while(!istEncounterVorbei()) {
             //ereignis auf index 1 abarbeiten
+        }*/
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         beendeEncounter();
-        return new SimResult(kampfrunden);
+        //return new SimResult(kampfrunden);
+        return new SimResult(simID, message);
     }
 
     private void initEncounter() { 

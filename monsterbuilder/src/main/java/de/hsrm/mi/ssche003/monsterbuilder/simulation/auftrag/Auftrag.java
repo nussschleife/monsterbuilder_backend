@@ -14,7 +14,7 @@ public class Auftrag {
 
     public Auftrag(SimStrategy strategy, SimRequest request, String id) {
         this.strategy = strategy;
-        this.tasks = strategy.createSimTasks(request);
+        this.tasks = strategy.createSimTasks(id, request);
         this.simID = id;
     }
     

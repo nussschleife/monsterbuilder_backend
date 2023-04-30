@@ -23,9 +23,9 @@ public class SimServiceImpl implements SimService{
         throw new UnsupportedOperationException("Unimplemented method 'beendeSimulation'");
     }
 
-    @Override
+    @Override //TODO: SimException usw.
     public SimResponse starteSimulation(SimRequest request) {
-        String simID = MASTER.addAuftrag(request, null, (SimResult res) -> sendeUpdate(res));
+        String simID = MASTER.addAuftrag(request, new DESStrategy(), (SimResult res) -> sendeUpdate(res));
         return new SimResponse(simID);
     }
 
@@ -36,6 +36,6 @@ public class SimServiceImpl implements SimService{
     }
     
     private void sendeUpdate(SimResult res) {
-        template.convertAndSendToUser(res.getUserSessionID(), "/user/queue", res); 
+        template.convertAndSendToUser(res.getUserSessionID(), "/queue/sim", res); 
     }
 }

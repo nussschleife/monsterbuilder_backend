@@ -7,8 +7,12 @@ public class SimResult {
     int runden;
     SimValue value;
     String userSessionID;
+    String message;
 
-    
+    public SimResult(String simID, String message) {
+        this.simID = simID;
+        this.message = message;
+    }
 
     public SimResult(int runden) {
         this.runden = runden;

@@ -12,7 +12,7 @@ public class SimConfig implements WebSocketMessageBrokerConfigurer{
 
    @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
-         config.enableSimpleBroker("/user/queue");
+         config.enableSimpleBroker("/queue/sim");
     }
     
     @Override
