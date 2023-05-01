@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -46,7 +45,6 @@ public class EncounterSimulationMaster {
             result.thenAccept(t -> sendeErgebnis.accept(t));
             auftrag.addFuture(result);
         }
-       
      
         return auftrag.getSimID();
     }
@@ -66,7 +64,6 @@ public class EncounterSimulationMaster {
            // zuLöschen.getTasks().forEach((ComletableFuture<SimResult> t) -> t.cancel());
 
         }
-        //Future.cancel auf alle tasks
     }
 
     private String generiereSimID() {

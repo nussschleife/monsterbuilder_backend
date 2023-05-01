@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -39,22 +40,23 @@ public class SimController {
     }
   
 
-    @MessageMapping("/sim/neu") 
+    @MessageMapping("/sim/neu/") 
     public void starteNeueSimulation(String msg, @Header("simpsessionid") String sessionID) {
         SimRequest request;
+        String response = "";
         try {
             request = mapper.readValue(msg, SimRequest.class);
             request.setUserName(sessionID);
-            String simID = simService.starteSimulation(request).getSimID();
-            template.convertAndSend( "/queue/user/sim/neu/"+sessionID, simID);
+            response = simService.starteSimulation(request).getSimID();
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
+            response = "json error";
             e.printStackTrace();
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
+            response = "processing error";
             e.printStackTrace();
         }
-        template.convertAndSend( "/queue/user/sim/neu/"+sessionID, "test erhalten aber fail");
+        template.convertAndSend("/queue/user/sim/neu/"+sessionID, response);
         logger.info("ende der api methode");
     }
+
 }

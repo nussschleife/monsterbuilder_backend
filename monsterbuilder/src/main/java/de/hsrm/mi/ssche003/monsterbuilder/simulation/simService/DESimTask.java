@@ -25,7 +25,7 @@ public class DESimTask implements SimTask {
     Logger logger = LoggerFactory.getLogger(DESimTask.class);
 
     public DESimTask(String id, String message) {
-        this.simID = simID;
+        this.simID = id;
         this.message = message;
     }
 

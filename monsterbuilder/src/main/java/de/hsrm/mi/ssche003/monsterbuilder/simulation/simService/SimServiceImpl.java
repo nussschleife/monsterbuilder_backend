@@ -64,12 +64,14 @@ public class SimServiceImpl implements SimService{
     private void sendeUpdate(SimResult res) {
         logger.info(res.getMessage());
         String result = "json error";
+        
         try {
             result = writer.writeValueAsString(res);
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
+           //TODO: SimServiceException
             e.printStackTrace();
         }
-       // template.convertAndSend( "/queue/user/sim/update"+res.getUserSessionID(), result); 
+        logger.info("/queue/user/sim/update/"+simID_SessionID.get(res.getSimID()));
+        template.convertAndSend("/queue/user/sim/update/"+simID_SessionID.get(res.getSimID()), result); 
     }
 }

@@ -12,12 +12,12 @@ public class SimConfig implements WebSocketMessageBrokerConfigurer{
 
    @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
-        config.enableSimpleBroker("/queue/");
+        config.enableSimpleBroker("/queue/", "/user");
+        config.setUserDestinationPrefix("/user");
     }
     
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/sim").setAllowedOrigins("*");
-        registry.addEndpoint("/sim/neu").setAllowedOrigins("*");
     }
 }
