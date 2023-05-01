@@ -13,7 +13,7 @@ public class Encounter {
     //paramter -> simvalue[]
     //durchschn. kampfrunden
     //bester effekt
-    //Liste an Runden?
+    //TODO: Liste an Runden? -> wäre nice um entscheidungen nachzuvollziehen
 
     public String getId() {
         return id;

@@ -10,7 +10,7 @@ public class DESStrategy implements SimStrategy{
     @Override
     public ArrayList<DESimTask> createSimTasks(String simID, SimRequest request) {
         ArrayList<DESimTask> alleTasks = new ArrayList<>();
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < 5; i++) {
             alleTasks.add(new DESimTask(simID, "testnachricht: "+String.valueOf(i)));
         }
         return alleTasks;

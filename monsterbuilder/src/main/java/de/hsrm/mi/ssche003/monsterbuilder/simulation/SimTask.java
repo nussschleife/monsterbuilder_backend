@@ -6,7 +6,5 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 
 public interface SimTask extends Callable<SimResult>{
     
-    public boolean istFertig();
-
     public String getSimID();
 }

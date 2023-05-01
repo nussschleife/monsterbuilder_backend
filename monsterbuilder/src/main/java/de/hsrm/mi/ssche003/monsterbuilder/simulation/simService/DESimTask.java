@@ -2,6 +2,9 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
@@ -19,6 +22,7 @@ public class DESimTask implements SimTask {
     Gruppe gruppe;
     String simID;
     String message;
+    Logger logger = LoggerFactory.getLogger(DESimTask.class);
 
     public DESimTask(String id, String message) {
         this.simID = simID;
@@ -38,6 +42,7 @@ public class DESimTask implements SimTask {
 
     @Override
     public SimResult call() {
+        logger.info("task called");
         /*while(!istEncounterVorbei()) {
             //ereignis auf index 1 abarbeiten
         }*/
@@ -86,12 +91,6 @@ public class DESimTask implements SimTask {
 
     private boolean istEncounterVorbei() {
         return keineErgeinisseÜbrig() || istGruppeBesiegt() || istMonsterBesiegt();
-    }
-
-    @Override
-    public boolean istFertig() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'istFertig'");
     }
 
     @Override
