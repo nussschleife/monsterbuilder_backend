@@ -142,6 +142,7 @@ public class Akteur {
         return this;
     }
 
+
     public int wuerfleInitiative() {
         return (int) (Math.random()*20) + 1; //+ini modifier wenn nötig
     }

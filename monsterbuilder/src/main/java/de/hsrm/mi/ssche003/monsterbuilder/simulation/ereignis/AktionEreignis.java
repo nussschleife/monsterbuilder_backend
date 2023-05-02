@@ -24,7 +24,7 @@ public class AktionEreignis implements Ereignis{
         //per skript aktion herausfinden
         // Wo wird der schaden gemacht? Schadenereignis?
         //wenn es zB. saving throw erfordert, neues ereignis erstellen und dann als nächstes ereignis den angriff
-        Akteur randomOpfer = (Akteur) state.getLebende().toArray()[(int)(Math.random()*state.getLebende().size())];
+        Akteur randomOpfer = (Akteur) state.getLebende().toArray()[((int)Math.random()*state.getLebende().size())];
         
         //neues Aktionsereignis für die runde danach 
         Ereignis[] ereignis = {new AktionEreignis(false, akteurID), new SchadenEreignis(randomOpfer, (int)(Math.random()*7)+1)};

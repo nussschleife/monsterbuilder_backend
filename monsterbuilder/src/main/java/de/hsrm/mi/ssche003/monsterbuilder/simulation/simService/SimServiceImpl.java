@@ -113,6 +113,7 @@ public class SimServiceImpl implements SimService{
     @Transactional
     private Monster erstelleKorrektesMonster(String name) {
         Monster monster =  (Monster) new Monster().setName(name).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
+        monster.setId(Long.valueOf(((int)Math.random())*934+1));
      //   monster.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
         monster.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
         return monster;
@@ -123,6 +124,7 @@ public class SimServiceImpl implements SimService{
         Charakter charakter =  (Charakter) new Charakter().setName(name).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
       //  charakter.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
         charakter.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
+        charakter.setId(Long.valueOf(((int)Math.random())*934+1));
         return charakter;
     }
 }

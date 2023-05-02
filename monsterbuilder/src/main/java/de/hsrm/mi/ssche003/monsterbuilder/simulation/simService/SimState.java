@@ -29,11 +29,11 @@ public class SimState {
     }
 
     public boolean istMonsterBesiegt() {
-        return monster.stream().allMatch(mon -> {return mon.getLebenspunkte() <= 0;});
+        return !lebendig.stream().anyMatch(akteur -> monster.contains(akteur));
     }
 
     public boolean istGruppeBesiegt() {
-        return gruppe.getAllCharaktere().stream().allMatch(charakter -> {return charakter.getLebenspunkte() <= 0;});
+        return !lebendig.stream().anyMatch(akteur -> gruppe.getAllCharaktere().contains(akteur));
     }
 
     public LinkedList<Akteur> getLebende() {

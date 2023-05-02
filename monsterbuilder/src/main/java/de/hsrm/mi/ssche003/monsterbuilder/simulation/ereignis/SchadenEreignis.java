@@ -25,6 +25,7 @@ public class SchadenEreignis implements Ereignis {
         PyObject[] pys = new PyObject[2];
         pys[0] = new PyInteger(getroffener.getId().intValue());
         pys[1] = new PyInteger(schaden);
+        String log = interpreter.get("log").__call__().asString();
         if(((PyInteger) interpreter.get("schaden").__call__(pys)).asInt() != 0) 
             state.toeteAkteur(getroffener);
         return Optional.empty();

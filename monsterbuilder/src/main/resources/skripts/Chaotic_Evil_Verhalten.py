@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import random
+import random, sys
 from de.hsrm.mi.ssche003.monsterbuilder.akteur import Akteur
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.monster import Monster
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter import Charakter
@@ -18,10 +18,27 @@ def initialisiere():
         alleCharaktere.append(PyCharakter(char))
 
 def ende():
-    return str(alleMonster.iterator().next().getLebenspunkte()) +' '+str(alleCharaktere.iterator().next().getLebenspunkte())
+    s = ""
+    for mon in javaMonster:
+        s += str(mon.getLebenspunkte()) + " " + mon.getName()
+    for mon in javaCharaktere:
+        s += str(mon.getLebenspunkte()) + " " + mon.getName()
+    return s
+
+def log():
+    s = ""
+    for mon in alleMonster:
+        s = s+ str(mon.id)+" "
+    for mon in alleCharaktere:
+        s = s+ str(mon.id)+" "
+    return s
 
 def holeAkteurMitId(id):
-    return [akteur for akteur in alleAkteure if akteur.getId() is id ][0]
+    charakter = [akteur for akteur in alleCharaktere if akteur.id == id ]
+    monster = [akteur for akteur in alleMonster if akteur.id == id ]
+    if len(monster) > 0:
+        return monster[0]
+    return charakter[0]
 
 
 def schaden(akteurid, wert):
@@ -105,7 +122,7 @@ class CharakterVerhalten(AkteurVerhalten):
     def __init__(self, charakter):
         self.charakter = charakter
 
-class PyAkteur():
+class PyAkteur(object):
     lebenspunkte = 1
     ruestungsklasse = 1
     geschwindigkeit_ft = 1
@@ -117,7 +134,7 @@ class PyAkteur():
         self.lebenspunkte = akteur.getLebenspunkte()
         self.ruestungsklasse = akteur.getRuestungsklasse()
         self.name = akteur.getName()
-        self.geschwindigkeit_ft = akteur.getGeschwingikeit_ft()
+        self.geschwindigkeit_ft = akteur.getGeschwindigkeit_ft()
         self.id = akteur.getId()
         
 
@@ -125,7 +142,7 @@ class PyMonster(PyAkteur):
     elementvertraeglichkeiten = []
 
     def __init__(self, monster):
-        super(PyMonster, self).__init__(self, monster)
+        super(PyMonster, self).__init__(monster)
         #self.elementverträglichkeiten = monster.getElementVerträglichkeiten()
         self.aktionen = monster.getAlleAngriffe()
 
@@ -133,5 +150,5 @@ class PyCharakter(PyAkteur):
     klasse = ""
 
     def __init__(self, charakter):
-        super(PyCharakter, self).__init__(self, charakter)
+        super(PyCharakter, self).__init__(charakter)
         self.aktionen = charakter.getAlleAngriffe()
