@@ -8,6 +8,8 @@ import java.util.Queue;
 import java.util.Set;
 
 import org.python.util.PythonInterpreter;
+import org.python.core.PyObject;
+import org.python.core.PySet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +30,7 @@ public class DESimTask implements SimTask {
     Logger logger = LoggerFactory.getLogger(DESimTask.class);
     SimValue value;
     PythonInterpreter interpreter;
+    final String CHAOTIC_EVIL = "src/main/resources/skripts/Chaotic_Evil_Verhalten.py";
 
     public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value) {
         this.simID = id;
@@ -35,13 +38,19 @@ public class DESimTask implements SimTask {
         state = new SimState(gruppe, monster);
         ereignisse.add(new InitiativeEreignis());
         this.value = value;
+        interpreter = new PythonInterpreter();
+        interpreter.execfile(CHAOTIC_EVIL);
+        interpreter.set("javaMonster", monster);
+        interpreter.set("javaCharaktere", gruppe.getAlleCharaktere());
+        PyObject someFunc = interpreter.get("initialisiere");
+        someFunc.__call__();
     }
 
     @Override
     public SimResult call() { //TODO: python interpreter
         logger.info("task called");
         while(!istEncounterVorbei()) {
-            Optional<Ereignis[]> folgeEreignisse = ereignisse.pop().auslösen(state);
+            Optional<Ereignis[]> folgeEreignisse = ereignisse.pop().auslösen(state, interpreter);
             if(folgeEreignisse.isPresent()) {
                 for(Ereignis e : folgeEreignisse.get()) {
                     if(e.addToHead())
@@ -58,7 +67,10 @@ public class DESimTask implements SimTask {
     }
 
     private void beendeEncounter() {
-
+        String javaMons = interpreter.get("ende").__call__().asString();
+        logger.info(javaMons);
+        interpreter.close();
+        
     }
 
     private void encounter() {

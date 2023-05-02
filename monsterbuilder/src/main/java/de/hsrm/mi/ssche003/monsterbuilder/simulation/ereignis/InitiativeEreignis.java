@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Optional;
 
+import org.python.util.PythonInterpreter;
+
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimState;
 
@@ -14,7 +16,7 @@ public class InitiativeEreignis implements Ereignis{
     }
     
     @Override
-    public Optional<Ereignis[]> auslösen(SimState state) {
+    public Optional<Ereignis[]> auslösen(SimState state, PythonInterpreter interpreter) {
         Akteur[] akteureSortiert = (state.getLebende().stream().sorted(Comparator.comparingInt(akteur -> akteur.wuerfleInitiative())).toArray(Akteur[] :: new));
         LinkedList<Akteur> reihenfolge = new LinkedList<Akteur>(Arrays.asList(akteureSortiert));
         state.setLebende(reihenfolge);

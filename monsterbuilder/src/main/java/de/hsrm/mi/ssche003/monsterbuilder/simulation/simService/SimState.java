@@ -1,7 +1,5 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -26,10 +24,8 @@ public class SimState {
         kampfrunden = 0;
     }
 
-    public void verwundeAkteur(Akteur akteur, int schaden) {
-        akteur.setLebenspunkte(akteur.getLebenspunkte() - schaden);
-        if(akteur.getLebenspunkte() <= 0)
-            this.lebendig.remove(akteur);
+    public void toeteAkteur(Akteur akteur) {
+        this.lebendig.remove(akteur);
     }
 
     public boolean istMonsterBesiegt() {

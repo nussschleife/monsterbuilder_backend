@@ -2,12 +2,14 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
 import java.util.Optional;
 
+import org.python.util.PythonInterpreter;
+
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimState;
 
 public class NeueRundeEreignis implements Ereignis{
 
     @Override
-    public Optional<Ereignis[]> auslösen(SimState state) {
+    public Optional<Ereignis[]> auslösen(SimState state, PythonInterpreter interpreter) {
         state.kampfrunden++;
         Ereignis[] folEreignisse = new Ereignis[state.getLebende().size()+1];
         for( int i = 0; i < folEreignisse.length; i++) {
