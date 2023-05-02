@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.charakterService.CharakterService;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.InitResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.ValidResponse;
@@ -38,6 +41,7 @@ public class AkteurRestApi {
 
     @Autowired MonsterService monsterService;
     @Autowired RegelelementService regelelementService;
+    @Autowired CharakterService charakterService;
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(AkteurRestApi.class);
 
 
@@ -107,6 +111,30 @@ public class AkteurRestApi {
         init.setAlleTraits(monsterService.findeAlleTraits().toArray(new Trait[0]));
         init.setSchadensarten(regelelementService.findeAlleNamenVonElement(new Schadensart()).toArray(new String[0]));
         return init;
+    }
+
+    @GetMapping("/gruppe/{id}")
+    public Gruppe getGruppeMitId(@PathVariable Long id) {
+        return charakterService.findeGruppeMitId(id);
+    }
+
+    @GetMapping("/charakter/{id}")
+    public Charakter getCharakterMitId(@PathVariable Long id) {
+        return charakterService.findeCharakterMitId(id);
+    }
+
+    @PostMapping("/gruppe/bearbeiten")
+    public ResponseEntity<Gruppe> bearbeiteGruppe(@RequestBody Gruppe bearbeiteteGruppe) {
+        //TODO: Validierung
+        Gruppe gespeichert = charakterService.bearbeiteGruppe(bearbeiteteGruppe);
+        return ResponseEntity.ok().body(gespeichert);
+    }
+
+    @PostMapping("/charakter/bearbeiten")
+    public ResponseEntity<Charakter> bearbeiteCharakter(@RequestBody Charakter charakter) {
+        //TODO: Validierung
+        Charakter gespeichert = charakterService.bearbeiteCharakter(charakter);
+        return ResponseEntity.ok().body(gespeichert);
     }
 
     private Monster dtoZuMonster(MonsterDTO monsterdto) {

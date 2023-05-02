@@ -1,70 +1,60 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 
+import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.SimTask;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.Ereignis;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.InitiativeEreignis;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Level;
 
 public class DESimTask implements SimTask {
     SimState state;
-    int kampfrunden;
-    ArrayList<Akteur> reihenfolge;
-    ArrayList<Ereignis> ereignisse;
-    Monster monster;
-    Gruppe gruppe;
+    Deque<Ereignis> ereignisse;
     String simID;
     String message;
     Logger logger = LoggerFactory.getLogger(DESimTask.class);
+    SimValue value;
+    PythonInterpreter interpreter;
 
-    public DESimTask(String id, String message) {
+    public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value) {
         this.simID = id;
-        this.message = message;
-    }
-
-    public DESimTask(Gruppe gruppe, Monster monster, String id) {
-        this.monster = monster;
-        this.gruppe = gruppe;
-        this.simID = id;
-        ereignisse = new ArrayList<Ereignis>();
-        reihenfolge = new ArrayList<Akteur>();
-        reihenfolge.add(monster);
-        reihenfolge.addAll(gruppe.getAllCharaktere());
-        state = new SimState(reihenfolge);
+        ereignisse = new ArrayDeque<Ereignis>();
+        state = new SimState(gruppe, monster);
+        ereignisse.add(new InitiativeEreignis());
+        this.value = value;
     }
 
     @Override
-    public SimResult call() {
+    public SimResult call() { //TODO: python interpreter
         logger.info("task called");
-        /*while(!istEncounterVorbei()) {
-            //ereignis auf index 1 abarbeiten
-        }*/
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        while(!istEncounterVorbei()) {
+            Optional<Ereignis[]> folgeEreignisse = ereignisse.pop().auslösen(state);
+            if(folgeEreignisse.isPresent()) {
+                for(Ereignis e : folgeEreignisse.get()) {
+                    if(e.addToHead())
+                        ereignisse.addFirst(e);
+                    else
+                        ereignisse.add(e);
+                }
+            }
         }
-        beendeEncounter();
-        //return new SimResult(kampfrunden);
-        return new SimResult(simID, message);
-    }
-
-    private void initEncounter() { 
-        //Startereignis erstellen
-        Ereignis startereignis = new InitiativeEreignis(reihenfolge);
-       //alle HP auffüllen
-
-        //liste an ereignissen wird erstlelt -> oder wird SimTask mit Startereignis zum Ini würfeln initialisiert?
-            //ereignis wäre eine Runde oder Aktion pro Spieler
         
+        beendeEncounter();
+        message = "runden: "+ state.kampfrunden + "value: "+String.valueOf(((Level) value).intValue());
+        return new SimResult(simID, message);
     }
 
     private void beendeEncounter() {
@@ -81,16 +71,8 @@ public class DESimTask implements SimTask {
         return ereignisse.isEmpty();
     }
 
-    private boolean istMonsterBesiegt() {
-        return monster.getLebenspunkte() <= 0;
-    }
-
-    private boolean istGruppeBesiegt() {
-        return gruppe.getAllCharaktere().stream().allMatch(charakter -> {return charakter.getLebenspunkte() <= 0;});
-    }
-
-    private boolean istEncounterVorbei() {
-        return keineErgeinisseÜbrig() || istGruppeBesiegt() || istMonsterBesiegt();
+    private boolean istEncounterVorbei() { //TODO: letzte bedingung raus?
+        return keineErgeinisseÜbrig() || state.istGruppeBesiegt() || state.istMonsterBesiegt();
     }
 
     @Override

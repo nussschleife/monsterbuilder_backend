@@ -1,6 +1,12 @@
 import random
+from de.hsrm.mi.ssche003.monsterbuilder.akteur import Akteur
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.monster import Monster
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter import Charakter
+
+#man gibt ein Ereignis hier in das Skript und der Akteur agiert entsprechend 
+#man hält instanzen der akteure mit dem alignment hier im skript
+#man gibt Gegnerische akteure in die instanz
+#was wird zurückgegeben? Ereignis/Akteur??
 
 class States:
    DEAD = 1
@@ -10,17 +16,21 @@ class States:
    PRONE = 5
 
 class AkteurVerhalten(object):
-    def initiative():
-       raise Exception('not implemented') 
+   
+   state = States.ALIVE
+   akteur = Akteur()
     
-    def reaktion():
-       raise Exception('not implemented') 
+   def initiative(self):
+      raise Exception('not implemented') 
+    
+   def reaktion(self):
+      raise Exception('not implemented') 
        
-    def aktion():
-       raise Exception('not implemented') 
+   def aktion(self):
+      raise Exception('not implemented') 
       
-    def bewegen():
-       raise Exception('not implemented') 
+   def bewegen(self, laufweite):
+      raise Exception('not implemented') 
     
 class MonsterVerhalten(AkteurVerhalten):
 

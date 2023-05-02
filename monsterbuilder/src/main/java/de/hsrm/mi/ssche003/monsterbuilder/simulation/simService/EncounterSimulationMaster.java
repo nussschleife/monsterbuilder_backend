@@ -40,7 +40,10 @@ public class EncounterSimulationMaster {
         for(SimTask task : auftrag.getTasks()) {
             CompletableFuture<SimResult> result = CompletableFuture.supplyAsync(() -> {
                 try { return task.call(); }
-                catch (Exception ex) { throw new CompletionException(ex); } 
+                catch (Exception ex) { 
+                    ex.printStackTrace();
+                    throw new CompletionException(ex); 
+                } 
             }, executor);
             result.thenAccept(t -> sendeErgebnis.accept(t));
             auftrag.addFuture(result);

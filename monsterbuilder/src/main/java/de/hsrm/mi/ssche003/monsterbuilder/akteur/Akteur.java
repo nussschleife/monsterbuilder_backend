@@ -143,7 +143,7 @@ public class Akteur {
     }
 
     public int wuerfleInitiative() {
-        return (int) Math.random()*20; //+ini modifier wenn nötig
+        return (int) (Math.random()*20) + 1; //+ini modifier wenn nötig
     }
 
     public boolean ausweichen(SavingThrow event, int schwierigkeit) {

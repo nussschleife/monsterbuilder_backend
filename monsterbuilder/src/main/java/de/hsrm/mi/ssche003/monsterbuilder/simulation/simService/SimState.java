@@ -1,23 +1,52 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 
 
 public class SimState {
-    ArrayList<Akteur> lebendig;
+    LinkedList<Akteur> lebendig;
+    Gruppe gruppe;
+    Set<Monster> monster;
+   public int kampfrunden;
     //Battlemap usw.
 
-    public SimState(ArrayList<Akteur> alleTeilnehmer) {
-        this.lebendig = alleTeilnehmer;
+    public SimState(Gruppe gruppe, Set<Monster> monster) {
+        this.lebendig = new LinkedList<Akteur>();
+        this.lebendig.addAll(monster);
+        this.lebendig.addAll(gruppe.getAllCharaktere());
+        this.gruppe = gruppe;
+        this.monster = monster;
+        kampfrunden = 0;
     }
 
-    public Akteur verwundeAkteur(Akteur akteur, int schaden) {
+    public void verwundeAkteur(Akteur akteur, int schaden) {
         akteur.setLebenspunkte(akteur.getLebenspunkte() - schaden);
         if(akteur.getLebenspunkte() <= 0)
-            lebendig.remove(akteur);
-        return akteur;
+            this.lebendig.remove(akteur);
+    }
+
+    public boolean istMonsterBesiegt() {
+        return monster.stream().allMatch(mon -> {return mon.getLebenspunkte() <= 0;});
+    }
+
+    public boolean istGruppeBesiegt() {
+        return gruppe.getAllCharaktere().stream().allMatch(charakter -> {return charakter.getLebenspunkte() <= 0;});
+    }
+
+    public LinkedList<Akteur> getLebende() {
+        return this.lebendig;
+    }
+
+
+    public void setLebende(LinkedList<Akteur> lebend) {
+        this.lebendig = lebend;
     }
 
 }
