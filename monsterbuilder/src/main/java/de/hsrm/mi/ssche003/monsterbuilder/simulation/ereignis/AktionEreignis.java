@@ -1,39 +1,54 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.python.core.PyObject;
-import org.python.util.PythonInterpreter;
+import org.python.core.PyObjectDerived;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimState;
 
-public class AktionEreignis implements Ereignis{
+public class AktionEreignis implements AkteurEreignis {
 
-    private boolean nachAusweichen;
-    private Long akteurID;
+    private Akteur akteur;
+    EreignisCode code = EreignisCode.ANGREIFEN;
+    public int schaden;
+    public Akteur gegner;
 
-    public AktionEreignis(boolean nachAusweichen, Long akteurID) {
-        this.nachAusweichen = nachAusweichen;
-        this.akteurID = akteurID;
+    public AktionEreignis( Akteur akteur) {
+        this.akteur = akteur;
+    }
+
+    public Boolean addToHead() {
+        return false;
     }
 
     @Override
-    public Optional<Ereignis[]> auslösen(SimState state, PythonInterpreter interpreter) {
-
-        //per skript aktion herausfinden
-        // Wo wird der schaden gemacht? Schadenereignis?
-        //wenn es zB. saving throw erfordert, neues ereignis erstellen und dann als nächstes ereignis den angriff
-        Akteur randomOpfer = (Akteur) state.getLebende().toArray()[((int)Math.random()*state.getLebende().size())];
-        
-        //neues Aktionsereignis für die runde danach 
-        Ereignis[] ereignis = {new AktionEreignis(false, akteurID), new SchadenEreignis(randomOpfer, (int)(Math.random()*7)+1)};
-        return Optional.of(ereignis);
+    public List<IEreignis> generiereFolEreignis(PyObject py) {
+       List<IEreignis> ereignis =  new ArrayList<IEreignis>(1);
+       PyObjectDerived derived = (PyObjectDerived) py;
+       ereignis.add((SchadenEreignis)derived.__tojava__(SchadenEreignis.class));
+       return ereignis;
     }
 
     @Override
-    public boolean addToHead() {
-        return nachAusweichen;
+    public String getFuncName() {
+        return code.toString();
+    }
+
+    public Long getAkteurID() {
+        return 1l;
+    }
+
+    @Override
+    public Optional<StateChange> getChange() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Akteur getAkteurVerhalten() {
+        return akteur;
     }
     
 }

@@ -6,16 +6,13 @@ public class SimResult {
     String simID;
     int runden;
     SimValue value;
-    String userSessionID;
     String message;
 
-    public SimResult(String simID, String message) {
-        this.simID = simID;
-        this.message = message;
-    }
-
-    public SimResult(int runden) {
-        this.runden = runden;
+    public SimResult(int runden, SimValue value, String simID) {
+       this.simID = simID;
+       this.runden = runden;
+        this.value = value;
+        
     }
 
     public String getSimID() {
@@ -34,29 +31,16 @@ public class SimResult {
         this.runden = runden;
     }
 
-    public SimValue getValue() {
+/*     public SimValue getValue() {
         return value;
-    }
+    } */
 
     public void setValue(SimValue value) {
         this.value = value;
     }
 
-    public String getUserSessionID() {
-        return userSessionID;
-    }
-
-    public void setUserSessionID(String userSessionID) {
-        this.userSessionID = userSessionID;
-    }
-
     public String getMessage() {
-        return message;
+        return "runden: "+ runden + "value: "+ "noch kein tostr impl.";
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    
 }

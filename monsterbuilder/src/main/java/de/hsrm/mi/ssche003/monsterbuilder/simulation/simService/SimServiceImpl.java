@@ -3,6 +3,7 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Level;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
@@ -113,9 +115,10 @@ public class SimServiceImpl implements SimService{
     @Transactional
     private Monster erstelleKorrektesMonster(String name) {
         Monster monster =  (Monster) new Monster().setName(name).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
-        monster.setId(Long.valueOf(((int)Math.random())*934+1));
+        monster.setId(generateIDBisFrontendGeht());
      //   monster.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
         monster.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
+        monster.setAlignment(Alignment.CHAOTIC_EVIL);
         return monster;
     }
 
@@ -124,7 +127,14 @@ public class SimServiceImpl implements SimService{
         Charakter charakter =  (Charakter) new Charakter().setName(name).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
       //  charakter.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
         charakter.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
-        charakter.setId(Long.valueOf(((int)Math.random())*934+1));
+        charakter.setId(generateIDBisFrontendGeht());
+        charakter.setAlignment(Alignment.CHAOTIC_EVIL);
         return charakter;
+    }
+
+    public Long generateIDBisFrontendGeht() {
+        long leftLimit = 1L;
+        long rightLimit = 420L;
+        return leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
     }
 }

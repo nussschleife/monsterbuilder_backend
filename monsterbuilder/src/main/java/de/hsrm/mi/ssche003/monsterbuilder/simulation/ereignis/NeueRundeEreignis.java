@@ -1,27 +1,36 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import org.python.util.PythonInterpreter;
+import org.python.core.PyObject;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimState;
 
-public class NeueRundeEreignis implements Ereignis{
+public class NeueRundeEreignis implements EncounterEreignis{
 
     @Override
-    public Optional<Ereignis[]> auslösen(SimState state, PythonInterpreter interpreter) {
+    public List<IEreignis> auslösen(SimState state) {
         state.kampfrunden++;
-        Ereignis[] folEreignisse = new Ereignis[state.getLebende().size()+1];
-        for( int i = 0; i < folEreignisse.length; i++) {
-            folEreignisse[i] = new AktionEreignis(false, state.getLebende().iterator().next().getId());
+        int size = state.getLebende().size();
+        List<IEreignis> folEreignisse = new ArrayList<>();
+        for( Akteur akteur : state.getLebende()) {
+            folEreignisse.add( new AktionEreignis(akteur));
         }
-        folEreignisse[folEreignisse.length-1] = new NeueRundeEreignis();
-        return Optional.of(folEreignisse); 
+        folEreignisse.add(size-1, new NeueRundeEreignis());
+        return folEreignisse; 
     }
 
     @Override
-    public boolean addToHead() {
+    public Boolean addToHead() {
         return false;
     }
-    
+
+    @Override
+    public Optional<StateChange> getChange() {
+        return Optional.empty();
+    }
+
 }
