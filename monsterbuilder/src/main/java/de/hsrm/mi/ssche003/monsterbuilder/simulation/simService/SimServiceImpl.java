@@ -104,7 +104,7 @@ public class SimServiceImpl implements SimService{
         radio.getAllCharaktere().add(erstelleKorrektenCharakter("brutus"));
         radio.getAllCharaktere().add(erstelleKorrektenCharakter("rasmodeus"));
         fromFrontend.setGruppe(radio);
-        for(int i = 1; i < 6; i++) {
+        for(int i = 1; i < 5; i++) {
             fromFrontend.getValues().add(new Level(i));
         }
         
@@ -114,7 +114,7 @@ public class SimServiceImpl implements SimService{
 
     @Transactional
     private Monster erstelleKorrektesMonster(String name) {
-        Monster monster =  (Monster) new Monster().setName(name).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
+        Monster monster =  (Monster) new Monster().setName(name).setLebenspunkte(58).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
         monster.setId(generateIDBisFrontendGeht());
      //   monster.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
         monster.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));

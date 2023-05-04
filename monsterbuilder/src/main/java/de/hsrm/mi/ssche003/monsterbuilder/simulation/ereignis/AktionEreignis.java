@@ -1,22 +1,22 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.python.core.PyObject;
 import org.python.core.PyObjectDerived;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 
 public class AktionEreignis implements AkteurEreignis {
 
-    private Akteur akteur;
+    private String akteur;
     EreignisCode code = EreignisCode.ANGREIFEN;
     public int schaden;
-    public Akteur gegner;
+    public String gegner = "";
 
-    public AktionEreignis( Akteur akteur) {
+    public AktionEreignis( String akteur) {
         this.akteur = akteur;
     }
 
@@ -25,21 +25,12 @@ public class AktionEreignis implements AkteurEreignis {
     }
 
     @Override
-    public List<IEreignis> generiereFolEreignis(PyObject py) {
-       List<IEreignis> ereignis =  new ArrayList<IEreignis>(1);
-       PyObjectDerived derived = (PyObjectDerived) py;
-       ereignis.add((SchadenEreignis)derived.__tojava__(SchadenEreignis.class));
-       return ereignis;
+    public List<IEreignis> generiereFolEreignis() {
+        if(schaden > 0 && gegner != "")
+            return Arrays.asList(new SchadenEreignis(gegner, schaden), new AktionEreignis(akteur));
+       return Arrays.asList(new AktionEreignis(akteur));
     }
 
-    @Override
-    public String getFuncName() {
-        return code.toString();
-    }
-
-    public Long getAkteurID() {
-        return 1l;
-    }
 
     @Override
     public Optional<StateChange> getChange() {
@@ -47,8 +38,12 @@ public class AktionEreignis implements AkteurEreignis {
     }
 
     @Override
-    public Akteur getAkteurVerhalten() {
+    public String getAkteurName() {
         return akteur;
     }
     
+    @Override
+    public EreignisCode getCode() {
+        return this.code;
+    }
 }

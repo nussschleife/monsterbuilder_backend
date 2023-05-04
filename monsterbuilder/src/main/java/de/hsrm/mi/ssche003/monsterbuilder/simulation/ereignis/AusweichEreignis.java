@@ -1,39 +1,32 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.python.core.PyBoolean;
 import org.python.core.PyObject;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 
 public class AusweichEreignis implements AkteurEreignis {
-    Akteur a;
+    String a;
     EreignisCode code = EreignisCode.AUSWEICHEN;
     int dmg;
     int schwierigkeit = 10;
+    public boolean ausgewichen = false;
 
-    public AusweichEreignis(Akteur a, int schaden) {
+    public AusweichEreignis(String a, int schaden) {
         this.a =a ;
         this.dmg = schaden;
     }
 
     @Override
-    public List<IEreignis> generiereFolEreignis(PyObject py) {
+    public List<IEreignis> generiereFolEreignis() {
         //PyObject enthält Boolean: wurde ausweichen geschafft?
-        if(((PyBoolean) py).getValue() == 1) //falls ja dann schaden halbieren
-            this.dmg /= 2;
-        
-        List<IEreignis> ereignisse = new ArrayList<IEreignis>(1);
-        ereignisse.add(new SchadenEreignis(this.a, this.dmg));
-        return ereignisse;
-    }
-
-    @Override
-    public String getFuncName() {
-        return code.toString();
+        if(!ausgewichen)
+            return Arrays.asList(new SchadenEreignis(a, dmg));
+        return new ArrayList<IEreignis>(0);
     }
 
     @Override
@@ -41,18 +34,18 @@ public class AusweichEreignis implements AkteurEreignis {
         return true;
     }
 
-    @Override
-    public Long getAkteurID() {
-        return 1l;
-    }
 
     @Override
     public Optional<StateChange> getChange() {
         return Optional.empty();
     }
 
-    public Akteur getAkteurVerhalten() {
+    public String getAkteurName() {
         return a;
     }
     
+    @Override
+    public EreignisCode getCode() {
+        return this.code;
+    }
 }
