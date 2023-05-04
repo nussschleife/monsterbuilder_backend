@@ -53,7 +53,6 @@ public class DESimTask implements SimTask {
         interpreter.set("javaCharaktere", state.charaktere);
         interpreter.set("state", this.state);
         interpreter.get("initialisiere").__call__(); //vom Haupt-skript
-        logger.info(state.lebendig.toString());
             
     }
 
@@ -94,22 +93,17 @@ public class DESimTask implements SimTask {
     }
 
     private Optional<List<IEreignis>> bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
-        if(aktuell instanceof SchadenEreignis)
-            logger.info("davor: "+ interpreter.get("log").__call__().asString());
         /*interpreter.execfile(Alignment_Pfad.get(aktuell.getAkteurVerhalten().getAlignment()));*/
             interpreter.set("aktuellesEreignis", aktuell); //das nicht -> im Methodenaufruf params übergben -> wie einheitlich? State rein?
             interpreter.set("state", state);
             interpreter.set("akteur", aktuell.getAkteurName());
             interpreter.get("handleEreignis").__call__();
-          
-        if(aktuell instanceof SchadenEreignis)
-            logger.info("danach: "+ interpreter.get("log").__call__().asString());
+       
   return Optional.of(aktuell.generiereFolEreignis());
 
     }
 
     private SimResult beendeEncounter() {
-        logger.info(state.toString());
         interpreter.close();
         return new SimResult(state.kampfrunden, value, simID);
     }

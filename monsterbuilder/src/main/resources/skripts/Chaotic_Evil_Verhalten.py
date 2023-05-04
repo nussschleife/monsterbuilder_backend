@@ -20,6 +20,17 @@ def angreifen(akteur, ereignis):
 def findeAktion(akteur, ereignis):
     akteur.findeAktion(ereignis)
 
+alleCharaktere = {}
+alleMonster = {}
+
+javaMonster = []
+javaCharaktere = []
+
+akteur = Akteur()
+state = SimState()
+
+alleAkteure = {}
+eventhandlers = {EreignisCode.ANGREIFEN: angreifen, EreignisCode.AKTION: findeAktion, EreignisCode.AUSWEICHEN: ausweichen, EreignisCode.SCHADEN: schaden}
 class States:
    DEAD = 1
    ALIVE = 2
@@ -139,18 +150,6 @@ class CharakterVerhalten2(AkteurVerhalten):
         del alleCharaktere[self.akteur.getName()]
         state.toeteAkteur(str(self.akteur.getName()))
 
-alleAkteure = {}
-eventhandlers = {EreignisCode.ANGREIFEN: angreifen, EreignisCode.AKTION: findeAktion, EreignisCode.AUSWEICHEN: ausweichen, EreignisCode.SCHADEN: schaden}
-
-alleCharaktere = {}
-alleMonster = {}
-
-javaMonster = []
-javaCharaktere = []
-
-akteur = Akteur()
-state = SimState()
-
 def initialisiere(): #wäre natürlich premium wenn man die javasachen hier übergeben kann
     alleMonster.update({str(mon.getName()):MonsterVerhalten2(copyMonster(mon)) for mon in javaMonster})
     alleCharaktere.update({str(char.getName()):CharakterVerhalten2(copyCharakter(char)) for char in javaCharaktere})
@@ -161,22 +160,6 @@ def handleEreignis():
     akteur = alleAkteure[str(aktuellesEreignis.getAkteurName())]
     eventhandlers[aktuellesEreignis.getCode()](akteur, aktuellesEreignis)
 
-def ende():
-    s = ""
-    for mon in alleMonster:
-        s += str(mon.getLebenspunkte()) + " " + mon.getName()
-
-    for mon in alleCharaktere:
-        s += str(mon.getLebenspunkte()) +" "+ mon.getName()
-    return s
-
-
-def log():
-    s = ""
-    for a in alleAkteure.values():
-        s+= str(a.akteur.getName())+ ": "+str(a.akteur.getLebenspunkte()) + " / "
-    return s
-        
 
 def findeBestenAngriffGegenMonster(gegner, angriffe):
     #nach elementvertraeglichkeiten suchen
@@ -188,8 +171,6 @@ def findeBestenAngriffGegenCharakter(gegner, angriffe):
 
 def wirdGegnerGetroffen(gegner):
     return gegner.getRuestungsklasse() <= Wuerfel.W20.wuerfle()
-
-
 
 def copyAkteur(akteur, copy):
     copy.setLebenspunkte(akteur.getLebenspunkte())
