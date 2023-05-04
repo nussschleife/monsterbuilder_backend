@@ -114,8 +114,8 @@ public class DESimTask implements SimTask {
     }
 
     private Optional<List<IEreignis>> bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
-        /*
-        interpreter.execfile(aktuell.akteur.getAlignment().toString()); -> wie wechselt man die dateien??
+        
+        interpreter.execfile(Alignment_Pfad.get(aktuell.getAkteurVerhalten().getAlignment()));/*
         PyObject annahme = interpreter.get("wirdEreignisAngenommen");
 
         if(((PyBoolean) annahme.__call__(new PyInteger(aktuell.getAkteurID().intValue()))).getBooleanValue()) {
@@ -126,6 +126,7 @@ public class DESimTask implements SimTask {
 
             }*/
             interpreter.set("aktuellesEreignis", aktuell); //das nicht -> im Methodenaufruf params übergben -> wie einheitlich? State rein?
+            interpreter.set("state", state);
             //ereignis kennt die passende Methode im Skript
             interpreter.set("akteur", aktuell.getAkteurVerhalten());
             PyObject value =  interpreter.get(aktuell.getFuncName()).__call__();

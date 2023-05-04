@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-from copy import copy
-import random, sys
-from operator import attrgetter
 from de.hsrm.mi.ssche003.monsterbuilder.akteur import Akteur
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.monster import Monster
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter import Charakter
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff import Angriff
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden import Wuerfel
-from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import IEreignis
+from  de.hsrm.mi.ssche003.monsterbuilder.simulation.simService import SimState
 from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import SchadenEreignis
 
 javaMonster = []
@@ -18,6 +15,7 @@ alleCharaktere = []
 alleMonster = []
 
 akteur = Akteur()
+state = SimState()
 #was wird zurückgegeben? Ereignis/Akteur??
 
 
@@ -67,7 +65,12 @@ def ausweichen():
 
 def angreifen():
     #TODO: angriff auswählen anhand von schwächen usw -> Zauber & Elementvertraeglichkeiten rein
-    gegner = min(alleMonster, key=lambda x: x.getLebenspunkte())
+    a = []
+    if isinstance(akteur, Monster):
+        a = state.getMonster()
+    else:
+        a = state.getCharaktere()
+    gegner = min(a, key=lambda x: x.getLebenspunkte())
     angriff = findeBestenAngriffGegenMonster(gegner, akteur.getAlleAngriffe())
 
     if(wirdGegnerGetroffen(gegner)):
@@ -196,6 +199,7 @@ def copyAkteur(akteur, copy):
     copy.setGeschwindigkeit_ft(akteur.getGeschwindigkeit_ft())
     copy.setId(akteur.getId())
     copy.setAlleAngriffe(akteur.getAlleAngriffe())
+    copy.setAlignment(akteur.getAlignment())
     return copy
         
 

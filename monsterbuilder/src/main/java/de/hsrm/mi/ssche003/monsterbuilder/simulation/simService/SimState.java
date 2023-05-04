@@ -46,4 +46,14 @@ public class SimState {
         this.lebendig = lebend;
     }
 
+    public Set<Charakter> getCharaktere() {
+        return charaktere;
+    }
+
+    public Set<Monster> getMonster() {
+        return monster;
+    }
+
+    
+
 }

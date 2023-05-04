@@ -48,7 +48,7 @@ public class SchadenEreignis implements AkteurEreignis {
 
     @Override
     public Optional<StateChange> getChange() {
-        if(changeState)
+        if(this.changeState)
             return Optional.of(new TotChange(getroffener));
         return Optional.empty();
     }

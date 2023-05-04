@@ -53,7 +53,7 @@ public class SimServiceImpl implements SimService{
 
     int hp = 10;
     byte level = 4;
-    byte ac = 18;
+    byte ac = 12;
     byte geschwindigkeit = 30;
 
     @PostConstruct
