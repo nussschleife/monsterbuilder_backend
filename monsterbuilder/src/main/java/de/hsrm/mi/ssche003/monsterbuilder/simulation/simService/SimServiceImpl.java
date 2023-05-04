@@ -3,7 +3,6 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 
 import org.slf4j.Logger;

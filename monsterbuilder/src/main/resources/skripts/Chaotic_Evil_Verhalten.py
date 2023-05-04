@@ -139,7 +139,7 @@ class CharakterVerhalten2(AkteurVerhalten):
         del alleCharaktere[self.akteur.getName()]
         state.toeteAkteur(str(self.akteur.getName()))
 
-alleAkteure = {"test": MonsterVerhalten2(Monster())}
+alleAkteure = {}
 eventhandlers = {EreignisCode.ANGREIFEN: angreifen, EreignisCode.AKTION: findeAktion, EreignisCode.AUSWEICHEN: ausweichen, EreignisCode.SCHADEN: schaden}
 
 alleCharaktere = {}

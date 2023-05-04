@@ -5,10 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.python.core.PyBoolean;
-import org.python.core.PyObject;
-
-
 public class AusweichEreignis implements AkteurEreignis {
     String a;
     EreignisCode code = EreignisCode.AUSWEICHEN;
