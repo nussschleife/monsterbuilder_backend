@@ -74,7 +74,7 @@ public class AkteurRestApi {
             Set<Sprache> sprachen = new HashSet<>();
             Sprache elementSprache = new Sprache();
 
-            //Neue Sprachen einspeichern
+            //TODO: Lieber Sprache so senden statt als String, dann kann das hier in den Service zu den anderen dingern
             for(String sprache : monsterdto.getSprachen()) {
                 Optional<Sprache> optional = regelelementService.findeElementMitNamen(sprache, elementSprache);
                 Sprache hinzufügen = optional.isEmpty() ? new Sprache() : optional.get();

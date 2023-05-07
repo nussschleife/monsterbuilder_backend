@@ -1,6 +1,8 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.UUID;
@@ -19,30 +21,30 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.auftrag.Auftrag;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.auftrag.SimStrategy;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.exception.EncounterSimulationException;
 
 public class EncounterSimulationMaster {
     private static EncounterSimulationMaster MASTER;
 
-    private Queue<Auftrag> auftragSchlange = new LinkedList<>();
-    private int kerne;
+    private List<Auftrag> auftraege = new ArrayList<>();
     private ThreadPoolExecutor executor;
     private static final Logger logger = LoggerFactory.getLogger(EncounterSimulationMaster.class);
 
     private EncounterSimulationMaster() {
-        kerne = Runtime.getRuntime().availableProcessors();
-        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(kerne > 1 ? kerne : 2);
+        int kerne = Runtime.getRuntime().availableProcessors();
+        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(kerne);
       
     }
 
     public <T extends SimStrategy> String addAuftrag(SimRequest neuerAuftrag, T strategy, Consumer<SimResult> sendeErgebnis){
         Auftrag auftrag = (new Auftrag(strategy, neuerAuftrag, generiereSimID()));  
-        this.auftragSchlange.add(auftrag);
+        this.auftraege.add(auftrag);
         for(SimTask task : auftrag.getTasks()) {
             CompletableFuture<SimResult> result = CompletableFuture.supplyAsync(() -> {
                 try { return task.call(); }
                 catch (Exception ex) { 
                     ex.printStackTrace();
-                    throw new CompletionException(ex); 
+                    throw new EncounterSimulationException(ex.getMessage()); 
                 } 
             }, executor);
             result.thenAccept(t -> sendeErgebnis.accept(t));
@@ -59,11 +61,11 @@ public class EncounterSimulationMaster {
     }
 
     public void stoppeAuftragMitId(String simID) {
-        Stream<Auftrag> zuLöschenStream = this.auftragSchlange.stream().filter((Auftrag a) -> {return a.getSimID() == simID;});
+        Stream<Auftrag> zuLöschenStream = this.auftraege.stream().filter((Auftrag a) -> {return a.getSimID() == simID;});
         Optional<Auftrag> zulöschenOpt = zuLöschenStream.findFirst(); 
         if(zulöschenOpt.isPresent()) {
             Auftrag zuLöschen = zulöschenOpt.get();
-            auftragSchlange.remove(zuLöschen);
+            auftraege.remove(zuLöschen);
            // zuLöschen.getTasks().forEach((ComletableFuture<SimResult> t) -> t.cancel());
 
         }

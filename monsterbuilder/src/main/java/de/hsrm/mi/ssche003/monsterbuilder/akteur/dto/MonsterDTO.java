@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
@@ -42,7 +41,7 @@ public class MonsterDTO {
     @Enumerated(EnumType.STRING)
     Alignment alignment;
     
-    private String[] sprachen;
+    private String[] sprachen; //TODO: dto loeschen, Monster so senden und im FE hinzufuegen
 
     private AbilityScore[] abilityScores;
 

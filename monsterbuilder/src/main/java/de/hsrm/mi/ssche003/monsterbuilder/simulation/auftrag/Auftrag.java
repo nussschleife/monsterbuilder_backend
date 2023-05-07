@@ -20,7 +20,7 @@ public class Auftrag {
         this.strategy = strategy;
         this.tasks = strategy.createSimTasks(id, request);
         this.simID = id;
-    }
+    } //TODO: Auftrag soll SimRequest ersetzen und nicht beinhalten
     
     public boolean istFertig() {
         return results.stream().allMatch((Future<SimResult> result) -> result.isDone()) || results.size() == 0;

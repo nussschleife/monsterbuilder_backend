@@ -83,7 +83,7 @@ public class SimServiceImpl implements SimService{
     }
     
     private void sendeUpdate(SimResult res) {
-        logger.info("sende simUpdate: "+res.getMessage());
+        logger.info("sende simUpdate: "+res.getNachricht());
         String result = "json error";
         
         try {
@@ -97,12 +97,13 @@ public class SimServiceImpl implements SimService{
 
     @Transactional
     private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) {
-        fromFrontend.getMonster().add(erstelleKorrektesMonster("bob"));
-        Gruppe radio = new Gruppe();
-        radio.setName("radio");
-        radio.getAllCharaktere().add(erstelleKorrektenCharakter("brutus"));
-        radio.getAllCharaktere().add(erstelleKorrektenCharakter("rasmodeus"));
-        fromFrontend.setGruppe(radio);
+       // fromFrontend.getMonster().add(erstelleKorrektesMonster("bob"));
+       // Gruppe radio = new Gruppe();
+       // radio.setName("radio");
+        //radio.getAllCharaktere().add(erstelleKorrektenCharakter("brutus"));
+        //radio.getAllCharaktere().add(erstelleKorrektenCharakter("rasmodeus"));
+        //fromFrontend.setGruppe(radio);
+        fromFrontend.getGruppe().getAllCharaktere().forEach(c -> c=erstelleKorrektenCharakter(c));
         for(int i = 1; i < 5; i++) {
             fromFrontend.getValues().add(new Level(i));
         }
@@ -122,12 +123,13 @@ public class SimServiceImpl implements SimService{
     }
 
     @Transactional
-    private Charakter erstelleKorrektenCharakter(String name) {
-        Charakter charakter =  (Charakter) new Charakter().setName(name).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
+    private Charakter erstelleKorrektenCharakter(Charakter fromfrontend) {
+        Charakter charakter = fromfrontend;
+        charakter.setName(fromfrontend.getName()).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
       //  charakter.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
         charakter.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
         charakter.setId(generateIDBisFrontendGeht());
-        charakter.setAlignment(Alignment.CHAOTIC_EVIL);
+        //charakter.setAlignment(Alignment.CHAOTIC_EVIL);
         return charakter;
     }
 

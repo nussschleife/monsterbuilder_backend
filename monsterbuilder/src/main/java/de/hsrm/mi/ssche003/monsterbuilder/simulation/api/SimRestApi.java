@@ -2,6 +2,7 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,15 +26,14 @@ public class SimRestApi {
 
     }
 
-    @PostMapping("/sim/neu/{sessionID}")
-    public ResponseEntity<SimResponse> starteNeueSimulation(@RequestBody SimRequest request, @PathVariable String sessionID) {
-        String response = "";
+    @PostMapping("/sim/neu/") 
+    public SimResponse starteNeueSimulation(@RequestBody SimRequest request, @Header("sessionid") String sessionID) {
+        SimResponse response = new SimResponse();
         request.setUserName(sessionID);
-        response = simService.starteSimulation(request).getSimID();
-        template.convertAndSend("/queue/user/sim/neu/"+sessionID, response);
-        //logger.info("ende der api methode");
-        
-        return ResponseEntity.ok().body(new SimResponse("test"));
+        response.setSimID(simService.starteSimulation(request).getSimID());
+        response.setSimName(request.getSimName());
+       
+        return response;
     }
     
 }

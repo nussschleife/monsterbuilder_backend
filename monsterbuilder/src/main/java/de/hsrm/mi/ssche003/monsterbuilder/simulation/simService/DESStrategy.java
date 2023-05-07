@@ -12,7 +12,7 @@ public class DESStrategy implements SimStrategy{
     public ArrayList<DESimTask> createSimTasks(String simID, SimRequest request) {
         ArrayList<DESimTask> alleTasks = new ArrayList<>();
         for(SimValue value : request.getValues()) {
-            alleTasks.add(new DESimTask(request.getGruppe(), request.getMonster(), simID, value));
+            alleTasks.add(new DESimTask(request.getGruppe(), request.getMonster(), simID, value,1)); //TODO: noch nicht getestet!! & 1 aus request-> Rückgabewert wäre dann liste aus simresults?
         }
         return alleTasks;
     }

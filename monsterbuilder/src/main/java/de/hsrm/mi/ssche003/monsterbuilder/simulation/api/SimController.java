@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimService;
 import jakarta.annotation.PostConstruct;
 
@@ -37,20 +38,23 @@ public class SimController {
 
     @MessageMapping("/sim/neu/") 
     public void starteNeueSimulation(String msg, @Header("simpsessionid") String sessionID) {
+        //todo prüfen dass monster valid ist
+        //todo charaktere an level anpassen lassen
         SimRequest request;
-        String response = "";
+        SimResponse response = new SimResponse();
+        String antwortNachricht = "";
         try {
             request = mapper.readValue(msg, SimRequest.class);
             request.setUserName(sessionID);
-            response = simService.starteSimulation(request).getSimID();
+            response.setSimID(simService.starteSimulation(request).getSimID());
+            response.setSimName(request.getSimName());
+            antwortNachricht = writer.writeValueAsString(response);
         } catch (JsonMappingException e) {
-            response = "json error";
             e.printStackTrace();
         } catch (JsonProcessingException e) {
-            response = "processing error";
             e.printStackTrace();
         }
-        template.convertAndSend("/queue/user/sim/neu/"+sessionID, response);
+        template.convertAndSend("/queue/user/sim/neu/"+sessionID, antwortNachricht);
         logger.info("ende der api methode");
     }
 

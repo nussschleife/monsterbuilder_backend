@@ -10,13 +10,9 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Angriffzauber;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.persistence.Version;
 
 @Entity @Table(name="Schadensart", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class Schadensart extends Regelelement implements SimValue {
@@ -35,7 +31,7 @@ public class Schadensart extends Regelelement implements SimValue {
         this.angriffzauber = angriffzauber;
     }
     @Override @JsonIgnore
-    public Regelelement getInstance() {
+    public Schadensart getInstance() {
         return new Schadensart();
     }
     @Override

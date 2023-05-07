@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
@@ -12,11 +14,14 @@ public class SimRequest {
     Gruppe gruppe;
     ArrayList<SimValue> values = new ArrayList<>();
     String userName;
+    String simName;
+    int durchlaeufe; //in frontend zufuegen
 
+    
     public void setUserName(String name) {
         this.userName = name;
     }
-
+    @JsonIgnore
     public String getUserName() {
         return userName;
     }
@@ -44,6 +49,17 @@ public class SimRequest {
     public void setValues(ArrayList<SimValue> values) {
         this.values = values;
     }
+    public String getSimName() {
+        return simName;
+    }
+    public void setSimName(String simName) {
+        this.simName = simName;
+    }
+    public int getDurchlaeufe() {
+        return durchlaeufe;
+    }
+    public void setDurchlaeufe(int durchlaeufe) {
+        this.durchlaeufe = durchlaeufe;
+    }
 
-    
 }

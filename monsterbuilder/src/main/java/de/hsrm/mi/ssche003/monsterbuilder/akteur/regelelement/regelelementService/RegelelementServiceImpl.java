@@ -27,7 +27,6 @@ public class RegelelementServiceImpl implements RegelelementService{
 
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(RegelelementServiceImpl.class);
 
-    @SuppressWarnings("unused")
     private <T extends Regelelement> RegelelementRepository<T> getRepository(T element) {
 
        if(element instanceof AbilityScore)
@@ -60,10 +59,10 @@ public class RegelelementServiceImpl implements RegelelementService{
     }
 
     @Override @Transactional
-    public <T extends Regelelement> T bearbeiteElement(T element) { //TODO: testen. fliegt das in die luft wenn nested entities sich geändert haben? zB. schadensart/zauber
+    public <T extends Regelelement> T bearbeiteElement(T element) { 
         RegelelementRepository<T> repo = getRepository(element);
         Optional<T> persistiertOpt = findeElementMitId(element);
-        T persistiert = persistiertOpt.isEmpty() ? element.getInstance() : persistiertOpt.get();
+        T persistiert = persistiertOpt.isEmpty() ? (T)element.getInstance() : persistiertOpt.get();
         persistiert.übernehmeBasisWerteVon(element);      
         persistiert.setName(element.getName());  
         try {

@@ -3,6 +3,7 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -18,8 +19,8 @@ public class Encounter {
     //durchschn. kampfrunden
     //bester effekt
     //TODO: Liste an Runden? -> wäre nice um entscheidungen nachzuvollziehen
-    @OneToMany(mappedBy = "encounter")
-    private Set<Runde> alleRunden = new HashSet<>();
+    @ElementCollection
+    private Set<String> rundenBeschreibungen = new HashSet<>();
 
     public String getId() {
         return id;
@@ -29,13 +30,15 @@ public class Encounter {
         this.id = id;
     }
 
-    public Set<Runde> getAlleRunden() {
-        return alleRunden;
+    public Set<String> getRundenBeschreibungen() {
+        return rundenBeschreibungen;
     }
 
-    public void setAlleRunden(Set<Runde> alleRunden) {
-        this.alleRunden = alleRunden;
+    public void setRundenBeschreibungen(Set<String> rundenBeschreibungen) {
+        this.rundenBeschreibungen = rundenBeschreibungen;
     }
+
+
 
     
 

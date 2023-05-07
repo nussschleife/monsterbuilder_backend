@@ -44,7 +44,7 @@ public abstract class Regelelement {
         this.version = version;
     }
 
-    public abstract <T extends Regelelement> T getInstance();
+    public abstract Regelelement getInstance();
 
     public abstract Regelelement übernehmeBasisWerteVon(Regelelement element);
     

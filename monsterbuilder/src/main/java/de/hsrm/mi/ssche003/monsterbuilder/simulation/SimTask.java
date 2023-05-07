@@ -7,4 +7,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 public interface SimTask extends Callable<SimResult>{
     
     public String getSimID();
+
+    @Override
+    public SimResult call();
 }

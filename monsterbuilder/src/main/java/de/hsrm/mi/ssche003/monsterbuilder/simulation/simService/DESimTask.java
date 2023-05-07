@@ -21,7 +21,6 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.AkteurEreignis;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.EncounterEreignis;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.IEreignis;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.InitiativeEreignis;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.SchadenEreignis;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.StateChange;
 
 public class DESimTask implements SimTask {
@@ -32,20 +31,20 @@ public class DESimTask implements SimTask {
     Logger logger = LoggerFactory.getLogger(DESimTask.class);
     SimValue value;
     PythonInterpreter interpreter;
+    int anzahlDurchläufe;
     final String PFAD = "src/main/resources/skripts/";
     final Map<Alignment, String> Alignment_Pfad = Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py", Alignment.NEUTRAL, PFAD + "Neutral_Verhalten.py");
 
-    public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value) {
-
+    public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value, int anzahlDurchläufe) {
         this.simID = id;
         this.value = value;
         this.interpreter = new PythonInterpreter();
         this.ereignisse = new ArrayDeque<IEreignis>();
+        this.anzahlDurchläufe = anzahlDurchläufe;
         this.state = new SimState().initSimState(gruppe.getAllCharaktere(), monster);
     }
 
-    public synchronized void initTask() {
-
+    public void initTask() {
         this.ereignisse.add(new InitiativeEreignis()); //Startereignis
       
         interpreter.execfile(Alignment_Pfad.get(Alignment.CHAOTIC_EVIL)); //aendern in Haupt-skript
@@ -59,25 +58,32 @@ public class DESimTask implements SimTask {
     @Override
     public SimResult call() {
         logger.info("task called");
-        initTask();
-    
-        while(!istEncounterVorbei()) {
-            IEreignis aktuell = ereignisse.pop();
+        for(int i = 0; i < anzahlDurchläufe; i++) {
+            resetEncounter();
+            initTask();
 
-            if(aktuell instanceof AkteurEreignis) {
-                if(state.getLebende().contains(((AkteurEreignis) aktuell).getAkteurName())) {
-                    Optional<List<IEreignis>> folgeEreignisse = bearbeiteAkteurEreignis((AkteurEreignis)aktuell);
-                    if(folgeEreignisse.isPresent() && folgeEreignisse.get().size() > 0) 
-                        folgeEreignisse.get().forEach((e) -> addEreignisZuWarteschlange(e));
+            while(!istEncounterVorbei()) {
+                IEreignis aktuell = ereignisse.pop();
+
+                if(aktuell instanceof AkteurEreignis) {
+                    if(state.getLebende().contains(((AkteurEreignis) aktuell).getAkteurName())) {
+                        Optional<List<IEreignis>> folgeEreignisse = bearbeiteAkteurEreignis((AkteurEreignis)aktuell);
+                        if(folgeEreignisse.isPresent() && folgeEreignisse.get().size() > 0) 
+                            folgeEreignisse.get().forEach((e) -> addEreignisZuWarteschlange(e));
+                    }
+                    
+                } else {
+                    ereignisse.addAll(((EncounterEreignis)aktuell).auslösen(state));
                 }
-                
-            } else {
-                ereignisse.addAll(((EncounterEreignis)aktuell).auslösen(state));
+                verändereState(aktuell.getChange());
             }
-            verändereState(aktuell.getChange());
         }
-        
         return beendeEncounter();
+    }
+
+    private void resetEncounter() {
+        interpreter.cleanup();
+        state.initSimState(state.getCharaktere(), state.monster);
     }
 
     private void verändereState(Optional<StateChange> change) {
@@ -93,7 +99,9 @@ public class DESimTask implements SimTask {
     }
 
     private Optional<List<IEreignis>> bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
-        /*interpreter.execfile(Alignment_Pfad.get(aktuell.getAkteurVerhalten().getAlignment()));*/
+        /*wenn alle Mosnter initialisiert sind braucht man nichtmal ein haupt-skript dass alle hält, weil sie in der python-umgebung existieren.
+         * auf map kann theoretisch so zugegriffen werden
+        */
             interpreter.set("aktuellesEreignis", aktuell); //das nicht -> im Methodenaufruf params übergben -> wie einheitlich? State rein?
             interpreter.set("state", state);
             interpreter.set("akteur", aktuell.getAkteurName());
@@ -122,3 +130,22 @@ public class DESimTask implements SimTask {
     }
 
 }
+
+
+
+/** ZIEL FUER CALLLL: -> State wird nur ueber statechange veraendert. Generierefolgeereignis ist teil von IEreignis
+ * while(!istEncounterVorbei()) {
+        IEreignis aktuell = ereignisse.pop();
+        EreignisResult result = null;
+        if(aktuell instanceof AkteurEreignis) {
+            if(state.getLebende().contains(((AkteurEreignis) aktuell).getAkteurName())) {
+              result = bearbeiteAkteurEreignis((AkteurEreignis)aktuell);
+            }
+        } else {
+            aktuell.ausfuehren();
+        }
+        List<IEreignis> folgeEreignisse = aktuell.generiereFolgeEreignis(result);
+        folgeEreignisse.forEach((e) -> addEreignisZuWarteschlange(e));
+        veraendereState(aktuell.getChange());
+    }
+ */
