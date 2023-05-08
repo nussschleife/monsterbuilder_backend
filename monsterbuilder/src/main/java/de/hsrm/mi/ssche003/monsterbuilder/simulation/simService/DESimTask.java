@@ -67,15 +67,16 @@ public class DESimTask implements SimTask {
 
                 if(aktuell instanceof AkteurEreignis) {
                     if(state.getLebende().contains(((AkteurEreignis) aktuell).getAkteurName())) {
-                        Optional<List<IEreignis>> folgeEreignisse = bearbeiteAkteurEreignis((AkteurEreignis)aktuell);
+                        Optional<List<IEreignis>> folgeEreignisse = bearbeiteAkteurEreignis((AkteurEreignis)aktuell); 
+                        verändereState(aktuell.getChange());
                         if(folgeEreignisse.isPresent() && folgeEreignisse.get().size() > 0) 
                             folgeEreignisse.get().forEach((e) -> addEreignisZuWarteschlange(e));
                     }
                     
                 } else {
+                    verändereState(aktuell.getChange());
                     ereignisse.addAll(((EncounterEreignis)aktuell).auslösen(state));
                 }
-                verändereState(aktuell.getChange());
             }
         }
         return beendeEncounter();

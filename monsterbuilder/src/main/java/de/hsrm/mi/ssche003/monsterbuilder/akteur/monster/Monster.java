@@ -4,51 +4,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.elementvertraeglichkeit.Elementvertraeglichkeit;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Monster extends Akteur{
-
-    //TODO: Regex oder custom validator
-    private String bildpfad;
 
     @ManyToMany
     @JoinTable(
         name = "monster_trait", 
         joinColumns = @JoinColumn(name = "monster_id"), 
         inverseJoinColumns = @JoinColumn(name = "trait_id"))
+
     private Set<Trait> alleTraits = new HashSet<>();    
 
-    /*@ManyToOne
-    private Spielleiter spielleiter;
-
-    @ManyToMany
-    private HashSet<Skill> skills = new HashSet<>();*/
-
-    /*@Transient
-    private ArrayList<Schadensart> weaknesses = new ArrayList<>(); */
-
-
-    public String getBildpfad() {
-        return bildpfad;
-    }
-
-   /* public Spielleiter getSpielleiter() {
-        return spielleiter;
-    }*/
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "monster")
+    private Set<Elementvertraeglichkeit> elementvertraeglichkeiten = new HashSet<>(); 
 
     public Set<Trait> getAlleTraits() {
         return alleTraits;
     }
-    /*
-    public HashSet<Skill> getSkills() {
-        return skills;
-    }*/
-
 
     public void setAlleTraits(Set<Trait> alleTraits) {
         this.alleTraits = alleTraits;
@@ -58,12 +40,21 @@ public class Monster extends Akteur{
         this.alleTraits.add(trait);
     }
 
+    @Override
+    public void bekommeSchaden(Schadensart art, int anzahl) {
+        for (Elementvertraeglichkeit elementvertraeglichkeit : this.elementvertraeglichkeiten) {
+            if(elementvertraeglichkeit.getSchadensart() == art) {
+                anzahl = elementvertraeglichkeit.berechneSchadenNeu(anzahl);
+                break;
+            }
+        }
+        this.setLebenspunkte( this.getLebenspunkte() - anzahl);
+    }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((bildpfad == null) ? 0 : bildpfad.hashCode());
         result = prime * result + ((alleTraits == null) ? 0 : alleTraits.hashCode());
         return result;
     }
@@ -77,11 +68,6 @@ public class Monster extends Akteur{
         if (getClass() != obj.getClass())
             return false;
         Monster other = (Monster) obj;
-        if (bildpfad == null) {
-            if (other.bildpfad != null)
-                return false;
-        } else if (!bildpfad.equals(other.bildpfad))
-            return false;
         if (alleTraits == null) {
             if (other.alleTraits != null)
                 return false;

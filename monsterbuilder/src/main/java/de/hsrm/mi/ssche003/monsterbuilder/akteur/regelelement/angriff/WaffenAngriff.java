@@ -5,26 +5,23 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Aktion;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Version;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 @Entity //TODO: ValidAngriff -> checkt werte mit level ab
-public class Angriff extends Regelelement{
+public class WaffenAngriff extends Regelelement implements Aktion{
     
     @ManyToOne
     Schadensart schadensart;
@@ -38,6 +35,9 @@ public class Angriff extends Regelelement{
     int schadenModifikator;
 
     int angriffModifikator;
+
+    @Enumerated(EnumType.STRING)
+    AbilityScoreName abilityScoreName;
 
     @Positive @Min(5) @JsonIgnore
     int reichweite_ft = 5;
@@ -93,6 +93,15 @@ public class Angriff extends Regelelement{
         this.angriffModifikator = angriffModifikator;
     }
 
+    public Akteur ausfuehren(Akteur gegner, int modifikator) {
+        int wurf = Wuerfel.W20.wuerfle()  + modifikator;
+        
+        if(gegner.trifftAngriff(wurf)) 
+            gegner.bekommeSchaden(schadensart, berechneSchaden());
+        
+        return gegner;
+    }
+
     @JsonIgnore
     public Set<Monster> getAlleMonster() {
         return alleMonster;
@@ -106,15 +115,31 @@ public class Angriff extends Regelelement{
         this.alleMonster.add(monster);
     }
 
+    public AbilityScoreName getAbilityScoreName() {
+        return abilityScoreName;
+    }
+
+    public void setAbilityScoreName(AbilityScoreName name) {
+        this.abilityScoreName = name;
+    }
+
+    public int berechneSchaden() {
+        int schadenswert = 0;
+        for( int i = 0; i < this.wuerfelanzahl; i++) {
+            schadenswert += this.wuerfel.wuerfle();
+        }
+        return schadenswert;
+    }
+
     @Override @JsonIgnore
     public Regelelement getInstance() {
-        return new Angriff();
+        return new WaffenAngriff();
     }
 
     @Override
-    public Angriff übernehmeBasisWerteVon(Regelelement element) {
-        if(element instanceof Angriff) {
-            Angriff angriff = (Angriff) element;
+    public WaffenAngriff übernehmeBasisWerteVon(Regelelement element) {
+        if(element instanceof WaffenAngriff) {
+            WaffenAngriff angriff = (WaffenAngriff) element;
             this.schadenModifikator = angriff.getSchadenModifikator();
             this.angriffModifikator = angriff.getAngriffModifikator();
             this.wuerfel = angriff.getWuerfel();
@@ -123,6 +148,12 @@ public class Angriff extends Regelelement{
             this.wuerfelanzahl = angriff.getWuerfelanzahl();
         }
         return this;
+    }
+
+    @Override
+    public void ausführen() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'ausführen'");
     }
 
 }

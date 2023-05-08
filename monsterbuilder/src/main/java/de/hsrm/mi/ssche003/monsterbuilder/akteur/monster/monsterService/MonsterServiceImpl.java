@@ -15,7 +15,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.MonsterRepo;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.TraitRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.persistence.OptimisticLockException;
@@ -58,9 +58,9 @@ public class MonsterServiceImpl implements MonsterService{
         }
             //bidirektionale Verbindungen erstellen
             //Angriffe 
-            Set<Angriff> angriffe = new HashSet<>();
-            for(Angriff angriff : monster.getAlleAngriffe()) {
-                Angriff optAngriff = regelService.bearbeiteElement(angriff);
+            Set<WaffenAngriff> angriffe = new HashSet<>();
+            for(WaffenAngriff angriff : monster.getAlleAngriffe()) {
+                WaffenAngriff optAngriff = regelService.bearbeiteElement(angriff);
                 optAngriff.addMonster(persistiertesMonster);
                 angriffe.add(optAngriff);
             }

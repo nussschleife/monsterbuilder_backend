@@ -1,5 +1,6 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +9,7 @@ public class AktionEreignis implements AkteurEreignis {
 
     private String akteur;
     EreignisCode code = EreignisCode.ANGREIFEN;
-    public int schaden;
+    public boolean toedlich;
     public String gegner = "";
 
     public AktionEreignis( String akteur) {
@@ -21,15 +22,19 @@ public class AktionEreignis implements AkteurEreignis {
 
     @Override
     public List<IEreignis> generiereFolEreignis() {
-        if(schaden > 0 && gegner != "")
-            return Arrays.asList(new SchadenEreignis(gegner, schaden), new AktionEreignis(akteur));
-       return Arrays.asList(new AktionEreignis(akteur));
+        this.toedlich = false;
+        this.gegner = "";
+        return Arrays.asList(this);
     }
 
 
     @Override
     public Optional<StateChange> getChange() {
-        return Optional.empty();
+        Optional<StateChange> change = Optional.empty();
+        if(toedlich && gegner != "") 
+            change = Optional.of(new TotChange(gegner));
+        
+        return change;
     }
 
     @Override

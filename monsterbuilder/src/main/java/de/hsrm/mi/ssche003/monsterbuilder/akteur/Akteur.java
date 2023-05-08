@@ -1,15 +1,24 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt.Condition;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AggressiveAktion;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow.SavingThrow;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +27,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -35,44 +45,45 @@ public class Akteur {
     @PositiveOrZero
     private int lebenspunkte;
     @Positive
-    private byte ruestungsklasse;
+    private int ruestungsklasse;
     @PositiveOrZero //TODO: modulo 5 - custom validator @ValidMovement
-    private byte geschwindigkeit_ft; //Geschwindigkeit in 5-Fuß Abstufungen
+    private int geschwindigkeit_ft; //Geschwindigkeit in 5-Fuß Abstufungen
 
     @Enumerated(EnumType.STRING)
     private Alignment alignment;
 
     protected int level;
 
-    @ManyToMany
+    @ManyToMany( cascade = CascadeType.MERGE)
     @JoinTable(
-        name = "akteur_sprache", 
+        name = "akteur_sprache",
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "sprache_id"))
     private Set<Sprache> sprachen = new HashSet<>();
     
-    @ManyToMany
+    @ManyToMany( cascade = CascadeType.MERGE)
     @JoinTable(
         name = "akteur_zauber", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "zauber_id"))
     protected Set<Zauber> alleZauber = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany( cascade = CascadeType.MERGE)
     @JoinTable(
         name = "akteur_angriff", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "angriff_id"))
-    protected Set<Angriff> alleAngriffe = new HashSet<>();
+    protected Set<WaffenAngriff> alleAngriffe = new HashSet<>();
     
-    @ManyToMany //TODO: prüfen dass jedes im enum einmal da ist und nur einmal
+    @ManyToMany( cascade = CascadeType.MERGE) //TODO: prüfen dass jedes im enum einmal da ist und nur einmal
     @JoinTable(
         name = "akteur_score", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "score_id"))
     protected Set<AbilityScore> abilityScores = new HashSet<>(); 
-    
 
+    @Transient @JsonIgnore
+    protected List<Condition> conditions = new ArrayList<>();
     
     public Set<Zauber> getAlleZauber() {
         return alleZauber;
@@ -82,15 +93,15 @@ public class Akteur {
         this.alleZauber = alleZauber;
     }
 
-    public Set<Angriff> getAlleAngriffe() {
+    public Set<WaffenAngriff> getAlleAngriffe() {
         return alleAngriffe;
     }
 
-    public void setAlleAngriffe(Set<Angriff> alleAngriffe) {
+    public void setAlleAngriffe(Set<WaffenAngriff> alleAngriffe) {
         this.alleAngriffe = alleAngriffe;
     }
 
-    public void addAngriff(Angriff angriff) {
+    public void addAngriff(WaffenAngriff angriff) {
         this.alleAngriffe.add(angriff);
     }
 
@@ -106,11 +117,11 @@ public class Akteur {
         return lebenspunkte;
     }
 
-    public byte getRuestungsklasse() {
+    public int getRuestungsklasse() {
         return ruestungsklasse;
     }
 
-    public byte getGeschwindigkeit_ft() {
+    public int getGeschwindigkeit_ft() {
         return geschwindigkeit_ft;
     }
 
@@ -132,23 +143,62 @@ public class Akteur {
         return this;
     }
 
-    public Akteur setRuestungsklasse(byte ruestungsklasse) {
+    public Akteur setRuestungsklasse(int ruestungsklasse) {
         this.ruestungsklasse = ruestungsklasse;
         return this;
     }
 
-    public Akteur setGeschwindigkeit_ft(byte geschwindigkeit_ft) {
+    public Akteur setGeschwindigkeit_ft(int geschwindigkeit_ft) {
         this.geschwindigkeit_ft = geschwindigkeit_ft;
         return this;
     }
 
-
     public int wuerfleInitiative() {
-        return (int) (Math.random()*20) + 1; //+ini modifier wenn nötig
+        return (int) (Math.random()*20) + 1; 
     }
 
-    public boolean ausweichen(SavingThrow event, int schwierigkeit) {
-        return false;
+    public boolean macheSavingThrow(SavingThrow save) {
+        return Wuerfel.W20.wuerfle() > save.getSchwierigkeit(); //Add save mod from akteur
+    }
+
+    public boolean trifftAngriff(int wurf) {
+        return wurf >= this.ruestungsklasse;
+    }
+
+    public Akteur zaubern(Zauber zauber, Akteur gegner) {
+        //Angriffmodifikator suchen
+        int wurf = Wuerfel.W20.wuerfle();
+        Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == zauber.getAbilityScoreName()).findFirst();
+          
+        if(score.isPresent())
+            wurf += score.get().getScore();
+        //Gegner verwunden
+        if(gegner.trifftAngriff(wurf)) {
+            if(zauber instanceof Effektzauber) {
+                // gegner.setzeEffekt(((Effektzauber)zauber).getEffekt());
+                 //effekt.wirke();
+            }
+        }
+            
+        return gegner;
+    }
+
+    public Akteur angreifen(WaffenAngriff angriff, Akteur gegner) {
+       //Angriffmodifikator suchen
+        int wurf = Wuerfel.W20.wuerfle();
+        Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == angriff.getAbilityScoreName()).findFirst();
+       
+        if(score.isPresent())
+            wurf += score.get().getScore();
+        //Gegner verwunden
+        if(gegner.trifftAngriff(wurf)) 
+            gegner.bekommeSchaden(angriff.getSchadensart(), angriff.berechneSchaden());
+        
+        return gegner;
+    }
+
+    public void bekommeSchaden(Schadensart art, int anzahl) {
+        this.lebenspunkte -= anzahl;
     }
 
 
@@ -200,6 +250,8 @@ public class Akteur {
     public void setLevel(int level) {
         this.level = level;
     }
+
+    
 
     @Override
     public int hashCode() {
@@ -285,6 +337,16 @@ public class Akteur {
         Id = id;
     }
 
-    
+    public List<Condition> getConditions() {
+        return conditions;
+    }
+
+    public void setConditions(List<Condition> conditions) {
+        this.conditions = conditions;
+    }
+
+    public void addCondition(Condition condition) {
+        this.conditions.add(condition);
+    }
 
 }

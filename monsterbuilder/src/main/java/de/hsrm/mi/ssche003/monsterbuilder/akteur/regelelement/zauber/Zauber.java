@@ -6,33 +6,41 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.persistence.Version;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
+@DiscriminatorColumn(name="dtype",  discriminatorType = DiscriminatorType.STRING)
 @Entity @Table(name="Zauber", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-public class Zauber extends Regelelement{
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Zauber extends Regelelement {
 
     @Positive
-    private byte level;
+    private int level;
 
     private String beschreibung;
 
     @PositiveOrZero
-    private byte reichweite_ft;
+    private int reichweite_ft;
+
+    @Enumerated(EnumType.STRING)
+    private AbilityScoreName abilityScoreName;
     
     @ManyToMany(mappedBy = "alleZauber") @JsonIgnore
     private HashSet<@Valid Monster> alleMonster = new HashSet<>();
 
-    public byte getLevel() {
+    public int getLevel() {
         return level;
     }
 
@@ -40,7 +48,7 @@ public class Zauber extends Regelelement{
         return beschreibung;
     }
 
-    public byte getReichweite_ft() {
+    public int getReichweite_ft() {
         return reichweite_ft;
     }
 
@@ -49,7 +57,7 @@ public class Zauber extends Regelelement{
         return alleMonster;
     }
 
-    public void setLevel(byte level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 
@@ -57,7 +65,7 @@ public class Zauber extends Regelelement{
         this.beschreibung = beschreibung;
     }
 
-    public void setReichweite_ft(byte reichweite) {
+    public void setReichweite_ft(int reichweite) {
         this.reichweite_ft = reichweite;
     }
 
@@ -81,5 +89,9 @@ public class Zauber extends Regelelement{
         return this;
     }
 
-    //TODO: haschode & equals
+    public AbilityScoreName getAbilityScoreName() {
+        return abilityScoreName;
+    }
+
+    //TODO: hashode & equals
 }

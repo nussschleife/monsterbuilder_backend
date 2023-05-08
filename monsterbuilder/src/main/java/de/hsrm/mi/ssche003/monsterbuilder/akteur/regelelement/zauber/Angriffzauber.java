@@ -1,58 +1,41 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Aktion;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Min;
 
-@Entity
-public class Angriffzauber extends Zauber {
-  //TODO: wie verbinden wir den ability score?
+@Entity @DiscriminatorValue("ANGRIFF")
+public class Angriffzauber extends Zauber implements Aktion { 
 
-    @ManyToOne
-    Schadensart schadensart;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "angriffzauber_angriff", referencedColumnName = "id")
+    private WaffenAngriff angriff;
 
-    @Enumerated(EnumType.STRING)
-    Wuerfel wuerfel;
 
-    @Min(1)
-    byte wuerfelanzahl;
-
-    byte modifikator;
-
-    public Schadensart getSchadensart() {
-        return schadensart;
+    public int berechneSchaden() {
+        return angriff.berechneSchaden();
     }
 
-    public void setSchadensart(Schadensart schadensart) {
-        this.schadensart = schadensart;
+    public Akteur ausfuehren(Akteur gegner, int modifikator) {
+        return angriff.ausfuehren(gegner, modifikator);
     }
 
-    public Wuerfel getWuerfel() {
-        return wuerfel;
-    }
-
-    public void setWuerfel(Wuerfel wuerfel) {
-        this.wuerfel = wuerfel;
-    }
-
-    public byte getWuerfelanzahl() {
-        return wuerfelanzahl;
-    }
-
-    public void setWuerfelanzahl(byte wuerfelanzahl) {
-        this.wuerfelanzahl = wuerfelanzahl;
-    }
-
-    public byte getModifikator() {
-        return modifikator;
-    }
-
-    public void setModifikator(byte modifikator) {
-        this.modifikator = modifikator;
+    @Override
+    public void ausführen() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'ausführen'");
     }
 
 }

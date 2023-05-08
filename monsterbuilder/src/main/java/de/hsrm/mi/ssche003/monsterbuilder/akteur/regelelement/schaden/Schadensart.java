@@ -6,9 +6,10 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.elementvertraeglichkeit.Elementvertraeglichkeit;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Angriffzauber;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,18 +19,11 @@ import jakarta.persistence.UniqueConstraint;
 public class Schadensart extends Regelelement implements SimValue {
 
     @OneToMany(mappedBy = "schadensart") @JsonIgnore
-    private Set<Angriffzauber> angriffzauber = new HashSet<>();
+    private Set<WaffenAngriff> angriffe = new HashSet<>();
 
-    @OneToMany(mappedBy = "schadensart") @JsonIgnore
-    private Set<Angriff> angriffe = new HashSet<>();
+    @OneToMany(mappedBy = "schadensart", cascade = CascadeType.ALL) @JsonIgnore
+    private Set<Elementvertraeglichkeit> vertraeglichkeiten = new HashSet<>();
 
-  
-    public Set<Angriffzauber> getAngriffzauber() {
-        return angriffzauber;
-    }
-    public void setAngriffzauber(Set<Angriffzauber> angriffzauber) {
-        this.angriffzauber = angriffzauber;
-    }
     @Override @JsonIgnore
     public Schadensart getInstance() {
         return new Schadensart();

@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
@@ -47,7 +47,7 @@ public class MonsterDTO {
 
     private Trait[] traits; //TODO: dto hat eine liste für existierende und eine für neue?
 
-    private Angriff[] angriffe;
+    private WaffenAngriff[] angriffe;
 
     public Long getId() {
         return id;
@@ -130,11 +130,11 @@ public class MonsterDTO {
         return this;
     }
 
-    public Angriff[] getAngriffe() {
+    public WaffenAngriff[] getAngriffe() {
         return angriffe;
     }
 
-    public MonsterDTO setAngriffe(Angriff[] angriffe) {
+    public MonsterDTO setAngriffe(WaffenAngriff[] angriffe) {
         this.angriffe = angriffe;
         return this;
     }

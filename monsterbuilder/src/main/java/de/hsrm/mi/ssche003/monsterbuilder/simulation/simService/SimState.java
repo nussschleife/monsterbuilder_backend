@@ -31,7 +31,7 @@ public class SimState {
     }
 
     public void toeteAkteur(String akteur) {
-            lebendig.remove(akteur);
+        lebendig.remove(akteur);
     }
 
     public boolean istMonsterBesiegt() {

@@ -45,7 +45,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.TraitRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AngriffRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
@@ -184,7 +184,7 @@ public class MonsterRestApiTests {
         Trait trait = traitRepo.findAll().get(0);
         dto.setTraits(new Trait[]{trait});
         dto.setAbilityScores(new AbilityScore[]{abilityScoreRepo.findAll().get(0)});
-        dto.setAngriffe(new Angriff[]{angriffRepo.findAll().get(0)});
+        dto.setAngriffe(new WaffenAngriff[]{angriffRepo.findAll().get(0)});
         dto.setSprachen(new String[]{sprachRepo.findAll().get(0).getName()});
 
         return dto;

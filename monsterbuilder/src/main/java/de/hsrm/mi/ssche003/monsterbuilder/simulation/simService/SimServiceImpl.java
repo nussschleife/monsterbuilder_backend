@@ -22,8 +22,9 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.TraitRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AngriffRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.SpracheRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
@@ -48,7 +49,7 @@ public class SimServiceImpl implements SimService{
     @Autowired SpracheRepository sprachRepo;
     @Autowired RegelelementService regelService;
     @Autowired AbilityScoreRepository abilityScoreRepo;
-    @Autowired AngriffRepository angriffRepo;
+    @Autowired RegelelementRepository<WaffenAngriff> angriffRepo;
 
     int hp = 10;
     byte level = 4;
@@ -93,6 +94,7 @@ public class SimServiceImpl implements SimService{
             e.printStackTrace();
         }
         template.convertAndSend("/queue/user/sim/update/"+simID_SessionID.get(res.getSimID()), result); 
+        logger.info(simID_SessionID.get(res.getSimID()));
     }
 
     @Transactional
@@ -127,6 +129,7 @@ public class SimServiceImpl implements SimService{
         Charakter charakter = fromfrontend;
         charakter.setName(fromfrontend.getName()).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
       //  charakter.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
+        logger.info(angriffRepo.findAll().size()+"");
         charakter.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
         charakter.setId(generateIDBisFrontendGeht());
         //charakter.setAlignment(Alignment.CHAOTIC_EVIL);

@@ -1,5 +1,11 @@
 INSERT INTO Sprache (name) VALUES ('Draconic'),('Elven'),('Common'),('Infernal'),('Goblin');
 INSERT INTO Trait (name) VALUES ('Elemental'),('Plant'),('Fey'),('Fiend'),('Zombie');
 INSERT INTO Schadensart (name) VALUES('Piercing'),('Bludgeoning'),('Good'),('Psychic'),('Evil'),('Fire'),('Cold');
-INSERT INTO Angriff (name, angriff_Modifikator, schaden_Modifikator, wuerfelanzahl, wuerfel, reichweite_ft) VALUES('testattacke', 2, 3, 4, 'W6', 30);
 INSERT INTO Ability_Score (name, score_Name, score) VALUES ('DEXTERITY','DEXTERITY', 4);
+INSERT INTO Ability_Score (name, score_Name, score) VALUES ('STRENGTH','STRENGTH', 4);
+INSERT INTO Waffen_Angriff (name, ability_score_name, angriff_Modifikator, schaden_Modifikator, wuerfelanzahl, wuerfel, reichweite_ft, schadensart_ID) VALUES('testattacke', 'STRENGTH', 2, 3, 4, 'W6', 30, 1);
+INSERT INTO CONDITION(disc, dauer) VALUES ('PRONE', 1);
+INSERT INTO CONDITION(disc, dauer) VALUES ('ENFEEBLED', 1);
+INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (12, 'WILL'), (12, 'FORTITUDE'), (12, 'REFLEX');
+INSERT INTO ZAUBER(dtype, name, angriffzauber_angriff, level, reichweite_ft) VALUES ('ANGRIFF','rankenhieb', 1, 1, 30);
+INSERT INTO ZAUBER (dtype, name, reichweite_ft, ability_score_name, condition_id, zauber_save, level) VALUES ('EFFEKT', 'kalter atem', 120, 'INTELLIGENCE', 1, 1, 1);

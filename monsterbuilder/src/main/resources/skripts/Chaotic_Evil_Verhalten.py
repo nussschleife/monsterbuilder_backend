@@ -2,10 +2,9 @@
 from de.hsrm.mi.ssche003.monsterbuilder.akteur import Akteur
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.monster import Monster
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter import Charakter
-from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff import Angriff
+from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff import WaffenAngriff as Angriff
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden import Wuerfel
 from  de.hsrm.mi.ssche003.monsterbuilder.simulation.simService import SimState
-from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import SchadenEreignis
 from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import EreignisCode
 
 def schaden(akteur, ereignis):
@@ -15,7 +14,7 @@ def ausweichen(akteur, ereignis):
     akteur.ausweichen(ereignis)
 
 def angreifen(akteur, ereignis):
-    akteur.angreifen(ereignis)
+    akteur.angriff(ereignis)
 
 def findeAktion(akteur, ereignis):
     akteur.findeAktion(ereignis)
@@ -48,7 +47,7 @@ class AkteurVerhalten(Akteur):
         self.akteur = akteur
 
     def initiative():
-        return int(random()*20)
+        return akteur.wuerfleInitiative()
 
     def reaktion(self, ereignis):
         return self._ausweichen()
@@ -56,7 +55,7 @@ class AkteurVerhalten(Akteur):
     def aktion(self, ereignis):
         return self.monster.getAlleAktionen()[0]
     
-    def angreifen(self, ereignis):
+    def angriff(self, ereignis):
         a = b
 
     def bewegen(self, ereignis):
@@ -77,36 +76,28 @@ class MonsterVerhalten2(AkteurVerhalten):
     def initiative():
        return AkteurVerhalten.initiative()
     
-    def schaden(self, ereignis):
-        self.akteur.lebenspunkte -= ereignis.schaden
-        tot = self.akteur.lebenspunkte <= 0
-        if tot:
-            self._sterben()
-        ereignis.setChange(tot)
-
-    def ausweichen(self, ereignis):
-        ereignis.ausgewichen = Wuerfel.W20.wuerfle() >= ereignis.getSchwierigkeit()
-
-    def angreifen(self,ereignis):
-        #TODO: angriff auswählen anhand von schwächen usw -> Zauber & Elementvertraeglichkeiten rein
-
-        gegner = min(list(alleCharaktere.values()), key=lambda x: x.akteur.getLebenspunkte()).akteur
+    def angriff(self,ereignis):
+        #TODO: angriff auswählen anhand von schwächen, state usw -> Zauber & Elementvertraeglichkeiten rein
+        gegnerverhalten = min(list(alleCharaktere.values()), key=lambda x: x.akteur.getLebenspunkte())
+        gegner = gegnerverhalten.akteur
         angriff = findeBestenAngriffGegenCharakter(gegner, self.akteur.getAlleAngriffe())
 
-        if(wirdGegnerGetroffen(gegner)):
-            ereignis.schaden = angriff.getWuerfel().wuerfle()
-            ereignis.gegner = str(gegner.getName())
-        else:
-            ereignis.schaden = 0
+        gegner = self.akteur.angreifen(angriff, gegner)
+        ereignis.gegner = gegner.getName()
+        ereignis.toedlich = gegner.lebenspunkte <= 0
+        if ereignis.toedlich:
+            gegnerverhalten._sterben()
+        #TODO: ereignisresult
 
     def findeAktion(self, ereignis):
+        #tTODO: entscheiden ob man sich bewegt oder so, wie weit ist gegner weg etc. dnan vllt zaubern oder effektzauber wirken
+        angreifen(ereignis)
         c = "d"
 
     def _sterben(self): #direkt aus lebende raus?
         self.state = States.DEAD
         del alleAkteure[self.akteur.getName()]
         del alleMonster[self.akteur.getName()]
-        state.toeteAkteur(str(self.akteur.getName()))
 
 
 class CharakterVerhalten2(AkteurVerhalten):
@@ -129,17 +120,17 @@ class CharakterVerhalten2(AkteurVerhalten):
     def ausweichen(self, ereignis):
         ereignis.ausgewichen = Wuerfel.W20.wuerfle() >= ereignis.getSchwierigkeit()
 
-    def angreifen(self,ereignis):
+    def angriff(self,ereignis):
         #TODO: angriff auswählen anhand von schwächen usw -> Zauber & Elementvertraeglichkeiten rein
-        akteurListe = list(alleMonster.values())
-        gegner = min(akteurListe, key= lambda x:x.akteur.getLebenspunkte()).akteur
+        gegnerverhalten = min(list(alleCharaktere.values()), key=lambda x: x.akteur.getLebenspunkte())
+        gegner = gegnerverhalten.akteur
         angriff = findeBestenAngriffGegenCharakter(gegner, self.akteur.getAlleAngriffe())
 
-        if(wirdGegnerGetroffen(gegner) and gegner.getName() is not None):
-            ereignis.schaden = angriff.getWuerfel().wuerfle()
-            ereignis.gegner = str(gegner.getName())
-        else:
-            ereignis.schaden = 0
+        gegner = self.akteur.angreifen(angriff, gegner)
+        ereignis.gegner = gegner.getName()
+        ereignis.toedlich = gegner.lebenspunkte <= 0
+        if ereignis.toedlich:
+            gegnerverhalten._sterben()
 
     def findeAktion(self, ereignis):
         c = "d"
@@ -158,6 +149,7 @@ def initialisiere(): #wäre natürlich premium wenn man die javasachen hier übe
 
 def handleEreignis():
     akteur = alleAkteure[str(aktuellesEreignis.getAkteurName())]
+    #akteur.getConditions().stream().foreach((c) -> c.senkeDauer(1))
     eventhandlers[aktuellesEreignis.getCode()](akteur, aktuellesEreignis)
 
 

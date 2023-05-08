@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.Angriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.persistence.OptimisticLockException;
@@ -23,7 +23,7 @@ public class RegelelementServiceImpl implements RegelelementService{
     @Autowired RegelelementRepository<AbilityScore> abilityScoreRepo; 
     @Autowired RegelelementRepository<Sprache> spracheRepo;
     @Autowired RegelelementRepository<Schadensart> schadensartRepo;
-    @Autowired RegelelementRepository<Angriff> angriffRepo;
+    @Autowired RegelelementRepository<WaffenAngriff> angriffRepo;
 
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(RegelelementServiceImpl.class);
 
@@ -35,7 +35,7 @@ public class RegelelementServiceImpl implements RegelelementService{
             return (RegelelementRepository<T>) spracheRepo;
         if(element instanceof Schadensart)
             return (RegelelementRepository<T>) schadensartRepo;
-        if(element instanceof Angriff)
+        if(element instanceof WaffenAngriff)
             return (RegelelementRepository<T>) angriffRepo;
         return null;
     }
