@@ -27,6 +27,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.Abili
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.SpracheRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.ZauberRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
@@ -50,6 +51,7 @@ public class SimServiceImpl implements SimService{
     @Autowired RegelelementService regelService;
     @Autowired AbilityScoreRepository abilityScoreRepo;
     @Autowired RegelelementRepository<WaffenAngriff> angriffRepo;
+    @Autowired ZauberRepository zauberRepo;
 
     int hp = 10;
     byte level = 4;
@@ -98,42 +100,30 @@ public class SimServiceImpl implements SimService{
     }
 
     @Transactional
-    private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) {
-       // fromFrontend.getMonster().add(erstelleKorrektesMonster("bob"));
-       // Gruppe radio = new Gruppe();
-       // radio.setName("radio");
-        //radio.getAllCharaktere().add(erstelleKorrektenCharakter("brutus"));
-        //radio.getAllCharaktere().add(erstelleKorrektenCharakter("rasmodeus"));
-        //fromFrontend.setGruppe(radio);
+    private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) { //TODO: JsonDesirealizer fuer SimValue
         fromFrontend.getGruppe().getAllCharaktere().forEach(c -> c=erstelleKorrektenCharakter(c));
+        fromFrontend.getMonster().forEach(m -> m = erstelleKorrektesMonster(m));
         for(int i = 1; i < 5; i++) {
             fromFrontend.getValues().add(new Level(i));
         }
-        
         return fromFrontend;
 
     }
 
     @Transactional
-    private Monster erstelleKorrektesMonster(String name) {
-        Monster monster =  (Monster) new Monster().setName(name).setLebenspunkte(58).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
+    private Monster erstelleKorrektesMonster(Monster monster) {
         monster.setId(generateIDBisFrontendGeht());
-     //   monster.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
-        monster.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
+        monster.setAlleZauber(Set.of(zauberRepo.findAll().get(1)));
         monster.setAlignment(Alignment.CHAOTIC_EVIL);
         return monster;
     }
 
     @Transactional
     private Charakter erstelleKorrektenCharakter(Charakter fromfrontend) {
-        Charakter charakter = fromfrontend;
-        charakter.setName(fromfrontend.getName()).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
-      //  charakter.setAbilityScores(Set.of(abilityScoreRepo.findAll().get(0)));
-        logger.info(angriffRepo.findAll().size()+"");
-        charakter.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
-        charakter.setId(generateIDBisFrontendGeht());
-        //charakter.setAlignment(Alignment.CHAOTIC_EVIL);
-        return charakter;
+        fromfrontend.setName(fromfrontend.getName()).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
+        fromfrontend.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
+        fromfrontend.setId(generateIDBisFrontendGeht());
+        return fromfrontend;
     }
 
     public Long generateIDBisFrontendGeht() {

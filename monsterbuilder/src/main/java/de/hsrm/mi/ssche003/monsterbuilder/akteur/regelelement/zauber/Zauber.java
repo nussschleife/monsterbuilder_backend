@@ -1,6 +1,7 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,7 +39,7 @@ public class Zauber extends Regelelement {
     private AbilityScoreName abilityScoreName;
     
     @ManyToMany(mappedBy = "alleZauber") @JsonIgnore
-    private HashSet<@Valid Monster> alleMonster = new HashSet<>();
+    private Set<@Valid Monster> alleMonster = new HashSet<>();
 
     public int getLevel() {
         return level;
@@ -53,7 +54,7 @@ public class Zauber extends Regelelement {
     }
 
     @JsonIgnore
-    public HashSet<Monster> getAlleMonster() {
+    public Set<Monster> getAlleMonster() {
         return alleMonster;
     }
 
@@ -69,7 +70,7 @@ public class Zauber extends Regelelement {
         this.reichweite_ft = reichweite;
     }
 
-    public void setAlleMonster(HashSet<Monster> alleMonster) {
+    public void setAlleMonster(Set<Monster> alleMonster) {
         this.alleMonster = alleMonster;
     }
 

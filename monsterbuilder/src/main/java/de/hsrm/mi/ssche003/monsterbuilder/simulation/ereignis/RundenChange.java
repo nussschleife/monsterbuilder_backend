@@ -1,12 +1,12 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
-
-import java.util.List;
-
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimState;
 
-public interface EncounterEreignis extends IEreignis {
+public class RundenChange implements StateChange{
 
-    List<IEreignis> auslösen();
+    @Override
+    public void changeState(SimState state) {
+        state.erhoeheRunden();
+    }
     
 }

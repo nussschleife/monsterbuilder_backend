@@ -3,15 +3,16 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 import java.util.ArrayList;
 import java.util.Set;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 
 
 public class SimState {
-    ArrayList<String> lebendig;
-    Set<Charakter> charaktere;
-    Set<Monster> monster;
-    public int kampfrunden;
+    private ArrayList<Akteur> lebendig;
+    private Set<Charakter> charaktere;
+    private Set<Monster> monster;
+    private int kampfrunden;
     //Battlemap usw.
 
     public SimState(){}
@@ -21,17 +22,11 @@ public class SimState {
         this.charaktere = gruppe;
         this.monster = monster;
         kampfrunden = 0;
-        for( Monster mon : monster){
-            this.lebendig.add(mon.getName());
-        } 
-        for( Charakter chara : charaktere){
-            this.lebendig.add(chara.getName());
-        } 
         return this;
     }
 
     public void toeteAkteur(String akteur) {
-        lebendig.remove(akteur);
+        lebendig.removeIf((lebender) -> lebender.getName() == akteur);
     }
 
     public boolean istMonsterBesiegt() {
@@ -42,13 +37,16 @@ public class SimState {
         return !lebendig.stream().anyMatch(chara -> charaktere.stream().anyMatch(m -> m.getName().equals(chara)));
     }
 
-    public ArrayList<String> getLebende() {
+    public ArrayList<Akteur> getLebende() {
         return this.lebendig;
     }
 
-
-    public void setLebende(ArrayList<String> lebend) {
+    public void initChange(ArrayList<Akteur> lebend) {
         this.lebendig = lebend;
+    }
+
+    public void erhoeheRunden() {
+        this.kampfrunden++;
     }
 
     public Set<Charakter> getCharaktere() {
@@ -59,6 +57,7 @@ public class SimState {
         return monster;
     }
 
-    
-
+    public int getRunden() {
+        return this.kampfrunden;
+    }
 }

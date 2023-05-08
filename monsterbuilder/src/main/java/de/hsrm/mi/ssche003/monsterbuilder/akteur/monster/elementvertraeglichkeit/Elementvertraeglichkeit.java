@@ -31,7 +31,7 @@ public class Elementvertraeglichkeit {
     @ManyToOne @JsonIgnore
     private Monster monster;
 
-    public int berechneSchadenNeu(int wert) {return wert;}
+    public int berechneSchadenNeu( int wert) {return wert;}
 
     public Long getId() {
         return id;

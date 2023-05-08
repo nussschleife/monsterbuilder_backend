@@ -9,7 +9,10 @@ public class Prone extends Condition {
     private String name = "PRONE";
     @Override
     public void wirkeCondition(Akteur gegner) {
-        super.wirkeCondition(gegner);
+        Condition copy = new Prone();
+        copy.setDauer(dauer);
+        copy.getBetroffeneAkteure().add(gegner);
+        gegner.addCondition(copy); 
         gegner.setRuestungsklasse(gegner.getRuestungsklasse() - 2);
     }
 

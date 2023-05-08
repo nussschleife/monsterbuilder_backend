@@ -45,14 +45,12 @@ public class DESimTask implements SimTask {
     }
 
     public void initTask() {
-        this.ereignisse.add(new InitiativeEreignis()); //Startereignis
-      
+        this.ereignisse.add(new InitiativeEreignis(state.getMonster(), state.getCharaktere())); //Startereignis
         interpreter.execfile(Alignment_Pfad.get(Alignment.CHAOTIC_EVIL)); //aendern in Haupt-skript
-        interpreter.set("javaMonster", state.monster);
-        interpreter.set("javaCharaktere", state.charaktere);
+        interpreter.set("javaMonster", state.getMonster());
+        interpreter.set("javaCharaktere", state.getCharaktere());
         interpreter.set("state", this.state);
         interpreter.get("initialisiere").__call__(); //vom Haupt-skript
-            
     }
 
     @Override
@@ -75,7 +73,7 @@ public class DESimTask implements SimTask {
                     
                 } else {
                     verändereState(aktuell.getChange());
-                    ereignisse.addAll(((EncounterEreignis)aktuell).auslösen(state));
+                    ereignisse.addAll(((EncounterEreignis)aktuell).auslösen());
                 }
             }
         }
@@ -84,7 +82,7 @@ public class DESimTask implements SimTask {
 
     private void resetEncounter() {
         interpreter.cleanup();
-        state.initSimState(state.getCharaktere(), state.monster);
+        state.initSimState(state.getCharaktere(), state.getMonster());
     }
 
     private void verändereState(Optional<StateChange> change) {
@@ -114,7 +112,7 @@ public class DESimTask implements SimTask {
 
     private SimResult beendeEncounter() {
         interpreter.close();
-        return new SimResult(state.kampfrunden, value, simID);
+        return new SimResult(state.getRunden(), value, simID);
     }
 
     private boolean keineErgeinisseÜbrig() {
@@ -131,7 +129,6 @@ public class DESimTask implements SimTask {
     }
 
 }
-
 
 
 /** ZIEL FUER CALLLL: -> State wird nur ueber statechange veraendert. Generierefolgeereignis ist teil von IEreignis

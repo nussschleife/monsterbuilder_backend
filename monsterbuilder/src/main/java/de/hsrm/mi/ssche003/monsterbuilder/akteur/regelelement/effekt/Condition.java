@@ -32,13 +32,18 @@ public class Condition {
     protected String name;
 
     @Transient @JsonIgnore
-    protected Set<Akteur> betroffeneAkteure;
+    protected Set<Akteur> betroffeneAkteure = new HashSet<>();
 
     @OneToMany(mappedBy = "condition")
     Set<Effektzauber> zauber = new HashSet<>();
 
-    public void wirkeCondition(Akteur gegner){gegner.addCondition(this);}
-    public void beendeCondition(Akteur gegner){gegner.getConditions().remove(this);}
+    public void wirkeCondition(Akteur gegner){ //ne kopie von this hinzufuegen? -> sonst nicht thread safe. Wirke passiert auf OG Zauber-Condition
+        Condition copy = new Condition();
+        copy.setDauer(dauer);
+        copy.getBetroffeneAkteure().add(gegner);
+        gegner.addCondition(copy); 
+    }
+    public void beendeCondition(Akteur gegner){gegner.getConditions().remove(this); this.betroffeneAkteure.remove(gegner);}
     public void erhoeheDauer(int runden){this.dauer += runden;}
     public void verringereDauer(int runden){
         this. dauer -= runden; 

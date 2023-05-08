@@ -1,6 +1,5 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +7,7 @@ import java.util.Optional;
 public class AktionEreignis implements AkteurEreignis {
 
     private String akteur;
-    EreignisCode code = EreignisCode.ANGREIFEN;
+    EreignisCode code = EreignisCode.AKTION;
     public boolean toedlich;
     public String gegner = "";
 

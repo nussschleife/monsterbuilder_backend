@@ -46,9 +46,6 @@ class AkteurVerhalten(Akteur):
     def __init__(self, akteur):
         self.akteur = akteur
 
-    def initiative():
-        return akteur.wuerfleInitiative()
-
     def reaktion(self, ereignis):
         return self._ausweichen()
         
@@ -60,9 +57,6 @@ class AkteurVerhalten(Akteur):
 
     def bewegen(self, ereignis):
         raise Exception('not implemented') 
-    
-    def _ausweichen(self, ereignis):
-        return int(random()*25) >= dc
 
 
 class MonsterVerhalten2(AkteurVerhalten):
@@ -73,16 +67,13 @@ class MonsterVerhalten2(AkteurVerhalten):
             self.akteur = monster
             super(MonsterVerhalten2, self)
 
-    def initiative():
-       return AkteurVerhalten.initiative()
-    
     def angriff(self,ereignis):
         #TODO: angriff auswählen anhand von schwächen, state usw -> Zauber & Elementvertraeglichkeiten rein
         gegnerverhalten = min(list(alleCharaktere.values()), key=lambda x: x.akteur.getLebenspunkte())
         gegner = gegnerverhalten.akteur
-        angriff = findeBestenAngriffGegenCharakter(gegner, self.akteur.getAlleAngriffe())
+        angriff = findeBestenAngriffGegenCharakter(gegner, self.akteur)
 
-        gegner = self.akteur.angreifen(angriff, gegner)
+        gegner = self.akteur.angriffAusfuehren(angriff, gegner)
         ereignis.gegner = gegner.getName()
         ereignis.toedlich = gegner.lebenspunkte <= 0
         if ereignis.toedlich:
@@ -90,9 +81,9 @@ class MonsterVerhalten2(AkteurVerhalten):
         #TODO: ereignisresult
 
     def findeAktion(self, ereignis):
-        #tTODO: entscheiden ob man sich bewegt oder so, wie weit ist gegner weg etc. dnan vllt zaubern oder effektzauber wirken
-        angreifen(ereignis)
-        c = "d"
+        self.angriff(ereignis)
+        for con in self.akteur.getConditions():
+            con.verringereDauer(1)
 
     def _sterben(self): #direkt aus lebende raus?
         self.state = States.DEAD
@@ -107,33 +98,21 @@ class CharakterVerhalten2(AkteurVerhalten):
         self.akteur = charakter 
         super(CharakterVerhalten2, self)
 
-    def initiative():
-       return AkteurVerhalten.initiative()
-    
-    def schaden(self, ereignis):
-        self.akteur.lebenspunkte -= ereignis.schaden
-        tot = self.akteur.lebenspunkte <= 0
-        if tot:
-            self._sterben()
-        ereignis.setChange(tot)
-
-    def ausweichen(self, ereignis):
-        ereignis.ausgewichen = Wuerfel.W20.wuerfle() >= ereignis.getSchwierigkeit()
-
     def angriff(self,ereignis):
         #TODO: angriff auswählen anhand von schwächen usw -> Zauber & Elementvertraeglichkeiten rein
         gegnerverhalten = min(list(alleCharaktere.values()), key=lambda x: x.akteur.getLebenspunkte())
         gegner = gegnerverhalten.akteur
-        angriff = findeBestenAngriffGegenCharakter(gegner, self.akteur.getAlleAngriffe())
-
-        gegner = self.akteur.angreifen(angriff, gegner)
+        angriff = findeBestenAngriffGegenMonster(gegner, self.akteur)
+        gegner = self.akteur.angriffAusfuehren(angriff, gegner)
         ereignis.gegner = gegner.getName()
         ereignis.toedlich = gegner.lebenspunkte <= 0
         if ereignis.toedlich:
             gegnerverhalten._sterben()
 
     def findeAktion(self, ereignis):
-        c = "d"
+        self.angriff(ereignis)
+        for con in self.akteur.getConditions():
+            con.verringereDauer(1)
 
     def _sterben(self):
         self.state = States.DEAD
@@ -153,13 +132,14 @@ def handleEreignis():
     eventhandlers[aktuellesEreignis.getCode()](akteur, aktuellesEreignis)
 
 
-def findeBestenAngriffGegenMonster(gegner, angriffe):
-    #nach elementvertraeglichkeiten suchen
-    return angriffe.toArray()[0]
+def findeBestenAngriffGegenMonster(gegner, charakter):
+    #TODO:nach elementvertraeglichkeiten suchen
+    return charakter.getAlleAngriffe().toArray()[0]
 
-def findeBestenAngriffGegenCharakter(gegner, angriffe):
-    #nach elementvertraeglichkeiten suchen
-    return angriffe.toArray()[0]
+def findeBestenAngriffGegenCharakter(gegner, monster):
+    if len(gegner.getConditions()) is 0:
+        return monster.getAlleZauber().toArray()[0]
+    return monster.getAlleAngriffe().toArray()[0]
 
 def wirdGegnerGetroffen(gegner):
     return gegner.getRuestungsklasse() <= Wuerfel.W20.wuerfle()
@@ -172,6 +152,7 @@ def copyAkteur(akteur, copy):
     copy.setId(akteur.getId())
     copy.setAlleAngriffe(akteur.getAlleAngriffe())
     copy.setAlignment(akteur.getAlignment())
+    copy.setAlleZauber(akteur.getAlleZauber())
     return copy
         
 

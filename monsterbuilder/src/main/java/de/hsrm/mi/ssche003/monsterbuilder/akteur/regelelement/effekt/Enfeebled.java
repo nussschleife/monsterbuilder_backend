@@ -10,7 +10,10 @@ public class Enfeebled extends Condition {
     private String name = "ENFEEBLED";
     @Override
     public void wirkeCondition(Akteur gegner) {
-        super.wirkeCondition(gegner);
+        Condition copy = new Enfeebled();
+        copy.setDauer(dauer);
+        copy.getBetroffeneAkteure().add(gegner);
+        gegner.addCondition(copy); 
         gegner.getAbilityScores().forEach((abilityscore) -> {
             if(abilityscore.getScoreName() == AbilityScoreName.STRENGTH) {
                 abilityscore.setScore(abilityscore.getScore() - 2);

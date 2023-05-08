@@ -84,6 +84,8 @@ public class Akteur {
 
     @Transient @JsonIgnore
     protected List<Condition> conditions = new ArrayList<>();
+
+    
     
     public Set<Zauber> getAlleZauber() {
         return alleZauber;
@@ -153,10 +155,6 @@ public class Akteur {
         return this;
     }
 
-    public int wuerfleInitiative() {
-        return (int) (Math.random()*20) + 1; 
-    }
-
     public boolean macheSavingThrow(SavingThrow save) {
         return Wuerfel.W20.wuerfle() > save.getSchwierigkeit(); //Add save mod from akteur
     }
@@ -166,7 +164,7 @@ public class Akteur {
     }
 
     public Akteur zaubern(Zauber zauber, Akteur gegner) {
-        //Angriffmodifikator suchen
+        //modifikator suchen
         int wurf = Wuerfel.W20.wuerfle();
         Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == zauber.getAbilityScoreName()).findFirst();
           
@@ -183,17 +181,9 @@ public class Akteur {
         return gegner;
     }
 
-    public Akteur angreifen(WaffenAngriff angriff, Akteur gegner) {
-       //Angriffmodifikator suchen
-        int wurf = Wuerfel.W20.wuerfle();
-        Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == angriff.getAbilityScoreName()).findFirst();
-       
-        if(score.isPresent())
-            wurf += score.get().getScore();
-        //Gegner verwunden
-        if(gegner.trifftAngriff(wurf)) 
-            gegner.bekommeSchaden(angriff.getSchadensart(), angriff.berechneSchaden());
-        
+    public Akteur angriffAusfuehren(AggressiveAktion aktion, Akteur gegner) {
+        Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == aktion.getAbilityScoreName()).findFirst();
+        aktion.ausfuehren(gegner, score.isPresent() ? score.get().getScore() : 0);
         return gegner;
     }
 
@@ -214,11 +204,6 @@ public class Akteur {
         this.abilityScores = abilityScores;
     }
 
-    /* public Akteur setZauber(HashSet<Zauber> zauber) {
-        this.zauber = zauber;
-        return this;
-    }
-*/
     public Akteur setAbilityScore(Set<AbilityScore> score) {
         this.abilityScores = score;
         return this;
@@ -251,6 +236,9 @@ public class Akteur {
         this.level = level;
     }
 
+    public int wuerfleInitiative() {
+        return (int) Wuerfel.W20.wuerfle();
+    }
     
 
     @Override

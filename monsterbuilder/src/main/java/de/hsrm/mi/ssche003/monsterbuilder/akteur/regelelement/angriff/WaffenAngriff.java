@@ -21,7 +21,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 @Entity //TODO: ValidAngriff -> checkt werte mit level ab
-public class WaffenAngriff extends Regelelement implements Aktion{
+public class WaffenAngriff extends Regelelement implements AggressiveAktion{
     
     @ManyToOne
     Schadensart schadensart;
@@ -148,12 +148,6 @@ public class WaffenAngriff extends Regelelement implements Aktion{
             this.wuerfelanzahl = angriff.getWuerfelanzahl();
         }
         return this;
-    }
-
-    @Override
-    public void ausführen() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ausführen'");
     }
 
 }
