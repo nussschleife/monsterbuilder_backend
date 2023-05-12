@@ -4,7 +4,7 @@ from de.hsrm.mi.ssche003.monsterbuilder.akteur.monster import Monster
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter import Charakter
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff import WaffenAngriff as Angriff
 from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden import Wuerfel
-from  de.hsrm.mi.ssche003.monsterbuilder.simulation.simService import SimState
+from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import AkteurEreignis
 from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import EreignisCode
 
 def schaden(akteur, ereignis):
@@ -19,10 +19,9 @@ def angreifen(akteur, ereignis):
 def findeAktion(akteur, ereignis):
     akteur.findeAktion(ereignis)
 
-alleCharaktere = {}
-alleMonster = {}
-alleAkteure = {}
 eventhandlers = {EreignisCode.ANGREIFEN: angreifen, EreignisCode.AKTION: findeAktion, EreignisCode.AUSWEICHEN: ausweichen, EreignisCode.SCHADEN: schaden}
+
+
 class States:
    DEAD = 1
    ALIVE = 2
@@ -169,3 +168,9 @@ def copyMonster(monster):
 
 def copyCharakter(chara):
     return copyAkteur(chara, Charakter())
+
+
+if isinstance(aktuellesEreignis, AkteurEreignis):
+    handleEreignis() 
+else:
+    initialisiere()

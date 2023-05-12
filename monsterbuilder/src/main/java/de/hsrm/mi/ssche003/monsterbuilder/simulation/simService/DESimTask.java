@@ -47,12 +47,17 @@ public class DESimTask implements SimTask {
     }
 
     public void initTask() {
-        this.ereignisse.add(new InitiativeEreignis(state.getMonster(), state.getCharaktere())); //Startereignis
-        interpreter.execfile(Alignment_Pfad.get(Alignment.CHAOTIC_EVIL)); //aendern in Haupt-skript
+        InitiativeEreignis ini = new InitiativeEreignis(state.getMonster(), state.getCharaktere());
+        this.ereignisse.add(ini); //Startereignis
+        
         interpreter.set("javaMonster", state.getMonster());
         interpreter.set("javaCharaktere", state.getCharaktere());
+        interpreter.exec("alleCharaktere = {}");
+        interpreter.exec("alleMonster = {}");
+        interpreter.exec( "alleAkteure = {}");
         interpreter.set("state", this.state);
-        interpreter.get("initialisiere").__call__(); 
+        interpreter.set("aktuellesEreignis", ini);
+        interpreter.execfile(Alignment_Pfad.get(Alignment.CHAOTIC_EVIL)); //aendern in Haupt-skript
     }
 
     @Override
@@ -108,7 +113,7 @@ public class DESimTask implements SimTask {
         */
             interpreter.set("aktuellesEreignis", aktuell); //das nicht -> im Methodenaufruf params übergben -> wie einheitlich? State rein?
             interpreter.set("state", state);
-            PyObject antwort = interpreter.get("handleEreignis").__call__();
+            interpreter.execfile(Alignment_Pfad.get(Alignment.CHAOTIC_EVIL)); //aendern in Haupt-skript
            // logger.info((antwort).asString());
     }
 
