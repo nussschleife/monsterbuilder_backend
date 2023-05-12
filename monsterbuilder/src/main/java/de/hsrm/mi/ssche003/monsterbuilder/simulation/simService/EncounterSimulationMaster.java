@@ -44,7 +44,7 @@ public class EncounterSimulationMaster {
             CompletableFuture<SimResult> result = CompletableFuture.supplyAsync(() -> {
                 try { return task.call(); }
                 catch (Exception ex) { 
-                    logger.info(ex.getMessage());
+                    logger.info(ex.getMessage()); //index out of range 0: Monster hat wahrscheinlich keinen Angriff
                     throw new EncounterSimulationException(ex.getMessage()); 
                 } 
             }, executor);

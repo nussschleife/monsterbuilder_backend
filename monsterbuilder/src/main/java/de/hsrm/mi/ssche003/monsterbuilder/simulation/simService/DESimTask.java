@@ -14,6 +14,7 @@ import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
@@ -61,13 +62,13 @@ public class DESimTask implements SimTask {
         //Setze korrektes behavior-Objekt fuer jedes Monster
         for(Monster monster : state.getMonster()) {
             interpreter.set("toInit", monster);
-            interpreter.execfile(getSkriptPath(monster.getAlignment()));
+            interpreter.get("initialisiere").__call__();
         }
 
         //Setze korrektes behavior-Objekt fuer jeden Charakter
         for(Charakter chara : state.getCharaktere()) {
             interpreter.set("toInit", chara);
-            interpreter.execfile(getSkriptPath(chara.getAlignment()));
+            interpreter.get("initialisiere").__call__();
         }
     }
 
@@ -75,7 +76,7 @@ public class DESimTask implements SimTask {
         if(!alignment_Pfad.containsKey(alignment))
             return alignment_Pfad.get(Alignment.CHAOTIC_EVIL);
         //TODO: pruefen ob Datei existiert fuer custom alignment
-        return alignment_Pfad.get(alignment);
+        return alignment_Pfad.get(Alignment.CHAOTIC_EVIL);
     }
 
     @Override
@@ -128,16 +129,19 @@ public class DESimTask implements SimTask {
     private void bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
         /*wenn alle Mosnter initialisiert sind braucht man nichtmal ein haupt-skript dass alle hält, weil sie in der python-umgebung existieren.
          * auf map kann theoretisch so zugegriffen werden
-        */
+        */  Akteur amZug = state.getLebende().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst().get();
             interpreter.set("aktuellesEreignis", aktuell);
             interpreter.set("state", state);
-            interpreter.execfile(MAINSKRIPT); 
+            interpreter.set("akteur", amZug);
+            interpreter.execfile(getSkriptPath(Alignment.CHAOTIC_EVIL)); //TODO: das skript des jeweiligen verhaltens ausführen
            // logger.info((antwort).asString());
     }
 
     private SimResult beendeEncounter() {
         interpreter.close();
-        return new SimResult(state.getRunden(), value, simID);
+        SimResult result = new SimResult(state.getRunden(), value, simID);
+        result.setNachricht("Gewinner: " + (state.istGruppeBesiegt() ? "Monster " : "Gruppe "));
+        return result;
     }
 
     private boolean keineErgeinisseÜbrig() {

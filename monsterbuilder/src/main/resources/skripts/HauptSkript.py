@@ -14,55 +14,22 @@ from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import AkteurEreign
 #ini methode aufrufen und akteur uebergeben
 #man bekommt initialisiertes Objekt zurueck und gibt es an copy weiter?
 
-def schaden(akteur, ereignis):
-    akteur.schaden(ereignis)
-
-def ausweichen(akteur, ereignis):
-    akteur.ausweichen(ereignis)
-
-def angreifen(akteur, ereignis):
-    akteur.angriff(ereignis)
-
-def findeAktion(akteur, ereignis):
-    akteur.findeAktion(ereignis)
-
 if not "alleCharaktere" in globals():
     alleCharaktere = {}
 if not "alleMonster" in globals():
     alleMonster = {}
 if not "alleAkteure" in globals():
     alleAkteure = {}
-eventhandlers = {EreignisCode.ANGREIFEN: angreifen, EreignisCode.AKTION: findeAktion, EreignisCode.AUSWEICHEN: ausweichen, EreignisCode.SCHADEN: schaden}
 
-class AkteurVerhalten(object):
-   
-    gegner = []
-
-    def __init__(self, akteur):
-        self.akteur = akteur
-        self.state = States.ALIVE
-
-    def reaktion(self, ereignis):
-        return self._ausweichen()
-        
-    def aktion(self, ereignis):
-        return self.monster.getAlleAktionen()[0]
+def initialisiere(): 
+    global toInit, alleMonster, alleCharaktere, alleAkteure
+    if isinstance(toInit, Charakter):
+        alleCharaktere[str(toInit.getName())] = copyCharakter(toInit)
+        alleAkteure.update(alleCharaktere)
+    else:
+        alleMonster[str(toInit.getName())] = copyMonster(toInit)
+        alleAkteure.update(alleMonster)
     
-    def angriff(self, ereignis):
-        a = b
-
-    def bewegen(self, ereignis):
-        raise Exception('not implemented') 
-
-def handleEreignis():
-    global aktuellesEreignis
-    for ver in alleAkteure:
-        if ver == str(aktuellesEreignis.getAkteurName()):
-            akteurver = alleAkteure[ver]
-            return eventhandlers[aktuellesEreignis.getCode()](akteurver, aktuellesEreignis)
-    return aktuellesEreignis.getAkteurName() + ' not found'
-
-
 def copyAkteur(akteur, copy):
     copy.setLebenspunkte(akteur.getLebenspunkte())
     copy.setRuestungsklasse(akteur.getRuestungsklasse())
@@ -71,13 +38,12 @@ def copyAkteur(akteur, copy):
     copy.setAlleAngriffe(akteur.getAlleAngriffe())
     copy.setAlleZauber(akteur.getAlleZauber())
     return copy
-        
 
 def copyMonster(monster):
     if isinstance(monster, Charakter):
         return copyCharakter(monster)
     copy = copyAkteur(monster, Monster())
-    copy.setAlleTraits(monster.getAlleTraits())
+    #copy.setAlleTraits(monster.getAlleTraits())
     return copy
 
 def copyCharakter(chara):
