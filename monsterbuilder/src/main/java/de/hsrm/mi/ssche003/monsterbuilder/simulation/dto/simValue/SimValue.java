@@ -1,10 +1,8 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue;
+package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -15,5 +13,8 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensar
     @Type(value = ConditionValue.class, name = "Condition"),
     @Type(value = SchadenValue.class, name = "Schadensart") })
 public interface SimValue {
+
+    @Override
+    public String toString();
     
 }

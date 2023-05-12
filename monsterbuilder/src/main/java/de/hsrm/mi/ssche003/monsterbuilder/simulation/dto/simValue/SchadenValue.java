@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue;
+package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue;
 
 import java.util.List;
 
@@ -8,4 +8,9 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensar
 public class SchadenValue {
     AggressiveAktion aktion;
     Schadensart schadensart;
+
+    @Override
+    public String toString() {
+        return "Schadensart: "+schadensart.getName();
+    }
 }

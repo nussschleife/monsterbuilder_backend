@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.SimValue;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.SimValue;
 
 public class SimRequest {
     Set<Monster> monster = new HashSet<>();

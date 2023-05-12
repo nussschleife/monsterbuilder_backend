@@ -2,10 +2,9 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
 import java.util.ArrayList;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.Level;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.auftrag.SimStrategy;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.SimValue;
 
 public class DESStrategy implements SimStrategy{
 

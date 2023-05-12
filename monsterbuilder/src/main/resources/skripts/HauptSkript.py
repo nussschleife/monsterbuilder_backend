@@ -68,9 +68,7 @@ def copyAkteur(akteur, copy):
     copy.setRuestungsklasse(akteur.getRuestungsklasse())
     copy.setName(akteur.getName())
     copy.setGeschwindigkeit_ft(akteur.getGeschwindigkeit_ft())
-    copy.setId(akteur.getId())
     copy.setAlleAngriffe(akteur.getAlleAngriffe())
-    copy.setAlignment(akteur.getAlignment())
     copy.setAlleZauber(akteur.getAlleZauber())
     return copy
         

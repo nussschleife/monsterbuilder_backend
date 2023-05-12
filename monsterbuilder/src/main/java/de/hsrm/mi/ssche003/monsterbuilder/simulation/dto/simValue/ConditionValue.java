@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue;
+package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue;
 
 import java.util.List;
 
@@ -21,6 +21,11 @@ public class ConditionValue implements SimValue{
     }
     public void setConditions(Condition conditions) {
         this.condition = conditions;
+    }
+
+    @Override
+    public String toString() {
+        return "Condition: "+condition.getName();
     }
     
 }

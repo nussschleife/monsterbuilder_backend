@@ -28,10 +28,10 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngr
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.SpracheRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.ZauberRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.Level;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.Level;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter.Encounter;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
