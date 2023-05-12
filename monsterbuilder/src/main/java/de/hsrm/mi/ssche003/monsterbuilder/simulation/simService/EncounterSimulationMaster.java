@@ -36,7 +36,7 @@ public class EncounterSimulationMaster {
       
     }
 
-    public String addAuftrag(SimRequest neuerAuftrag, SimStrategy strategy, Consumer<SimResult> sendeErgebnis){
+    public synchronized String addAuftrag(SimRequest neuerAuftrag, SimStrategy strategy, Consumer<SimResult> sendeErgebnis){
         Auftrag auftrag = (new Auftrag(strategy, neuerAuftrag, generiereSimID()));  
         this.auftraege.add(auftrag);
         for(SimTask task : auftrag.getTasks()) {
@@ -60,7 +60,7 @@ public class EncounterSimulationMaster {
         return MASTER;
     }
 
-    public void stoppeAuftragMitId(String simID) {
+    public synchronized void stoppeAuftragMitId(String simID) {
         Stream<Auftrag> zuLöschenStream = this.auftraege.stream().filter((Auftrag a) -> {return a.getSimID() == simID;});
         Optional<Auftrag> zulöschenOpt = zuLöschenStream.findFirst(); 
         if(zulöschenOpt.isPresent()) {
