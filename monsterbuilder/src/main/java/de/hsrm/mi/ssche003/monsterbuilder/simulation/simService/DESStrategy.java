@@ -2,7 +2,8 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
 import java.util.ArrayList;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.Level;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.auftrag.SimStrategy;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 
@@ -11,8 +12,8 @@ public class DESStrategy implements SimStrategy{
     @Override
     public ArrayList<DESimTask> createSimTasks(String simID, SimRequest request) {
         ArrayList<DESimTask> alleTasks = new ArrayList<>();
-        for(SimValue value : request.getValues()) {
-            alleTasks.add(new DESimTask(request.getGruppe(), request.getMonster(), simID, value,1)); //TODO: noch nicht getestet!! & 1 aus request-> Rückgabewert wäre dann liste aus simresults?
+        for(SimValue value : request.getValues()) {//TODO: Value ist DTO -> LevelValue etc. aus diagramm. Erstmal muss skript uebergeben werden
+            alleTasks.add(new DESimTask(request.getGruppe(), request.getMonster(), simID, value,1)); 
         }
         return alleTasks;
     }

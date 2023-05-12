@@ -1,28 +1,29 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.dto;
 
+import java.util.List;
+
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
 
-public class InitResponse {
-    private String[] sprachen;
-    private Alignment[] alleAlignments;
-    private Trait[] alleTraits;
+public class RegelelementInitResponse {
+    private List<String> conditions;
+    private List<String> sprachen;
     private AbilityScoreName[] abilityScoreNamen;
-    private String[] schadensarten;
+    private List<String> schadensarten;
     private Wuerfel[] wuerfel;
+    private Alignment[] alleAlignments;
 
-    public InitResponse() {
+    public RegelelementInitResponse() {
         alleAlignments = Alignment.values();
         abilityScoreNamen = AbilityScoreName.values();
         wuerfel = Wuerfel.values();
     }
 
-    public String[] getSprachen() {
+    public List<String> getSprachen() {
         return sprachen;
     }
-    public void setSprachen(String[] sprachen) {
+    public void setSprachen(List<String> sprachen) {
         this.sprachen = sprachen;
     }
     public Alignment[] getAlleAlignments() {
@@ -30,12 +31,6 @@ public class InitResponse {
     }
     public void setAlleAlignments(Alignment[] alleAlignments) {
         this.alleAlignments = alleAlignments;
-    }
-    public Trait[] getAlleTraits() {
-        return alleTraits;
-    }
-    public void setAlleTraits(Trait[] alleTraits) {
-        this.alleTraits = alleTraits;
     }
 
     public AbilityScoreName[] getAbilityScoreNamen() {
@@ -46,11 +41,11 @@ public class InitResponse {
         this.abilityScoreNamen = abilityScoreNames;
     }
 
-    public String[] getSchadensarten() {
+    public List<String> getSchadensarten() {
         return schadensarten;
     }
 
-    public void setSchadensarten(String[] schadensarten) {
+    public void setSchadensarten(List<String> schadensarten) {
         this.schadensarten = schadensarten;
     }
 
@@ -61,5 +56,14 @@ public class InitResponse {
     public void setWuerfel(Wuerfel[] wuerfel) {
         this.wuerfel = wuerfel;
     }
+
+    public List<String> getConditions() {
+        return conditions;
+    }
+
+    public void setConditions(List<String> conditions) {
+        this.conditions = conditions;
+    }
     
 }
+

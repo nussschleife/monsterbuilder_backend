@@ -2,7 +2,7 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.SimValue;
 
 public class SimResult {
     String simID;

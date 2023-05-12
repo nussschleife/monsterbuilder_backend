@@ -36,7 +36,7 @@ public class EncounterSimulationMaster {
       
     }
 
-    public <T extends SimStrategy> String addAuftrag(SimRequest neuerAuftrag, T strategy, Consumer<SimResult> sendeErgebnis){
+    public String addAuftrag(SimRequest neuerAuftrag, SimStrategy strategy, Consumer<SimResult> sendeErgebnis){
         Auftrag auftrag = (new Auftrag(strategy, neuerAuftrag, generiereSimID()));  
         this.auftraege.add(auftrag);
         for(SimTask task : auftrag.getTasks()) {

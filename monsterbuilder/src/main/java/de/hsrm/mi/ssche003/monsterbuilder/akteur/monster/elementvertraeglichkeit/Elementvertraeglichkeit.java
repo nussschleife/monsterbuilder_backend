@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +18,9 @@ import jakarta.persistence.Version;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Elementvertraeglichkeit {
+@DiscriminatorColumn(name = "disc", discriminatorType = DiscriminatorType.CHAR )
+@DiscriminatorValue("e")
+public abstract class Elementvertraeglichkeit {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

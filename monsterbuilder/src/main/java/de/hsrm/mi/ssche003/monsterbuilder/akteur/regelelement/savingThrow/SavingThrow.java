@@ -1,5 +1,6 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,11 +12,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
 
 @Entity
-public class SavingThrow {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Long version;
+public class SavingThrow extends Regelelement {
 
     @Enumerated(EnumType.STRING)
     private SaveType typ;
@@ -32,22 +29,6 @@ public class SavingThrow {
         this.schwierigkeit = schwierigkeit;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
     public SaveType getTyp() {
         return typ;
     }
@@ -62,6 +43,18 @@ public class SavingThrow {
 
     public void setEffektzauber(Effektzauber effektzauber) {
         this.effektzauber = effektzauber;
+    }
+
+    @Override
+    public Regelelement getInstance() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInstance'");
+    }
+
+    @Override
+    public Regelelement übernehmeBasisWerteVon(Regelelement element) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'übernehmeBasisWerteVon'");
     }
 
 

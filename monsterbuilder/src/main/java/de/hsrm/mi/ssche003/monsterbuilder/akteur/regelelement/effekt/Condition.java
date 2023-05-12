@@ -4,8 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -19,15 +23,19 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type")
+
+@JsonSubTypes({
+    @Type(value = Prone.class, name = "Prone"),
+    @Type(value = Enfeebled.class, name = "Enfeebled")})
 @Entity
 @DiscriminatorColumn(name="disc", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Condition { 
+public abstract class Condition extends Regelelement{ 
     
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-    @Version
-    protected Long version;
     protected int dauer;
     protected String name;
 
@@ -37,12 +45,8 @@ public class Condition {
     @OneToMany(mappedBy = "condition")
     Set<Effektzauber> zauber = new HashSet<>();
 
-    public void wirkeCondition(Akteur gegner){ //ne kopie von this hinzufuegen? -> sonst nicht thread safe. Wirke passiert auf OG Zauber-Condition
-        Condition copy = new Condition();
-        copy.setDauer(dauer);
-        copy.getBetroffeneAkteure().add(gegner);
-        gegner.addCondition(copy); 
-    }
+    public abstract Akteur wirkeCondition(Akteur gegner);
+  
     public void beendeCondition(Akteur gegner){gegner.getConditions().remove(this); this.betroffeneAkteure.remove(gegner);}
     public void erhoeheDauer(int runden){this.dauer += runden;}
     public void verringereDauer(int runden){

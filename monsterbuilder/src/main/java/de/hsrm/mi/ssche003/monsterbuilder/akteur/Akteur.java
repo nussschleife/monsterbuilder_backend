@@ -35,7 +35,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 @MappedSuperclass	
-public class Akteur {
+public abstract class Akteur {
     @jakarta.persistence.Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     @Version @JsonIgnore
@@ -161,24 +161,6 @@ public class Akteur {
 
     public boolean trifftAngriff(int wurf) {
         return wurf >= this.ruestungsklasse;
-    }
-
-    public Akteur zaubern(Zauber zauber, Akteur gegner) {
-        //modifikator suchen
-        int wurf = Wuerfel.W20.wuerfle();
-        Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == zauber.getAbilityScoreName()).findFirst();
-          
-        if(score.isPresent())
-            wurf += score.get().getScore();
-        //Gegner verwunden
-        if(gegner.trifftAngriff(wurf)) {
-            if(zauber instanceof Effektzauber) {
-                // gegner.setzeEffekt(((Effektzauber)zauber).getEffekt());
-                 //effekt.wirke();
-            }
-        }
-            
-        return gegner;
     }
 
     public Akteur angriffAusfuehren(AggressiveAktion aktion, Akteur gegner) {

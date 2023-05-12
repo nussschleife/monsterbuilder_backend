@@ -1,7 +1,10 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue;
+
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 
 public class Level extends Number implements SimValue{
     int level; 
+    Gruppe gruppe;
 
     public Level(int value) {
         this.level = value;
@@ -38,5 +41,11 @@ public class Level extends Number implements SimValue{
     @Override
     public String toString(){
         return String.valueOf(level);
+    }
+
+    public Gruppe getGruppe() {
+        return gruppe;
     }    
+
+    
 }

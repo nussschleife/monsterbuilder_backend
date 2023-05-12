@@ -4,8 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.elementvertraeglichkeit.Elementvertraeglichkeit;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AggressiveAktion;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -79,6 +81,14 @@ public class Monster extends Akteur{
     @Override 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    @Override
+    public Akteur angriffAusfuehren(AggressiveAktion angriff, Akteur gegner) {
+        if(gegner instanceof Charakter) {
+            super.angriffAusfuehren(angriff, gegner);
+        }
+        return gegner;
     }
     
 }

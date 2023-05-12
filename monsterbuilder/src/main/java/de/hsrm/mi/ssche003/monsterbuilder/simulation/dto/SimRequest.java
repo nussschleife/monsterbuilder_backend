@@ -5,9 +5,9 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.SimValue;
 
 public class SimRequest {
     Set<Monster> monster = new HashSet<>();

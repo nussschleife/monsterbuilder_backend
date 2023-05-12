@@ -26,15 +26,15 @@ public class SimState {
     }
 
     public void toeteAkteur(String akteur) {
-        lebendig.removeIf((lebender) -> lebender.getName() == akteur);
+        lebendig.removeIf((lebender) -> lebender.getName().equals(akteur));
     }
 
     public boolean istMonsterBesiegt() {
-      return !lebendig.stream().anyMatch(mon -> monster.stream().anyMatch(m -> m.getName().equals(mon)));
+      return !lebendig.stream().anyMatch(mon -> monster.stream().anyMatch(m -> m.getName().equals(mon.getName())));
     }
 
     public boolean istGruppeBesiegt() {
-        return !lebendig.stream().anyMatch(chara -> charaktere.stream().anyMatch(m -> m.getName().equals(chara)));
+        return !lebendig.stream().anyMatch(chara -> charaktere.stream().anyMatch(m -> m.getName().equals(chara.getName())));
     }
 
     public ArrayList<Akteur> getLebende() {

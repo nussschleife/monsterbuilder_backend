@@ -1,8 +1,9 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.elementvertraeglichkeit;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
-@Entity
+@Entity @DiscriminatorValue("i")
 public class Immunitaet extends Elementvertraeglichkeit{
 
     @Override

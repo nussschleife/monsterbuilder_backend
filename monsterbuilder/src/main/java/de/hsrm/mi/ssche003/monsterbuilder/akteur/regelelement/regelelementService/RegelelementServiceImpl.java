@@ -12,6 +12,8 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt.Condition;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt.ConditionRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.persistence.OptimisticLockException;
@@ -24,6 +26,7 @@ public class RegelelementServiceImpl implements RegelelementService{
     @Autowired RegelelementRepository<Sprache> spracheRepo;
     @Autowired RegelelementRepository<Schadensart> schadensartRepo;
     @Autowired RegelelementRepository<WaffenAngriff> angriffRepo;
+    @Autowired RegelelementRepository<Condition> conditionRepository;
 
     static final Logger logger = org.slf4j.LoggerFactory.getLogger(RegelelementServiceImpl.class);
 
@@ -37,6 +40,8 @@ public class RegelelementServiceImpl implements RegelelementService{
             return (RegelelementRepository<T>) schadensartRepo;
         if(element instanceof WaffenAngriff)
             return (RegelelementRepository<T>) angriffRepo;
+        if(element instanceof Condition)
+            return (RegelelementRepository<T>) conditionRepository;
         return null;
     }
 

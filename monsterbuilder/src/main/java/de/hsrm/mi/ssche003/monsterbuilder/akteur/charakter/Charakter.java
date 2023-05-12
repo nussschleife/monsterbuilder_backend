@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AggressiveAktion;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
@@ -49,7 +51,13 @@ public class Charakter extends Akteur{
         return true;
     }
 
-    
+    @Override
+    public Akteur angriffAusfuehren(AggressiveAktion angriff, Akteur gegner) {
+        if(gegner instanceof Monster) {
+            super.angriffAusfuehren(angriff, gegner);
+        }
+        return gegner;
+    }
 
 
 }

@@ -7,14 +7,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.python.core.PyBoolean;
+import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.SimTask;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.AkteurEreignis;
@@ -50,7 +52,7 @@ public class DESimTask implements SimTask {
         interpreter.set("javaMonster", state.getMonster());
         interpreter.set("javaCharaktere", state.getCharaktere());
         interpreter.set("state", this.state);
-        interpreter.get("initialisiere").__call__(); //vom Haupt-skript
+        interpreter.get("initialisiere").__call__(); 
     }
 
     @Override
@@ -64,7 +66,7 @@ public class DESimTask implements SimTask {
                 IEreignis aktuell = ereignisse.pop();
 
                 if(aktuell instanceof AkteurEreignis) {
-                    if(state.getLebende().contains(((AkteurEreignis) aktuell).getAkteurName())) {
+                    if(state.getLebende().stream().anyMatch((lebendiger) -> lebendiger.getName() == ((AkteurEreignis)aktuell).getAkteurName())) {
                         Optional<List<IEreignis>> folgeEreignisse = bearbeiteAkteurEreignis((AkteurEreignis)aktuell); 
                         verändereState(aktuell.getChange());
                         if(folgeEreignisse.isPresent() && folgeEreignisse.get().size() > 0) 
@@ -103,10 +105,9 @@ public class DESimTask implements SimTask {
         */
             interpreter.set("aktuellesEreignis", aktuell); //das nicht -> im Methodenaufruf params übergben -> wie einheitlich? State rein?
             interpreter.set("state", state);
-            interpreter.set("akteur", aktuell.getAkteurName());
-            interpreter.get("handleEreignis").__call__();
-       
-  return Optional.of(aktuell.generiereFolEreignis());
+            PyObject antwort = interpreter.get("handleEreignis").__call__();
+           // logger.info((antwort).asString());
+         return Optional.of(aktuell.generiereFolEreignis());
 
     }
 
@@ -120,7 +121,7 @@ public class DESimTask implements SimTask {
     }
 
     private boolean istEncounterVorbei() {
-        return keineErgeinisseÜbrig() || state.istGruppeBesiegt() || state.istMonsterBesiegt();
+        return state.getRunden() >= 1 && ( keineErgeinisseÜbrig() || state.istGruppeBesiegt() || state.istMonsterBesiegt());
     }
 
     @Override

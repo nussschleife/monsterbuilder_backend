@@ -21,15 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.charakterService.CharakterService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.InitResponse;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.AkteurInitResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.ValidResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.exception.MonsterServiceException;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterService.MonsterService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -65,7 +63,7 @@ public class AkteurRestApi {
         return false;
     }
 
-    @PostMapping("/monster") @Transactional
+    @PostMapping("/monster") @Transactional //TODO: kein DTO senden
     public ResponseEntity<Monster> addMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
         Monster monster = dtoZuMonster(monsterdto);
         if(!result.hasErrors()) {
@@ -98,18 +96,11 @@ public class AkteurRestApi {
 
     }
 
-    @GetMapping("/monster/validiere")
-    public ResponseEntity<ValidResponse> validateMonster() {
-        return ResponseEntity.ok().body(new ValidResponse());
-    }
-
     @GetMapping("/init")
-    public InitResponse getInitialValues() {
-        logger.info("INIT");
-        InitResponse init = new InitResponse();
-        init.setSprachen(regelelementService.findeAlleNamenVonElement(new Sprache()).toArray(new String[0]));
+    public AkteurInitResponse getInitialValues() {
+        logger.info("INIT AKTEUR");
+        AkteurInitResponse init = new AkteurInitResponse();
         init.setAlleTraits(monsterService.findeAlleTraits().toArray(new Trait[0]));
-        init.setSchadensarten(regelelementService.findeAlleNamenVonElement(new Schadensart()).toArray(new String[0]));
         return init;
     }
 

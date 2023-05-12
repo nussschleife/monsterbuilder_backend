@@ -1,0 +1,61 @@
+{
+  "standardStats": [
+    {
+      "level": 1,
+      "lebenspunkte": {
+        "min": 6,
+        "max": 20
+      },
+      "ruestungsklasse": {
+        "min": 10,
+        "max": 16
+      },
+      "schadenModifikator": {
+        "min": 1,
+        "max": 3
+      },
+      "angriffModifikator": {
+        "min": -1,
+        "max": 2
+      }
+    },
+    {
+      "level": 2,
+      "lebenspunkte": {
+        "min": 20,
+        "max": 30
+      },
+      "ruestungsklasse": {
+        "min": 10,
+        "max": 15
+      },
+      "schadenModifikator": {
+        "min": 2,
+        "max": 5
+      },
+      "angriffModifikator": {
+        "min": 0,
+        "max": 3
+      }
+    },
+    {
+      "level": 3,
+      "lebenspunkte": {
+        "min": 30,
+        "max": 40
+      },
+      "ruestungsklasse": {
+        "min": 15,
+        "max": 20
+      },
+      "schadenModifikator": {
+        "min": 3,
+        "max": 7
+      },
+      "angriffModifikator": {
+        "min": 1,
+        "max": 4
+      }
+    }
+  ]
+}

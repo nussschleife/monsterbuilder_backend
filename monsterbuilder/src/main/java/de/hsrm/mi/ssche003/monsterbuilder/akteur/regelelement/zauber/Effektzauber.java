@@ -13,7 +13,6 @@ import jakarta.persistence.OneToOne;
 
 @Entity @DiscriminatorValue("EFFEKT")
 public class Effektzauber extends Zauber implements AggressiveAktion {
-    //Auslöser
     @ManyToOne
     Condition condition;
     

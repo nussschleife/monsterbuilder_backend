@@ -17,17 +17,18 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Level;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.TraitRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AngriffRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.SpracheRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.ZauberRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.Level;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
@@ -50,7 +51,7 @@ public class SimServiceImpl implements SimService{
     @Autowired SpracheRepository sprachRepo;
     @Autowired RegelelementService regelService;
     @Autowired AbilityScoreRepository abilityScoreRepo;
-    @Autowired RegelelementRepository<WaffenAngriff> angriffRepo;
+    @Autowired AngriffRepository angriffRepo;
     @Autowired ZauberRepository zauberRepo;
 
     int hp = 10;
@@ -100,7 +101,7 @@ public class SimServiceImpl implements SimService{
     }
 
     @Transactional
-    private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) { //TODO: JsonDesirealizer fuer SimValue
+    private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) {
         fromFrontend.getGruppe().getAllCharaktere().forEach(c -> c=erstelleKorrektenCharakter(c));
         fromFrontend.getMonster().forEach(m -> m = erstelleKorrektesMonster(m));
         for(int i = 1; i < 5; i++) {
@@ -113,7 +114,7 @@ public class SimServiceImpl implements SimService{
     @Transactional
     private Monster erstelleKorrektesMonster(Monster monster) {
         monster.setId(generateIDBisFrontendGeht());
-        monster.setAlleZauber(Set.of(zauberRepo.findAll().get(1)));
+        monster.setAlleZauber(Set.of(zauberRepo.findFirstEffektzauber().get()));
         monster.setAlignment(Alignment.CHAOTIC_EVIL);
         return monster;
     }
@@ -121,7 +122,7 @@ public class SimServiceImpl implements SimService{
     @Transactional
     private Charakter erstelleKorrektenCharakter(Charakter fromfrontend) {
         fromfrontend.setName(fromfrontend.getName()).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
-        fromfrontend.setAlleAngriffe(Set.of(angriffRepo.findAll().get(0)));
+        fromfrontend.setAlleAngriffe(Set.of(angriffRepo.findFirstByOrderByIdAsc().get())); 
         fromfrontend.setId(generateIDBisFrontendGeht());
         return fromfrontend;
     }
