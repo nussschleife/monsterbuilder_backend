@@ -64,19 +64,18 @@ public class DESimTask implements SimTask {
 
             while(!istEncounterVorbei()) {
                 IEreignis aktuell = ereignisse.pop();
-
+                List<IEreignis> folgeEreignisse  = null;
                 if(aktuell instanceof AkteurEreignis) {
                     if(state.getLebende().stream().anyMatch((lebendiger) -> lebendiger.getName() == ((AkteurEreignis)aktuell).getAkteurName())) {
-                        Optional<List<IEreignis>> folgeEreignisse = bearbeiteAkteurEreignis((AkteurEreignis)aktuell); 
+                        bearbeiteAkteurEreignis((AkteurEreignis)aktuell); 
                         verändereState(aktuell.getChange());
-                        if(folgeEreignisse.isPresent() && folgeEreignisse.get().size() > 0) 
-                            folgeEreignisse.get().forEach((e) -> addEreignisZuWarteschlange(e));
+                        folgeEreignisse =  ((AkteurEreignis)aktuell).generiereFolEreignis();
                     }
-                    
-                } else {
+                } else { 
                     verändereState(aktuell.getChange());
-                    ereignisse.addAll(((EncounterEreignis)aktuell).auslösen());
+                    folgeEreignisse = ((EncounterEreignis)aktuell).auslösen();
                 }
+                addEreignisseZuWarteschlange(folgeEreignisse);
             }
         }
         return beendeEncounter();
@@ -92,14 +91,18 @@ public class DESimTask implements SimTask {
             change.get().changeState(state);
     }
 
-    private void addEreignisZuWarteschlange(IEreignis ereignis) {
-        if(ereignis.addToHead())
-            ereignisse.addFirst(ereignis);
-        else
-            ereignisse.add(ereignis);
+    private void addEreignisseZuWarteschlange(List<IEreignis> folge) {
+        if(folge != null)  {
+            for(IEreignis ereignis : folge) {
+                if(ereignis.addToHead())
+                    ereignisse.addFirst(ereignis);
+                else
+                    ereignisse.add(ereignis);
+            }
+        }
     }
 
-    private Optional<List<IEreignis>> bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
+    private void bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
         /*wenn alle Mosnter initialisiert sind braucht man nichtmal ein haupt-skript dass alle hält, weil sie in der python-umgebung existieren.
          * auf map kann theoretisch so zugegriffen werden
         */
@@ -107,8 +110,6 @@ public class DESimTask implements SimTask {
             interpreter.set("state", state);
             PyObject antwort = interpreter.get("handleEreignis").__call__();
            // logger.info((antwort).asString());
-         return Optional.of(aktuell.generiereFolEreignis());
-
     }
 
     private SimResult beendeEncounter() {

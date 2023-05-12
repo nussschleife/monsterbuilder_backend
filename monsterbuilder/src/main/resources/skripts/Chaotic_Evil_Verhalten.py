@@ -75,7 +75,7 @@ class MonsterVerhalten2(AkteurVerhalten):
         #TODO: ereignisresult
 
     def findeAktion(self, ereignis):
-        return self.angriff(ereignis)
+        self.angriff(ereignis)
         for con in self.akteur.getConditions():
             con.verringereDauer(1)
 
@@ -83,7 +83,6 @@ class MonsterVerhalten2(AkteurVerhalten):
         self.state = States.DEAD
         del alleAkteure[self.akteur.getName()]
         del alleMonster[self.akteur.getName()]
-        state.toeteAkteur(str(self.akteur.getName()))
 
 
 class CharakterVerhalten2(AkteurVerhalten):
@@ -116,7 +115,6 @@ class CharakterVerhalten2(AkteurVerhalten):
         self.state = States.DEAD
         del alleAkteure[self.akteur.getName()]
         del alleCharaktere[self.akteur.getName()]
-        state.toeteAkteur(str(self.akteur.getName()))
 
 def initialisiere(): #wäre natürlich premium wenn man die javasachen hier übergeben kann
     global alleMonster, alleAkteure, alleCharaktere
@@ -131,14 +129,13 @@ def handleEreignis():
     for ver in alleAkteure:
         if ver == str(aktuellesEreignis.getAkteurName()):
             akteurver = alleAkteure[ver]
-            return akteurver.findeAktion(aktuellesEreignis)
+            return eventhandlers[aktuellesEreignis.getCode()](akteurver, aktuellesEreignis)
     return aktuellesEreignis.getAkteurName() + ' not found'
   #  if akteur in alleMonster:
    #     akteur = alleMonster[str(aktuellesEreignis.getAkteurName())]
   #  if akteur in alleCharaktere:
     #    akteur =  alleCharaktere[str(aktuellesEreignis.getAkteurName())]
  #   verhalten = str(aktuellesEreignis.getAkteurName()) =='BLIZZARD ARBOR'
-    #akteur.akteur.getConditions().stream().foreach((c) -> c.senkeDauer(1))
     #eventhandlers[aktuellesEreignis.getCode()](akteur, aktuellesEreignis)
     
 
