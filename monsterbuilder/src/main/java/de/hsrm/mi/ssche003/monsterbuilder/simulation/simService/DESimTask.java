@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.simValue.SimValue;
@@ -35,7 +36,8 @@ public class DESimTask implements SimTask {
     PythonInterpreter interpreter;
     int anzahlDurchläufe;
     final String PFAD = "src/main/resources/skripts/";
-    final Map<Alignment, String> Alignment_Pfad = Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py", Alignment.NEUTRAL, PFAD + "Neutral_Verhalten.py");
+    final Map<Alignment, String> alignment_Pfad = Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py", Alignment.NEUTRAL, PFAD + "Neutral_Verhalten.py");
+    final String MAINSKRIPT = PFAD + "HauptSkript.py";
 
     public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value, int anzahlDurchläufe) {
         this.simID = id;
@@ -49,15 +51,23 @@ public class DESimTask implements SimTask {
     public void initTask() {
         InitiativeEreignis ini = new InitiativeEreignis(state.getMonster(), state.getCharaktere());
         this.ereignisse.add(ini); //Startereignis
-        
-        interpreter.set("javaMonster", state.getMonster());
-        interpreter.set("javaCharaktere", state.getCharaktere());
-        interpreter.exec("alleCharaktere = {}");
-        interpreter.exec("alleMonster = {}");
-        interpreter.exec( "alleAkteure = {}");
+        //TODO: erst checken ob custom template ini methode hat und Python errors fangen, default template verwenden
+        //initialisiere Python Umgebung
         interpreter.set("state", this.state);
         interpreter.set("aktuellesEreignis", ini);
-        interpreter.execfile(Alignment_Pfad.get(Alignment.CHAOTIC_EVIL)); //aendern in Haupt-skript
+        interpreter.execfile(MAINSKRIPT); 
+
+        //Setze korrektes behavior-Objekt fuer jedes Monster
+        for(Monster monster : state.getMonster()) {
+            interpreter.set("toInit", monster);
+            interpreter.execfile(alignment_Pfad.get(Alignment.CHAOTIC_EVIL));
+        }
+
+        //Setze korrektes behavior-Objekt fuer jeden Charakter
+        for(Charakter chara : state.getCharaktere()) {
+            interpreter.set("toInit", chara);
+            interpreter.execfile(alignment_Pfad.get(Alignment.CHAOTIC_EVIL));
+        }
     }
 
     @Override
@@ -111,9 +121,9 @@ public class DESimTask implements SimTask {
         /*wenn alle Mosnter initialisiert sind braucht man nichtmal ein haupt-skript dass alle hält, weil sie in der python-umgebung existieren.
          * auf map kann theoretisch so zugegriffen werden
         */
-            interpreter.set("aktuellesEreignis", aktuell); //das nicht -> im Methodenaufruf params übergben -> wie einheitlich? State rein?
+            interpreter.set("aktuellesEreignis", aktuell);
             interpreter.set("state", state);
-            interpreter.execfile(Alignment_Pfad.get(Alignment.CHAOTIC_EVIL)); //aendern in Haupt-skript
+            interpreter.execfile(MAINSKRIPT); 
            // logger.info((antwort).asString());
     }
 

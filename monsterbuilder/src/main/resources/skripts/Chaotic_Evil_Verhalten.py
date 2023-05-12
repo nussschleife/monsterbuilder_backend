@@ -7,48 +7,12 @@ from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden import Wuerf
 from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import AkteurEreignis
 from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import EreignisCode
 
-def schaden(akteur, ereignis):
-    akteur.schaden(ereignis)
-
-def ausweichen(akteur, ereignis):
-    akteur.ausweichen(ereignis)
-
-def angreifen(akteur, ereignis):
-    akteur.angriff(ereignis)
-
-def findeAktion(akteur, ereignis):
-    akteur.findeAktion(ereignis)
-
-eventhandlers = {EreignisCode.ANGREIFEN: angreifen, EreignisCode.AKTION: findeAktion, EreignisCode.AUSWEICHEN: ausweichen, EreignisCode.SCHADEN: schaden}
-
-
 class States:
    DEAD = 1
    ALIVE = 2
    WOUNDED = 3
    SCARED = 4
    PRONE = 5
-
-class AkteurVerhalten(object):
-   
-    gegner = []
-
-    def __init__(self, akteur):
-        self.akteur = akteur
-        self.state = States.ALIVE
-
-    def reaktion(self, ereignis):
-        return self._ausweichen()
-        
-    def aktion(self, ereignis):
-        return self.monster.getAlleAktionen()[0]
-    
-    def angriff(self, ereignis):
-        a = b
-
-    def bewegen(self, ereignis):
-        raise Exception('not implemented') 
-
 
 class MonsterVerhalten2(AkteurVerhalten):
 
@@ -115,30 +79,15 @@ class CharakterVerhalten2(AkteurVerhalten):
         del alleAkteure[self.akteur.getName()]
         del alleCharaktere[self.akteur.getName()]
 
-def initialisiere(): #wäre natürlich premium wenn man die javasachen hier übergeben kann
-    global alleMonster, alleAkteure, alleCharaktere
-    alleMonster.update({str(mon.getName()):MonsterVerhalten2(copyMonster(mon)) for mon in javaMonster})
-    alleCharaktere.update({str(char.getName()):CharakterVerhalten2(copyCharakter(char)) for char in javaCharaktere})
-    alleAkteure.update(alleMonster)
-    alleAkteure.update(alleCharaktere)
-    return str(alleAkteure.keys()) + " " + str(alleAkteure.values())
-
-def handleEreignis():
-    global aktuellesEreignis
-    for ver in alleAkteure:
-        if ver == str(aktuellesEreignis.getAkteurName()):
-            akteurver = alleAkteure[ver]
-            return eventhandlers[aktuellesEreignis.getCode()](akteurver, aktuellesEreignis)
-    return aktuellesEreignis.getAkteurName() + ' not found'
-  #  if akteur in alleMonster:
-   #     akteur = alleMonster[str(aktuellesEreignis.getAkteurName())]
-  #  if akteur in alleCharaktere:
-    #    akteur =  alleCharaktere[str(aktuellesEreignis.getAkteurName())]
- #   verhalten = str(aktuellesEreignis.getAkteurName()) =='BLIZZARD ARBOR'
-    #eventhandlers[aktuellesEreignis.getCode()](akteur, aktuellesEreignis)
+def initialisiere(): 
+    global toInit, alleMonster, alleCharaktere, alleAkteure
+    if isinstance(toInit, Charakter):
+        alleCharaktere[str(toInit.getName())] = CharakterVerhalten2(copyCharakter(toInit))
+        alleAkteure.update(alleCharaktere)
+    else:
+        alleMonster[str(toInit.getName())] = MonsterVerhalten2(copyMonster(toInit))
+        alleAkteure.update(alleMonster)
     
-
-
 def findeBestenAngriffGegenMonster(gegner, charakter):
     #TODO:nach elementvertraeglichkeiten suchen
     return charakter.getAlleAngriffe().toArray()[0]
@@ -148,29 +97,4 @@ def findeBestenAngriffGegenCharakter(gegner, monster):
         return monster.getAlleZauber().toArray()[0]
     return monster.getAlleAngriffe().toArray()[0]
 
-
-def copyAkteur(akteur, copy):
-    copy.setLebenspunkte(akteur.getLebenspunkte())
-    copy.setRuestungsklasse(akteur.getRuestungsklasse())
-    copy.setName(akteur.getName())
-    copy.setGeschwindigkeit_ft(akteur.getGeschwindigkeit_ft())
-    copy.setId(akteur.getId())
-    copy.setAlleAngriffe(akteur.getAlleAngriffe())
-    copy.setAlignment(akteur.getAlignment())
-    copy.setAlleZauber(akteur.getAlleZauber())
-    return copy
-        
-
-def copyMonster(monster):
-    copy = copyAkteur(monster, Monster())
-    copy.setAlleTraits(monster.getAlleTraits())
-    return copy
-
-def copyCharakter(chara):
-    return copyAkteur(chara, Charakter())
-
-
-if isinstance(aktuellesEreignis, AkteurEreignis):
-    handleEreignis() 
-else:
-    initialisiere()
+initialisiere()
