@@ -40,7 +40,7 @@ import jakarta.transaction.Transactional;
 public class SimServiceImpl implements SimService{
 
     @Autowired SimpMessagingTemplate template;
-    final EncounterSimulationMaster MASTER = EncounterSimulationMaster.getInstance();
+    @Autowired EncounterSimulationMaster MASTER;
     private static final Logger logger = LoggerFactory.getLogger(SimServiceImpl.class);
     private Map<String, String> simID_SessionID = new HashMap<String,String>();
     ObjectMapper mapper;
@@ -115,7 +115,6 @@ public class SimServiceImpl implements SimService{
     private Monster erstelleKorrektesMonster(Monster monster) {
         monster.setId(generateIDBisFrontendGeht());
         monster.setAlleZauber(Set.of(zauberRepo.findFirstEffektzauber().get()));
-        monster.setAlignment(Alignment.CHAOTIC_EVIL);
         return monster;
     }
 

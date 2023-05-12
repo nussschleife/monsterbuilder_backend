@@ -8,7 +8,7 @@ public class SimResult {
     String simID;
     int runden;
     SimValue value;
-    String nachricht;
+    String nachricht = "";
 
     public SimResult(int runden, SimValue value, String simID) {
        this.simID = simID;
@@ -33,20 +33,20 @@ public class SimResult {
         this.runden = runden;
     }
 
-/*     public SimValue getValue() {
-        return value;
-    } */
-
     public void setValue(SimValue value) {
         this.value = value;
     }
 
     public String getNachricht() {
-        return "runden: "+ runden + " "+ value.toString();
+        return this.nachricht + "runden: "+ runden + " "+ value.toString();
     }
     @JsonIgnore //TODO: json kann level noch nicht verarbeiten
     public SimValue getValue() {
         return value;
+    }
+
+    public void setNachricht(String nachricht) {
+        this.nachricht = nachricht;
     }
 
 }

@@ -74,6 +74,8 @@ def copyAkteur(akteur, copy):
         
 
 def copyMonster(monster):
+    if isinstance(monster, Charakter):
+        return copyCharakter(monster)
     copy = copyAkteur(monster, Monster())
     copy.setAlleTraits(monster.getAlleTraits())
     return copy

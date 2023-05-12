@@ -2,6 +2,7 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,25 +28,25 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.InitiativeEreignis
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.StateChange;
 
 public class DESimTask implements SimTask {
-    SimState state;
-    Deque<IEreignis> ereignisse;
-    String simID;
-    String message;
-    Logger logger = LoggerFactory.getLogger(DESimTask.class);
-    SimValue value;
-    PythonInterpreter interpreter;
-    int anzahlDurchläufe;
-    final String PFAD = "src/main/resources/skripts/";
-    final Map<Alignment, String> alignment_Pfad = Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py", Alignment.NEUTRAL, PFAD + "Neutral_Verhalten.py");
-    final String MAINSKRIPT = PFAD + "HauptSkript.py";
+    private SimState state;
+    private Deque<IEreignis> ereignisse;
+    private String simID;
+    private Logger logger = LoggerFactory.getLogger(DESimTask.class);
+    private SimValue value;
+    private PythonInterpreter interpreter;
+    private int anzahlDurchläufe;
+    private final String PFAD = "src/main/resources/skripts/"; //TODO: aus properties
+    private HashMap<Alignment, String> alignment_Pfad = new HashMap<>(Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py", Alignment.NEUTRAL, PFAD + "Neutral_Verhalten.py"));
+    private final String MAINSKRIPT = PFAD + "HauptSkript.py";
 
-    public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value, int anzahlDurchläufe) {
+    public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value, int anzahlDurchläufe, String customSkriptName) {
         this.simID = id;
         this.value = value;
         this.interpreter = new PythonInterpreter();
         this.ereignisse = new ArrayDeque<IEreignis>();
         this.anzahlDurchläufe = anzahlDurchläufe;
         this.state = new SimState().initSimState(gruppe.getAllCharaktere(), monster);
+        this.alignment_Pfad.put(Alignment.CUSTOM, customSkriptName); //TODO: system.dir von hier aufrufen
     }
 
     public void initTask() {
@@ -60,14 +61,21 @@ public class DESimTask implements SimTask {
         //Setze korrektes behavior-Objekt fuer jedes Monster
         for(Monster monster : state.getMonster()) {
             interpreter.set("toInit", monster);
-            interpreter.execfile(alignment_Pfad.get(Alignment.CHAOTIC_EVIL));
+            interpreter.execfile(getSkriptPath(monster.getAlignment()));
         }
 
         //Setze korrektes behavior-Objekt fuer jeden Charakter
         for(Charakter chara : state.getCharaktere()) {
             interpreter.set("toInit", chara);
-            interpreter.execfile(alignment_Pfad.get(Alignment.CHAOTIC_EVIL));
+            interpreter.execfile(getSkriptPath(chara.getAlignment()));
         }
+    }
+
+    private String getSkriptPath(Alignment alignment) {
+        if(!alignment_Pfad.containsKey(alignment))
+            return alignment_Pfad.get(Alignment.CHAOTIC_EVIL);
+        //TODO: pruefen ob Datei existiert fuer custom alignment
+        return alignment_Pfad.get(alignment);
     }
 
     @Override

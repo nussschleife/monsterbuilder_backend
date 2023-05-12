@@ -16,6 +16,7 @@ public class SimRequest {
     String userName;
     String simName;
     int durchlaeufe; //in frontend zufuegen
+    String customSkriptName;
 
     
     public void setUserName(String name) {
@@ -60,6 +61,12 @@ public class SimRequest {
     }
     public void setDurchlaeufe(int durchlaeufe) {
         this.durchlaeufe = durchlaeufe;
+    }
+    public String getCustomSkriptName() {
+        return customSkriptName;
+    }
+    public void setCustomSkriptName(String customSkriptName) {
+        this.customSkriptName = customSkriptName;
     }
 
 }

@@ -19,7 +19,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimService;
 import jakarta.annotation.PostConstruct;
 
-@Controller
+@Controller //TODO: löschen
 public class SimController {
 
     private static final Logger logger = LoggerFactory.getLogger(SimController.class);

@@ -43,6 +43,9 @@ public class SimRestApi {
             @RequestHeader("sessionid") String sessionID) {
         SimResponse response = new SimResponse();
         request.setUserName(sessionID);
+        if(request.getCustomSkriptName() != "") {
+            request.setCustomSkriptName(System.getProperty("user.dir")+ "/" +skriptPath+ "/" +request.getCustomSkriptName());
+        }
         response.setSimID(simService.starteSimulation(request).getSimID());
         response.setSimName(request.getSimName());
 
@@ -59,7 +62,7 @@ public class SimRestApi {
     @PostMapping("/skript/template/custom")
     public ResponseEntity<Void> post_speichereTemplate(@RequestBody MultipartFile file) {
         logger.info("neues template erhalten");
-        String home = System.getProperty("user.dir"); // TODO: aendern pls
+        String home = System.getProperty("user.dir");
         File skript = new File(home + '/' + skriptPath, file.getOriginalFilename());
         logger.info("PATH: " + skript.getPath());
 
