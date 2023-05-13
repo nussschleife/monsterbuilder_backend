@@ -12,6 +12,7 @@ import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
@@ -127,12 +128,11 @@ public class DESimTask implements SimTask {
 
     private void bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
         //TODO: errorhandling
-            Optional<Monster> mon = state.getMonster().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst();
-            Optional<Charakter> chara = state.getCharaktere().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst();
+            Akteur mon = state.getLebende().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst().get();
             interpreter.set("aktuellesEreignis", aktuell);
             interpreter.set("state", state);
-            interpreter.set("akteur", mon.isPresent() ? mon.get() : chara.get());
-            interpreter.execfile(getSkriptPath(mon.isPresent() ? mon.get().getAlignment() : chara.get().getAlignment())); 
+            interpreter.set("akteur", mon);
+            interpreter.execfile(getSkriptPath(mon.getAlignment())); 
     }
 
     private SimResult beendeEncounter() {

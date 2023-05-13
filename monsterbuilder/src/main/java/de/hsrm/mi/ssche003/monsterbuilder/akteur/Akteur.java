@@ -16,10 +16,13 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensar
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Inheritance;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
@@ -27,10 +30,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 
-@MappedSuperclass
-public abstract class Akteur {
-    @jakarta.persistence.Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Akteur {
+    @jakarta.persistence.Id @GeneratedValue(strategy = GenerationType.TABLE)
     private Long Id;
     @Version @JsonIgnore
     private Long version;
@@ -50,23 +58,47 @@ public abstract class Akteur {
 
     @Transient @JsonIgnore
     protected List<Condition> conditions = new ArrayList<>();
-    @Transient
-    protected Set<WaffenAngriff> alleAngriffe = new HashSet<>();
-    @Transient
-    protected Set<Zauber> alleZauber = new HashSet<>();;
 
-    @Transient
-    protected Set<AbilityScore> abilityScores = new HashSet<>();; 
-    @Transient
-    protected Set<SavingThrow> savingThrows = new HashSet<>();; 
-    @Transient
-    private Set<Sprache> sprachen = new HashSet<>();;
+    @ManyToMany( cascade = CascadeType.MERGE)
+    @JoinTable(
+        name = "akteur_sprache",
+        joinColumns = @JoinColumn(name = "akteur_id"), 
+        inverseJoinColumns = @JoinColumn(name = "sprache_id"))
+    private Set<Sprache> sprachen = new HashSet<>();
+    
+    @ManyToMany( cascade = CascadeType.MERGE)
+    @JoinTable(
+        name = "akteur_zauber", 
+        joinColumns = @JoinColumn(name = "akteur_id"), 
+        inverseJoinColumns = @JoinColumn(name = "zauber_id"))
+    protected Set<Zauber> alleZauber = new HashSet<>();
+
+    @ManyToMany( cascade = CascadeType.MERGE)
+    @JoinTable(
+        name = "akteur_angriff", 
+        joinColumns = @JoinColumn(name = "akteur_id"), 
+        inverseJoinColumns = @JoinColumn(name = "angriff_id"))
+    protected Set<WaffenAngriff> alleAngriffe = new HashSet<>();
+    
+    @ManyToMany( cascade = CascadeType.MERGE) 
+    @JoinTable(
+        name = "akteur_score", 
+        joinColumns = @JoinColumn(name = "akteur_id"), 
+        inverseJoinColumns = @JoinColumn(name = "score_id"))
+    protected Set<AbilityScore> abilityScores = new HashSet<>(); 
+
+    @ManyToMany( cascade = CascadeType.MERGE)
+    @JoinTable(
+        name = "akteur_save", 
+        joinColumns = @JoinColumn(name = "akteur_id"), 
+        inverseJoinColumns = @JoinColumn(name = "save_id"))
+    protected Set<SavingThrow> savingThrows = new HashSet<>(); 
+
     
     public Long getVersion() {
         return version;
     }
 
-    public abstract Set<Sprache> getSprachen();
 
     public void setSprachen(Set<Sprache> sprachen) {
         this.sprachen = sprachen;
@@ -209,13 +241,6 @@ public abstract class Akteur {
         Id = id;
     }
 
-    public abstract Set<Zauber> getAlleZauber();
-
-    public void setAlleZauber(Set<Zauber> alleZauber) {
-        this.alleZauber = alleZauber;
-    }
-
-    public abstract Set<WaffenAngriff> getAlleAngriffe();
 
     public void setAlleAngriffe(Set<WaffenAngriff> alleAngriffe) {
         this.alleAngriffe = alleAngriffe;
@@ -241,7 +266,6 @@ public abstract class Akteur {
         this.abilityScores = abilityScores;
     }
 
-    public abstract Set<SavingThrow> getSavingThrows();
 
     public void setSavingThrows(Set<SavingThrow> savingThrows) {
         this.savingThrows = savingThrows;
@@ -260,14 +284,50 @@ public abstract class Akteur {
         return this;
     }
 
-    public abstract List<AkteurAktion> getAlleAktionen(); 
-
-    
 
     public boolean macheSavingThrow(SavingThrow save) {
         Optional<SavingThrow> savingThrow = this.savingThrows.stream().filter(s -> s.getTyp() == save.getTyp()).findFirst();
         int mod = savingThrow.isPresent() ? savingThrow.get().getSchwierigkeit() : 0;
         return Wuerfel.W20.wuerfle() + mod > save.getSchwierigkeit(); //Add save mod from akteur
+    }
+
+    @JsonIgnore
+   public List<AkteurAktion> getAlleAktionen() {
+        List<AkteurAktion> alleAktionen = new ArrayList<>();
+        for(AkteurAktion aktion : this.alleAngriffe) {
+            alleAktionen.add(aktion);
+        }
+
+        for(AkteurAktion aktion : this.alleZauber) {
+            alleAktionen.add(aktion);
+        }
+
+        return alleAktionen;
+    }
+
+
+    public Set<Sprache> getSprachen() {
+        return sprachen;
+    }
+
+
+    public Set<Zauber> getAlleZauber() {
+        return alleZauber;
+    }
+
+
+    public void setAlleZauber(Set<Zauber> alleZauber) {
+        this.alleZauber = alleZauber;
+    }
+
+
+    public Set<WaffenAngriff> getAlleAngriffe() {
+        return alleAngriffe;
+    }
+
+
+    public Set<SavingThrow> getSavingThrows() {
+        return savingThrows;
     }
 
 }

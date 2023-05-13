@@ -77,7 +77,7 @@ public class MonsterServiceImpl implements MonsterService{
             Set<Sprache> sprachen = new HashSet<>();
             for(Sprache sprache : monster.getSprachen()) {
                 Sprache optSprache = regelService.bearbeiteElement(sprache);
-                optSprache.addMonster(persistiertesMonster);
+                optSprache.addAkteur(persistiertesMonster);
                 sprachen.add(optSprache);
             }
             //AbilityScores
@@ -85,7 +85,7 @@ public class MonsterServiceImpl implements MonsterService{
 
             for(AbilityScore abilityScore : monster.getAbilityScores()) {
                 AbilityScore optAbilityScore = regelService.bearbeiteElement(abilityScore);
-                optAbilityScore.addMonster(persistiertesMonster);
+                optAbilityScore.addAkteur(persistiertesMonster);
                 scores.add(optAbilityScore);
             }
 

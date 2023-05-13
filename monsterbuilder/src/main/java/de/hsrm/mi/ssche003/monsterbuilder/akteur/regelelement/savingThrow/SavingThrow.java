@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
@@ -26,25 +27,15 @@ public class SavingThrow extends Regelelement {
     private Effektzauber effektzauber;
 
     @ManyToMany(mappedBy = "savingThrows") @JsonIgnore
-    private Set<Charakter> alleCharaktere = new HashSet<>();
+    private Set<Akteur> alleAkteure = new HashSet<>();
 
-    @ManyToMany(mappedBy = "savingThrows") @JsonIgnore
-    private Set<Monster> alleMonster = new HashSet<>();
     
-    public Set<Charakter> getAlleCharaktere() {
-        return alleCharaktere;
+    public Set<Akteur> getAlleAkteure() {
+        return alleAkteure;
     }
 
-    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
-        this.alleCharaktere = alleCharaktere;
-    }
-
-    public Set<Monster> getAlleMonster() {
-        return alleMonster;
-    }
-
-    public void setAlleMonster(Set<Monster> alleMonster) {
-        this.alleMonster = alleMonster;
+    public void setAlleAkteure(Set<Akteur> alleCharaktere) {
+        this.alleAkteure = alleCharaktere;
     }
 
     public int getSchwierigkeit() {

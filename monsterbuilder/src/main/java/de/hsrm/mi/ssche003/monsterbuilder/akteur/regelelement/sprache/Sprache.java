@@ -5,8 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -15,27 +14,8 @@ import jakarta.persistence.ManyToMany;
 public class Sprache extends Regelelement{ 
 
     @ManyToMany(mappedBy = "sprachen") @JsonIgnore
-    private Set<Monster> alleMonster = new HashSet<>();
-
-    @ManyToMany(mappedBy = "sprachen") @JsonIgnore
-    private Set<Charakter> alleCharaktere = new HashSet<>();
-
+    private Set<Akteur> alleAkteure = new HashSet<>();
     
-    
-    @JsonIgnore
-    public Set<Monster> getAlleMonster() {
-        return alleMonster;
-    }
-
-    public void setAlleMonster(Set<Monster> alleMonster) {
-        this.alleMonster = alleMonster;
-    }
-    
-    public void addMonster(Monster monster) {
-        this.alleMonster.add(monster);
-    }
-
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -45,11 +25,6 @@ public class Sprache extends Regelelement{
         if (getClass() != obj.getClass())
             return false;
         Sprache other = (Sprache) obj;
-        if (alleMonster == null) {
-            if (other.alleMonster != null)
-                return false;
-        } else if (!alleMonster.equals(other.alleMonster))
-            return false;
         return true;
     }
 
@@ -63,12 +38,16 @@ public class Sprache extends Regelelement{
         return this;
     }
 
-    public Set<Charakter> getAlleCharaktere() {
-        return alleCharaktere;
+    public Set<Akteur> getAlleAkteure() {
+        return alleAkteure;
     }
 
-    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
-        this.alleCharaktere = alleCharaktere;
+    public void setAlleAkteure(Set<Akteur> alleAkteure) {
+        this.alleAkteure = alleAkteure;
     }
 
+
+    public void addAkteur(Akteur akteur) {
+        this.alleAkteure.add(akteur);
+    }
 }

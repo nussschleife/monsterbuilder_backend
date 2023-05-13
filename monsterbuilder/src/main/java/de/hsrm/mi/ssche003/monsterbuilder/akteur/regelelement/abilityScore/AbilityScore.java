@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
@@ -24,10 +25,7 @@ public class AbilityScore extends Regelelement{
     private int score;
 
     @ManyToMany(mappedBy = "abilityScores") @JsonIgnore
-    private Set<Monster> monster = new HashSet<>();
-
-    @ManyToMany(mappedBy = "abilityScores") @JsonIgnore
-    private Set<Charakter> alleCharaktere = new HashSet<>();
+    private Set<Akteur> alleAkteure = new HashSet<>();
 
     public AbilityScoreName getScoreName() {
         return scoreName;
@@ -45,18 +43,7 @@ public class AbilityScore extends Regelelement{
         this.score = score;
     }
 
-    @JsonIgnore
-    public Set<Monster> getMonster() {
-        return monster;
-    }
-
-    public void setMonster(Set<Monster> akteur) {
-        this.monster = akteur;
-    }
-
-    public void addMonster(Monster monster) {
-        this.monster.add(monster);
-    }
+   
 
     @Override @JsonIgnore
     public AbilityScore getInstance() {
@@ -74,12 +61,16 @@ public class AbilityScore extends Regelelement{
         return this;
     }
 
-    public Set<Charakter> getAlleCharaktere() {
-        return alleCharaktere;
+    public Set<Akteur> getAlleAkteure() {
+        return alleAkteure;
     }
 
-    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
-        this.alleCharaktere = alleCharaktere;
+    public void setAlleAkteure(Set<Akteur> alleAkteure) {
+        this.alleAkteure = alleAkteure;
+    }
+
+    public void addAkteur(Akteur akteur) {
+        this.alleAkteure.add(akteur);
     }
     
 }

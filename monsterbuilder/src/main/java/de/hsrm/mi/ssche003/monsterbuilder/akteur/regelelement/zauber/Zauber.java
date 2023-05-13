@@ -42,22 +42,12 @@ public class Zauber extends Regelelement implements AkteurAktion {
     private AbilityScoreName abilityScoreName;
     
     @ManyToMany(mappedBy = "alleZauber") @JsonIgnore
-    private Set<@Valid Monster> alleMonster = new HashSet<>();
-
-    @ManyToMany(mappedBy = "alleZauber") @JsonIgnore
-    private Set<@Valid Charakter> alleCharaktere = new HashSet<>();
+    private Set<@Valid Akteur> alleAkteure = new HashSet<>();
     
     public void setAbilityScoreName(AbilityScoreName abilityScoreName) {
         this.abilityScoreName = abilityScoreName;
     }
 
-    public Set<Charakter> getAlleCharaktere() {
-        return alleCharaktere;
-    }
-
-    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
-        this.alleCharaktere = alleCharaktere;
-    }
 
     public int getLevel() {
         return level;
@@ -69,11 +59,6 @@ public class Zauber extends Regelelement implements AkteurAktion {
 
     public int getReichweite_ft() {
         return reichweite_ft;
-    }
-
-    @JsonIgnore
-    public Set<Monster> getAlleMonster() {
-        return alleMonster;
     }
 
     public void setLevel(int level) {
@@ -88,9 +73,7 @@ public class Zauber extends Regelelement implements AkteurAktion {
         this.reichweite_ft = reichweite;
     }
 
-    public void setAlleMonster(Set<Monster> alleMonster) {
-        this.alleMonster = alleMonster;
-    }
+ 
 
     @Override @JsonIgnore
     public Regelelement getInstance() {
@@ -116,6 +99,16 @@ public class Zauber extends Regelelement implements AkteurAktion {
     public Akteur ausfuehren(Akteur gegner, int modifikator) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'ausfuehren'");
+    }
+
+
+    public Set<Akteur> getAlleAkteure() {
+        return alleAkteure;
+    }
+
+
+    public void setAlleAkteure(Set<Akteur> alleAkteure) {
+        this.alleAkteure = alleAkteure;
     }
 
     //TODO: hashode & equals
