@@ -59,35 +59,35 @@ public class Akteur {
     @Transient @JsonIgnore
     protected List<Condition> conditions = new ArrayList<>();
 
-    @ManyToMany( cascade = CascadeType.MERGE)
+    @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(
         name = "akteur_sprache",
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "sprache_id"))
     private Set<Sprache> sprachen = new HashSet<>();
     
-    @ManyToMany( cascade = CascadeType.MERGE)
+    @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(
         name = "akteur_zauber", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "zauber_id"))
     protected Set<Zauber> alleZauber = new HashSet<>();
 
-    @ManyToMany( cascade = CascadeType.MERGE)
+    @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(
         name = "akteur_angriff", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "angriff_id"))
     protected Set<WaffenAngriff> alleAngriffe = new HashSet<>();
     
-    @ManyToMany( cascade = CascadeType.MERGE) 
+    @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}) 
     @JoinTable(
         name = "akteur_score", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "score_id"))
     protected Set<AbilityScore> abilityScores = new HashSet<>(); 
 
-    @ManyToMany( cascade = CascadeType.MERGE)
+    @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(
         name = "akteur_save", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
@@ -292,7 +292,7 @@ public class Akteur {
     }
 
     @JsonIgnore
-   public List<AkteurAktion> getAlleAktionen() {
+    public List<AkteurAktion> getAlleAktionen() {
         List<AkteurAktion> alleAktionen = new ArrayList<>();
         for(AkteurAktion aktion : this.alleAngriffe) {
             alleAktionen.add(aktion);

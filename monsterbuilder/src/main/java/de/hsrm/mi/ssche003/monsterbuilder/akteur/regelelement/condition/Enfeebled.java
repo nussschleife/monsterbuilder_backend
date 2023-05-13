@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
-@Entity @DiscriminatorValue("ENFEEBLED")
+@Entity
 public class Enfeebled extends Condition {
 
 

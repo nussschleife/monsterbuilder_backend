@@ -13,7 +13,6 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementReposi
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition.Condition;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition.ConditionRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 import jakarta.persistence.OptimisticLockException;
@@ -42,6 +41,7 @@ public class RegelelementServiceImpl implements RegelelementService{
             return (RegelelementRepository<T>) angriffRepo;
         if(element instanceof Condition)
             return (RegelelementRepository<T>) conditionRepository;
+        
         return null;
     }
 

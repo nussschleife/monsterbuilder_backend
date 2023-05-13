@@ -28,12 +28,10 @@ import jakarta.persistence.Transient;
     @Type(value = Prone.class, name = "Prone"),
     @Type(value = Enfeebled.class, name = "Enfeebled")}) */
 @Entity
-@DiscriminatorColumn(name="disc", discriminatorType = DiscriminatorType.STRING)
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Condition extends Regelelement{ 
     
     protected int dauer;
-    protected String name;
 
     @Transient @JsonIgnore
     protected Set<Akteur> betroffeneAkteure = new HashSet<>();
@@ -61,12 +59,7 @@ public abstract class Condition extends Regelelement{
     public void setDauer(int dauer) {
         this.dauer = dauer;
     }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+ 
     public Set<Akteur> getBetroffeneAkteure() {
         return betroffeneAkteure;
     }

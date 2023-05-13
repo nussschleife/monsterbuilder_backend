@@ -6,9 +6,12 @@ INSERT INTO Ability_Score (name, score_Name, score) VALUES ('DEXTERITY','DEXTERI
 INSERT INTO Waffen_Angriff (name, ability_score_name, angriff_Modifikator, schaden_Modifikator, wuerfelanzahl, wuerfel, reichweite_ft, schadensart_ID) VALUES('standardAngriffLevel1', 'STRENGTH', 9, 4, 1, 'W8', 30, 1);
 INSERT INTO Waffen_Angriff (name, ability_score_name, angriff_Modifikator, schaden_Modifikator, wuerfelanzahl, wuerfel, reichweite_ft, schadensart_ID) VALUES('standardAngriffLevel2', 'STRENGTH', 10, 4, 1, 'W8', 30, 1);
 INSERT INTO Waffen_Angriff (name, ability_score_name, angriff_Modifikator, schaden_Modifikator, wuerfelanzahl, wuerfel, reichweite_ft, schadensart_ID) VALUES('standardAngriffLevel3', 'STRENGTH', 11, 4, 1, 'W8', 30, 1);
-INSERT INTO CONDITION(disc, dauer, name) VALUES ('PRONE', 3, 'PRONE');
-INSERT INTO CONDITION(disc, dauer, name) VALUES ('ENFEEBLED', 3, 'ENFEEBLED');
-INSERT INTO CONDITION(disc, dauer) VALUES ('PETRIFIED', 3);
+INSERT INTO CONDItion(dauer, name) VALUES (3, 'PRONE');
+INSERT INTO condition(dauer, name) VALUES (3, 'ENFEEBLED');
+INSERT INTO condition(dauer, name) VALUES ( 3, 'PETRIFIED');
+insert into PRONE(id) VALUES (1);
+insert into ENFEEBLED(id) VALUES(2);
+insert into PETRIFIED(id) values(3);
 INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (3, 'WILL'), (8, 'FORTITUDE'), (7, 'REFLEX');
 INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (4, 'WILL'), (10, 'FORTITUDE'), (8, 'REFLEX');
 INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (7, 'WILL'), (9, 'FORTITUDE'), (6, 'REFLEX');

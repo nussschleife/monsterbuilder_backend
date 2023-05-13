@@ -13,7 +13,7 @@ import jakarta.persistence.OneToOne;
 
 @Entity @DiscriminatorValue("EFFEKT")
 public class Effektzauber extends Zauber implements AkteurAktion {
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     Condition condition;
     
     @OneToOne(cascade = CascadeType.ALL)

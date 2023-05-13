@@ -4,13 +4,16 @@ import java.util.List;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition.Condition;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
 
 public class RegelelementInitResponse {
     private List<String> conditions;
-    private List<String> sprachen;
+    private List<Sprache> sprachen;
     private AbilityScoreName[] abilityScoreNamen;
-    private List<String> schadensarten;
+    private List<Schadensart> schadensarten;
     private Wuerfel[] wuerfel;
     private Alignment[] alleAlignments;
 
@@ -20,10 +23,10 @@ public class RegelelementInitResponse {
         wuerfel = Wuerfel.values();
     }
 
-    public List<String> getSprachen() {
+    public List<Sprache> getSprachen() {
         return sprachen;
     }
-    public void setSprachen(List<String> sprachen) {
+    public void setSprachen(List<Sprache> sprachen) {
         this.sprachen = sprachen;
     }
     public Alignment[] getAlleAlignments() {
@@ -41,11 +44,11 @@ public class RegelelementInitResponse {
         this.abilityScoreNamen = abilityScoreNames;
     }
 
-    public List<String> getSchadensarten() {
+    public List<Schadensart> getSchadensarten() {
         return schadensarten;
     }
 
-    public void setSchadensarten(List<String> schadensarten) {
+    public void setSchadensarten(List<Schadensart> schadensarten) {
         this.schadensarten = schadensarten;
     }
 

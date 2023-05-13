@@ -1,14 +1,9 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.monster;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.AkteurAktion;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
@@ -16,12 +11,9 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.elementvertraeglichkeit.Elementvertraeglichkeit;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow.SavingThrow;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinTable;
@@ -40,7 +32,7 @@ public class Monster extends Akteur{
 
     private Set<Trait> alleTraits = new HashSet<>();    
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "monster")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "monster")
     private Set<Elementvertraeglichkeit> elementvertraeglichkeiten = new HashSet<>(); 
 
     public Set<Trait> getAlleTraits() {
@@ -91,11 +83,6 @@ public class Monster extends Akteur{
         return true;
     }
 
-    @Override 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     @Override
     public Akteur aktionAusfuehren(AkteurAktion aktion, Akteur gegner) {
         if( gegner instanceof Charakter) {
@@ -121,30 +108,5 @@ public class Monster extends Akteur{
         int mod = savingThrow.isPresent() ? savingThrow.get().getSchwierigkeit() : 0;
         return Wuerfel.W20.wuerfle() + mod > save.getSchwierigkeit(); //Add save mod from akteur
     }
-
-
-    @Override
-    public void setAlleAngriffe(Set<WaffenAngriff> alleAngriffe) {
-        this.alleAngriffe = alleAngriffe;
-    }
-
-    @Override
-    public Set<AbilityScore> getAbilityScores() {
-        return abilityScores;
-    }
-
-    @Override
-    public void setAbilityScores(Set<AbilityScore> abilityScores) {
-        this.abilityScores = abilityScores;
-    }
-
-
-    @Override
-    public void setSavingThrows(Set<SavingThrow> savingThrows) {
-        this.savingThrows = savingThrows;
-    }
-
-   
-    
 
 }

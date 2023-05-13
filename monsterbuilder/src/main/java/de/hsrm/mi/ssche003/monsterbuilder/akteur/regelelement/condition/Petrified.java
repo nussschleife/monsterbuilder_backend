@@ -10,12 +10,16 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 
-@DiscriminatorValue("PETRIFIED")
+@Entity
 public class Petrified extends Condition{
 
     private String name = "PETRIFIED";
+    @Transient @JsonIgnore
     private Set<Zauber> zauber;
+    @Transient @JsonIgnore
     private Set<WaffenAngriff> angriffe;
 
     @Override

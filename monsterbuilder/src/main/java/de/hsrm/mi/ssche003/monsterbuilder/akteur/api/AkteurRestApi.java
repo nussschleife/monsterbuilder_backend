@@ -65,8 +65,7 @@ public class AkteurRestApi {
     }
 
     @PostMapping("/monster") @Transactional //TODO: kein DTO senden
-    public ResponseEntity<Monster> addMonster(@Valid @RequestBody MonsterDTO monsterdto, BindingResult result) {
-        Monster monster = dtoZuMonster(monsterdto);
+    public ResponseEntity<Monster> addMonster(@Valid @RequestBody Monster monster, BindingResult result) {
         if(!result.hasErrors()) {
            
             logger.info("NEUES MONSTER ERHALTEN: ");
@@ -74,13 +73,13 @@ public class AkteurRestApi {
             Sprache elementSprache = new Sprache();
 
             //TODO: Lieber Sprache so senden statt als String, dann kann das hier in den Service zu den anderen dingern
-            for(String sprache : monsterdto.getSprachen()) {
+           /* for(String sprache : monster.getSprachen()) {
                 Optional<Sprache> optional = regelelementService.findeElementMitNamen(sprache, elementSprache);
                 Sprache hinzufügen = optional.isEmpty() ? new Sprache() : optional.get();
                 hinzufügen.setName(sprache);
                 hinzufügen = regelelementService.bearbeiteElement(hinzufügen);
                 sprachen.add(hinzufügen);
-            }
+            }*/
 
             monster.setSprachen(sprachen);
 

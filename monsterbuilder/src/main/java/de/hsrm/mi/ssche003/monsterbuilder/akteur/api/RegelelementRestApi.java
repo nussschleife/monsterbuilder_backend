@@ -23,8 +23,8 @@ public class RegelelementRestApi {
     public RegelelementInitResponse getInitialValues() {
         logger.info("INIT REGELELEMENTE");
         RegelelementInitResponse init = new RegelelementInitResponse();
-        init.setSprachen(regelelementService.findeAlleNamenVonElement(new Sprache()));
-        init.setSchadensarten(regelelementService.findeAlleNamenVonElement(new Schadensart()));
+        init.setSprachen(regelelementService.findeAlleVonTyp(new Sprache()));
+        init.setSchadensarten(regelelementService.findeAlleVonTyp(new Schadensart()));
         init.setConditions(regelelementService.findeAlleNamenVonElement(new Prone()));
         return init;
     }
