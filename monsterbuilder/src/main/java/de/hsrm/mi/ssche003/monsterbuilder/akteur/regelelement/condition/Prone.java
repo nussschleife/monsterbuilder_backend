@@ -1,4 +1,6 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
@@ -10,10 +12,10 @@ public class Prone extends Condition {
     private String name = "PRONE";
     @Override
     public Akteur wirkeCondition(Akteur gegner) {
-        Condition copy = new Prone();
-        copy.setDauer(dauer);
-        copy.getBetroffeneAkteure().add(gegner);
-        gegner.addCondition(copy); 
+        Condition kopie = new Prone();
+        kopie.setDauer(dauer);
+        kopie.getBetroffeneAkteure().add(gegner);
+        gegner.addCondition(kopie); 
         gegner.setRuestungsklasse(gegner.getRuestungsklasse() - 2);
         return gegner;
     }
@@ -24,7 +26,7 @@ public class Prone extends Condition {
         gegner.setRuestungsklasse(gegner.getRuestungsklasse() + 2);
     }
 
-    @Override
+    @Override @JsonIgnore
     public Regelelement getInstance() {
         return this;
     }

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import jakarta.persistence.Entity;
@@ -24,6 +25,9 @@ public class AbilityScore extends Regelelement{
 
     @ManyToMany(mappedBy = "abilityScores") @JsonIgnore
     private Set<Monster> monster = new HashSet<>();
+
+    @ManyToMany(mappedBy = "abilityScores") @JsonIgnore
+    private Set<Charakter> alleCharaktere = new HashSet<>();
 
     public AbilityScoreName getScoreName() {
         return scoreName;
@@ -69,7 +73,14 @@ public class AbilityScore extends Regelelement{
 
         return this;
     }
+
+    public Set<Charakter> getAlleCharaktere() {
+        return alleCharaktere;
+    }
+
+    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
+        this.alleCharaktere = alleCharaktere;
+    }
     
-    //Zauber, Angriff usw.
 }
  

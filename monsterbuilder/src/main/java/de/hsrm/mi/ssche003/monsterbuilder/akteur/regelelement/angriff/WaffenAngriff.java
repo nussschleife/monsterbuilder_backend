@@ -5,8 +5,9 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.AkteurAktion;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Aktion;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
@@ -21,7 +22,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 @Entity //TODO: ValidAngriff -> checkt werte mit level ab
-public class WaffenAngriff extends Regelelement implements AggressiveAktion{
+public class WaffenAngriff extends Regelelement implements AkteurAktion{
     
     @ManyToOne
     Schadensart schadensart;
@@ -44,6 +45,11 @@ public class WaffenAngriff extends Regelelement implements AggressiveAktion{
 
     @ManyToMany(mappedBy = "alleAngriffe") @JsonIgnore
     private Set<Monster> alleMonster = new HashSet<>();
+
+    @ManyToMany(mappedBy = "alleAngriffe") @JsonIgnore
+    private Set<Charakter> alleCharaktere = new HashSet<>();
+
+    
 
     public Schadensart getSchadensart() {
         return schadensart;
@@ -148,6 +154,14 @@ public class WaffenAngriff extends Regelelement implements AggressiveAktion{
             this.wuerfelanzahl = angriff.getWuerfelanzahl();
         }
         return this;
+    }
+
+    public Set<Charakter> getAlleCharaktere() {
+        return alleCharaktere;
+    }
+
+    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
+        this.alleCharaktere = alleCharaktere;
     }
 
 }

@@ -2,11 +2,11 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue;
 
 import java.util.List;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AggressiveAktion;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.AkteurAktion;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 
 public class SchadenValue {
-    AggressiveAktion aktion;
+    AkteurAktion aktion;
     Schadensart schadensart;
 
     @Override

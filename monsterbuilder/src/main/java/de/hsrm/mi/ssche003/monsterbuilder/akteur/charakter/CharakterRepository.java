@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CharakterRepository extends JpaRepository<Charakter, Long>{
     Optional<Charakter> findById(Long id);
+    Optional<Charakter> findByName(String name);
 }

@@ -1,15 +1,19 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Version;
 
 @Entity
 public class SavingThrow extends Regelelement {
@@ -18,8 +22,30 @@ public class SavingThrow extends Regelelement {
     private SaveType typ;
     int schwierigkeit;
 
-    @OneToOne(mappedBy = "save")
+    @OneToOne(mappedBy = "save") @JsonIgnore
     private Effektzauber effektzauber;
+
+    @ManyToMany(mappedBy = "savingThrows") @JsonIgnore
+    private Set<Charakter> alleCharaktere = new HashSet<>();
+
+    @ManyToMany(mappedBy = "savingThrows") @JsonIgnore
+    private Set<Monster> alleMonster = new HashSet<>();
+    
+    public Set<Charakter> getAlleCharaktere() {
+        return alleCharaktere;
+    }
+
+    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
+        this.alleCharaktere = alleCharaktere;
+    }
+
+    public Set<Monster> getAlleMonster() {
+        return alleMonster;
+    }
+
+    public void setAlleMonster(Set<Monster> alleMonster) {
+        this.alleMonster = alleMonster;
+    }
 
     public int getSchwierigkeit() {
         return schwierigkeit;
@@ -45,16 +71,20 @@ public class SavingThrow extends Regelelement {
         this.effektzauber = effektzauber;
     }
 
-    @Override
+    @Override @JsonIgnore
     public Regelelement getInstance() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstance'");
+        return new SavingThrow();
     }
 
     @Override
     public Regelelement übernehmeBasisWerteVon(Regelelement element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'übernehmeBasisWerteVon'");
+        if(element instanceof SavingThrow) {
+            SavingThrow save = (SavingThrow) element;
+            this.setName(element.getName());
+            this.schwierigkeit = save.getSchwierigkeit();
+            this.typ = save.getTyp();
+        }
+        return this;
     }
 
 

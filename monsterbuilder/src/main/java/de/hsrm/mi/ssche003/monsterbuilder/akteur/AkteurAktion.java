@@ -1,9 +1,8 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
 
-public interface AggressiveAktion{
+public interface AkteurAktion{
     
     public Akteur ausfuehren(Akteur gegner, int modifikator);
 

@@ -8,13 +8,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.python.core.PyBoolean;
-import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
@@ -22,6 +19,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.SimTask;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.SimValue;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter.Encounter;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.AkteurEreignis;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.EncounterEreignis;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.IEreignis;
@@ -57,6 +55,7 @@ public class DESimTask implements SimTask {
         //initialisiere Python Umgebung
         interpreter.set("state", this.state);
         interpreter.set("aktuellesEreignis", ini);
+        interpreter.set("encounter", new Encounter());
         interpreter.execfile(MAINSKRIPT); 
 
         //Setze korrektes behavior-Objekt fuer jedes Monster
@@ -76,7 +75,7 @@ public class DESimTask implements SimTask {
         if(!alignment_Pfad.containsKey(alignment))
             return alignment_Pfad.get(Alignment.CHAOTIC_EVIL);
         //TODO: pruefen ob Datei existiert fuer custom alignment
-        return alignment_Pfad.get(Alignment.CHAOTIC_EVIL);
+        return alignment_Pfad.get(alignment);
     }
 
     @Override
@@ -127,14 +126,13 @@ public class DESimTask implements SimTask {
     }
 
     private void bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
-        /*wenn alle Mosnter initialisiert sind braucht man nichtmal ein haupt-skript dass alle hält, weil sie in der python-umgebung existieren.
-         * auf map kann theoretisch so zugegriffen werden
-        */  Akteur amZug = state.getLebende().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst().get();
+        //TODO: errorhandling
+            Optional<Monster> mon = state.getMonster().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst();
+            Optional<Charakter> chara = state.getCharaktere().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst();
             interpreter.set("aktuellesEreignis", aktuell);
             interpreter.set("state", state);
-            interpreter.set("akteur", amZug);
-            interpreter.execfile(getSkriptPath(Alignment.CHAOTIC_EVIL)); //TODO: das skript des jeweiligen verhaltens ausführen
-           // logger.info((antwort).asString());
+            interpreter.set("akteur", mon.isPresent() ? mon.get() : chara.get());
+            interpreter.execfile(getSkriptPath(mon.isPresent() ? mon.get().getAlignment() : chara.get().getAlignment())); 
     }
 
     private SimResult beendeEncounter() {
@@ -158,21 +156,3 @@ public class DESimTask implements SimTask {
     }
 
 }
-
-
-/** ZIEL FUER CALLLL: -> State wird nur ueber statechange veraendert. Generierefolgeereignis ist teil von IEreignis
- * while(!istEncounterVorbei()) {
-        IEreignis aktuell = ereignisse.pop();
-        EreignisResult result = null;
-        if(aktuell instanceof AkteurEreignis) {
-            if(state.getLebende().contains(((AkteurEreignis) aktuell).getAkteurName())) {
-              result = bearbeiteAkteurEreignis((AkteurEreignis)aktuell);
-            }
-        } else {
-            aktuell.ausfuehren();
-        }
-        List<IEreignis> folgeEreignisse = aktuell.generiereFolgeEreignis(result);
-        folgeEreignisse.forEach((e) -> addEreignisZuWarteschlange(e));
-        veraendereState(aktuell.getChange());
-    }
- */

@@ -2,6 +2,7 @@ package de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.charakterService;
 
 import java.util.Optional;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.CharakterRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.GruppeRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CharakterServiceImpl implements CharakterService{
@@ -20,8 +22,8 @@ public class CharakterServiceImpl implements CharakterService{
 
     private static final Logger logger = LoggerFactory.getLogger(CharakterServiceImpl.class);
 
-    @Override
-    public Charakter bearbeiteCharakter(Charakter charakter) {
+    @Override @Transactional
+    public Charakter bearbeiteCharakter(Charakter charakter) { //TODO: das ganze hier macht hibernate doch von allein?
         Charakter persistierterCharakter = findeCharakterMitId(charakter.getId());
         persistierterCharakter.setAlignment(charakter.getAlignment());
         persistierterCharakter.setName(charakter.getName());
@@ -29,7 +31,6 @@ public class CharakterServiceImpl implements CharakterService{
         persistierterCharakter.setLebenspunkte(charakter.getLebenspunkte());
         persistierterCharakter.setRuestungsklasse(charakter.getRuestungsklasse());
         persistierterCharakter.setGruppe(charakter.getGruppe());
-        //class, angriffe usw.
         return charaRepo.save(persistierterCharakter);
 
     }
@@ -54,7 +55,7 @@ public class CharakterServiceImpl implements CharakterService{
         return charaRepo.save(new Charakter());
     }
 
-    @Override
+    @Override @Transactional
     public Gruppe bearbeiteGruppe(Gruppe gruppe) {
         Gruppe persistierteGruppe = findeGruppeMitId(gruppe.getId());
         persistierteGruppe.setAlleCharaktere(gruppe.getAlleCharaktere());
@@ -63,6 +64,35 @@ public class CharakterServiceImpl implements CharakterService{
             c = bearbeiteCharakter(c);
         });
         return gruppeRepo.save(persistierteGruppe);
+    }
+
+    @Override @Transactional
+    public Charakter holeStandardCharakter(int level, String klasse) {
+        //TODO: custom exception, naming convention
+        String name = "StandardCharakterLevel"+level;
+        Optional<Charakter> charakter = charaRepo.findByName(name);
+        return initChara(charakter.get());
+    }
+
+    @Transactional
+    public Charakter initChara(Charakter chara){
+       
+            if(!Hibernate.isInitialized(chara.getAbilityScores())){
+                Hibernate.initialize(chara.getAbilityScores());
+            }
+            if(!Hibernate.isInitialized(chara.getAlleAngriffe())){
+                Hibernate.initialize(chara.getAlleAngriffe());
+            }
+            if(!Hibernate.isInitialized(chara.getAlleZauber())){
+                Hibernate.initialize(chara.getAlleZauber());
+            }
+            if(!Hibernate.isInitialized(chara.getSprachen())){
+                Hibernate.initialize(chara.getSprachen());
+            }
+            if(!Hibernate.isInitialized(chara.getSavingThrows())){
+                Hibernate.initialize(chara.getSavingThrows());
+            }
+        return chara;
     }
 
 }

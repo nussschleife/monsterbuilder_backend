@@ -11,8 +11,11 @@ public class DESStrategy implements SimStrategy{
     @Override
     public ArrayList<DESimTask> createSimTasks(String simID, SimRequest request) {
         ArrayList<DESimTask> alleTasks = new ArrayList<>();
-        for(SimValue value : request.getValues()) {//TODO: Value ist DTO -> LevelValue etc. aus diagramm. Erstmal muss skript uebergeben werden
-            alleTasks.add(new DESimTask(request.getGruppe(), request.getMonster(), simID, value,1, request.getCustomSkriptName())); 
+        for(SimValue value : request.getValues()) {//TODO: Value ist DTO -> LevelValue etc. aus diagramm. 
+            for( int i = 0; i < request.getDurchlaeufe(); i++) {
+                alleTasks.add(new DESimTask(request.getGruppe(), request.getMonster(), simID, value,1, request.getCustomSkriptName())); 
+            }
+            
         }
         return alleTasks;
     }

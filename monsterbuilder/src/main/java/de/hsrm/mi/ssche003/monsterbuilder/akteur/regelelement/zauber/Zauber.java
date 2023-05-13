@@ -5,6 +5,9 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.AkteurAktion;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
@@ -25,7 +28,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 @DiscriminatorColumn(name="dtype",  discriminatorType = DiscriminatorType.STRING)
 @Entity @Table(name="Zauber", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Zauber extends Regelelement {
+public class Zauber extends Regelelement implements AkteurAktion {
 
     @Positive
     private int level;
@@ -40,6 +43,21 @@ public class Zauber extends Regelelement {
     
     @ManyToMany(mappedBy = "alleZauber") @JsonIgnore
     private Set<@Valid Monster> alleMonster = new HashSet<>();
+
+    @ManyToMany(mappedBy = "alleZauber") @JsonIgnore
+    private Set<@Valid Charakter> alleCharaktere = new HashSet<>();
+    
+    public void setAbilityScoreName(AbilityScoreName abilityScoreName) {
+        this.abilityScoreName = abilityScoreName;
+    }
+
+    public Set<Charakter> getAlleCharaktere() {
+        return alleCharaktere;
+    }
+
+    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
+        this.alleCharaktere = alleCharaktere;
+    }
 
     public int getLevel() {
         return level;
@@ -92,6 +110,12 @@ public class Zauber extends Regelelement {
 
     public AbilityScoreName getAbilityScoreName() {
         return abilityScoreName;
+    }
+
+    @Override
+    public Akteur ausfuehren(Akteur gegner, int modifikator) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'ausfuehren'");
     }
 
     //TODO: hashode & equals

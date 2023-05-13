@@ -1,43 +1,30 @@
+# -*- coding: utf-8 -*-
 
-class CustomVerhalten(AkteurVerhalten):
-    def __init__(self, akteur):
-        self.akteur = akteur 
-        super(AkteurVerhalten, self)
+#koennen beliebig erweitert werden
+class States:
+   DEAD = 1
+   ALIVE = 2
+   WOUNDED = 3
+   SCARED = 4
 
-    def angriff(self,ereignis):
-        global aktuellesEreignis
-        #TODO: angriff auswählen anhand von schwächen usw -> Zauber & Elementvertraeglichkeiten rein
-        gegnerverhalten = min(list(alleMonster.values()), key=lambda x: x.akteur.getLebenspunkte())
-        gegner = gegnerverhalten.akteur
-        angriff =self.akteur.getAlleAngriffe().toArray()[0]
-        gegner = self.akteur.angriffAusfuehren(angriff, gegner)
-        ereignis.gegner = gegner.getName()
-        aktuellesEreignis.toedlich = gegner.lebenspunkte <= 0
-        if aktuellesEreignis.toedlich:
-            gegnerverhalten._sterben()
-        return gegner
+def findeAktion(akteur, ereignis):
+    if len(akteur.getAlleAktionen()) > 0:
+    ##aktion aussuchen und verwenden##
+        aktion = akteur.getAlleAktionen()[0]
+        gegner = alleGegner[0]
+        akteur.aktionAusfuehren(aktion, gegner)
 
-    def findeAktion(self, ereignis):
-        a = self.angriff(ereignis)
-        for con in self.akteur.getConditions():
-            con.verringereDauer(1)
-        return a
+    ##nach der Aktion werden potentielle conditions runtergezaehlt##
+    for con in akteur.getConditions():
+        con.verringereDauer(1)
 
-    def _sterben(self):
-        self.state = States.DEAD
-        del alleAkteure[self.akteur.getName()]
-        del alleCharaktere[self.akteur.getName()]
+    ##es wird geschaut ob der Gegner gestorben ist##
+    ereignis.toedlich = gegner.lebenspunkte <= 0
+    if ereignis.toedlich:
+        del alleGegner[str(gegner.getName())]
 
-def initialise():
-    global toInit, alleMonster, alleCharaktere, alleAkteure
-    if isinstance(toInit, Charakter):
-        alleCharaktere[str(toInit.getName())] = CustomVerhalten(copyCharakter(toInit))
-        alleAkteure.update(alleCharaktere)
-    else:
-        alleMonster[str(toInit.getName())] = CustomVerhalten(copyMonster(toInit))
-        alleAkteure.update(alleMonster)
-
-initialise()
-
-#akteur pseudoklasse
-#angriff etc.
+##hier koennen States gesetzt werden##
+akteurstate = States.ALIVE
+##Aktion wird waehren der Simulation ausgefuehrt##
+alleGegner = alleCharaktere if isinstance(akteur, Monster) else alleMonster
+findeAktion(akteur, aktuellesEreignis)

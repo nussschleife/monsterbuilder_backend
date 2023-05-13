@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
@@ -110,22 +111,27 @@ public class AkteurRestApi {
     }
 
     @GetMapping("/charakter/{id}")
-    public Charakter getCharakterMitId(@PathVariable Long id) {
+    public Charakter get_holeCharakterMitId(@PathVariable Long id) {
         return charakterService.findeCharakterMitId(id);
     }
 
     @PostMapping("/gruppe/bearbeiten")
-    public ResponseEntity<Gruppe> bearbeiteGruppe(@RequestBody Gruppe bearbeiteteGruppe) {
+    public ResponseEntity<Gruppe> post_bearbeiteGruppe(@RequestBody Gruppe bearbeiteteGruppe) {
         //TODO: Validierung
         Gruppe gespeichert = charakterService.bearbeiteGruppe(bearbeiteteGruppe);
         return ResponseEntity.ok().body(gespeichert);
     }
 
     @PostMapping("/charakter/bearbeiten")
-    public ResponseEntity<Charakter> bearbeiteCharakter(@RequestBody Charakter charakter) {
+    public ResponseEntity<Charakter> post_bearbeiteCharakter(@RequestBody Charakter charakter) {
         //TODO: Validierung
         Charakter gespeichert = charakterService.bearbeiteCharakter(charakter);
         return ResponseEntity.ok().body(gespeichert);
+    }
+
+    @GetMapping("/charakter/standard/{level}/{klasse}") @Transactional
+    public ResponseEntity<Charakter> get_holeStandardCharakter(@PathVariable int level, @PathVariable String klasse) {
+        return ResponseEntity.ok().body(charakterService.holeStandardCharakter(level, klasse)); 
     }
 
     private Monster dtoZuMonster(MonsterDTO monsterdto) {
@@ -134,7 +140,7 @@ public class AkteurRestApi {
         monster.setName(monsterdto.getName());
         monster.setGeschwindigkeit_ft(monsterdto.getGeschwindigkeit_ft());
         monster.setRuestungsklasse(monsterdto.getRuestungsklasse());
-        monster.setAbilityScore(Set.of(monsterdto.getAbilityScores()));
+        monster.setAbilityScores(Set.of(monsterdto.getAbilityScores()));
         
         return monster;
     }

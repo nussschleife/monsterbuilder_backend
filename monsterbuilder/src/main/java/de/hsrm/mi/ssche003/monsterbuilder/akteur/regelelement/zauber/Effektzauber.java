@@ -1,8 +1,8 @@
 package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.AkteurAktion;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AggressiveAktion;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt.Condition;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition.Condition;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow.SavingThrow;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity @DiscriminatorValue("EFFEKT")
-public class Effektzauber extends Zauber implements AggressiveAktion {
+public class Effektzauber extends Zauber implements AkteurAktion {
     @ManyToOne
     Condition condition;
     

@@ -1,4 +1,6 @@
-package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt;
+package de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
@@ -8,13 +10,18 @@ import jakarta.persistence.Entity;
 
 @Entity @DiscriminatorValue("ENFEEBLED")
 public class Enfeebled extends Condition {
+
+
     private String name = "ENFEEBLED";
+
+
     @Override
     public Akteur wirkeCondition(Akteur gegner) {
-        Condition copy = new Enfeebled();
-        copy.setDauer(dauer);
-        copy.getBetroffeneAkteure().add(gegner);
-        gegner.addCondition(copy); 
+        
+        Condition kopie = new Enfeebled();
+        kopie.setDauer(dauer);
+        kopie.getBetroffeneAkteure().add(gegner);
+        gegner.addCondition(kopie); 
         gegner.getAbilityScores().forEach((abilityscore) -> {
             if(abilityscore.getScoreName() == AbilityScoreName.STRENGTH) {
                 abilityscore.setScore(abilityscore.getScore() - 2);
@@ -33,7 +40,7 @@ public class Enfeebled extends Condition {
         });
     }
 
-    @Override
+    @Override @JsonIgnore
     public Regelelement getInstance() {
         return this;
     }

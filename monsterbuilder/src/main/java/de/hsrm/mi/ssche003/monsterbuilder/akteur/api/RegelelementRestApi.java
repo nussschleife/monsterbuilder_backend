@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.RegelelementInitResponse;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt.Prone;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition.Prone;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;

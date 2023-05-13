@@ -1,36 +1,37 @@
+from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import EreignisCode
 # -*- coding: utf-8 -*-
-global alleCharaktere, alleMonster, aktuellesEreignis, state, akteur
+global alleCharaktere, alleMonster, alleAkteure, aktuellesEreignis, state, akteur, eventhandlers
 alleGegner = alleCharaktere if isinstance(akteur, Monster) else alleMonster
 class States:
    DEAD = 1
    ALIVE = 2
    WOUNDED = 3
    SCARED = 4
+   PRONE = 5
 
-akteurstate = States.ALIVE
+state = States.ALIVE
 
 def angreifen(akteur, ereignis):
+    #TODO: angriff auswählen anhand von schwächen, state usw -> Zauber & Elementvertraeglichkeiten rein
     global aktuellesEreignis
     gegner = min(list(alleGegner.values()), key=lambda x: x.getLebenspunkte())
     angriff = findeBestenAngriffGegenCharakter(gegner, akteur) if isinstance(akteur, Monster) else findeBestenAngriffGegenMonster(gegner, akteur)
 
-    gegner = akteur.aktionAusfuehren(angriff, gegner)
+    gegner = akteur.angriffAusfuehren(angriff, gegner)
     ereignis.gegner = gegner.getName()
     aktuellesEreignis.toedlich = gegner.lebenspunkte <= 0
     if aktuellesEreignis.toedlich:
         del alleGegner[str(gegner.getName())]
     return gegner
+    #TODO: ereignisresult
 
 def findeAktion(akteur, ereignis):
-    if len(akteur.getAlleAktionen()) > 0:
-        angreifen(akteur, ereignis)
+    angreifen(akteur, ereignis)
     for con in akteur.getConditions():
         con.verringereDauer(1)
 
 def findeBestenAngriffGegenMonster(gegner, charakter):
-
-    if akteurstate is States.SCARED:
-        return charakter.getAlleAngriffe().stream().max(Comparator.comparing(lambda a: a.berechneSchaden()))
+    #TODO:nach elementvertraeglichkeiten suchen
     return charakter.getAlleAngriffe().toArray()[0]
 
 def findeBestenAngriffGegenCharakter(gegner, monster):
@@ -39,8 +40,13 @@ def findeBestenAngriffGegenCharakter(gegner, monster):
     return monster.getAlleAngriffe().toArray()[0]
 
 
-##passiert bei Skriptaufruf##
-if(akteur.getLebenspunkte() < 10):
-    akteurstate = States.SCARED
+eventhandlers = {EreignisCode.ANGREIFEN: angreifen, EreignisCode.AKTION: findeAktion}
 
-findeAktion(akteur, aktuellesEreignis)
+
+if(akteur.getLebenspunkte() < 10):
+    state = States.SCARED
+
+if aktuellesEreignis.getCode() == EreignisCode.ANGREIFEN:
+    angreifen(akteur, aktuellesEreignis)
+elif aktuellesEreignis.getCode() == EreignisCode.AKTION:
+    findeAktion(akteur, aktuellesEreignis)

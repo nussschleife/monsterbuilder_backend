@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import jakarta.persistence.Entity;
@@ -15,6 +16,11 @@ public class Sprache extends Regelelement{
 
     @ManyToMany(mappedBy = "sprachen") @JsonIgnore
     private Set<Monster> alleMonster = new HashSet<>();
+
+    @ManyToMany(mappedBy = "sprachen") @JsonIgnore
+    private Set<Charakter> alleCharaktere = new HashSet<>();
+
+    
     
     @JsonIgnore
     public Set<Monster> getAlleMonster() {
@@ -55,6 +61,14 @@ public class Sprache extends Regelelement{
     public Sprache übernehmeBasisWerteVon(Regelelement element) {
         this.setName(element.getName());
         return this;
+    }
+
+    public Set<Charakter> getAlleCharaktere() {
+        return alleCharaktere;
+    }
+
+    public void setAlleCharaktere(Set<Charakter> alleCharaktere) {
+        this.alleCharaktere = alleCharaktere;
     }
 
 }

@@ -10,22 +10,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.effekt.Condition;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AggressiveAktion;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition.Condition;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow.SavingThrow;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
@@ -34,7 +28,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
-@MappedSuperclass	
+@MappedSuperclass
 public abstract class Akteur {
     @jakarta.persistence.Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -54,61 +48,28 @@ public abstract class Akteur {
 
     protected int level;
 
-    @ManyToMany( cascade = CascadeType.MERGE)
-    @JoinTable(
-        name = "akteur_sprache",
-        joinColumns = @JoinColumn(name = "akteur_id"), 
-        inverseJoinColumns = @JoinColumn(name = "sprache_id"))
-    private Set<Sprache> sprachen = new HashSet<>();
-    
-    @ManyToMany( cascade = CascadeType.MERGE)
-    @JoinTable(
-        name = "akteur_zauber", 
-        joinColumns = @JoinColumn(name = "akteur_id"), 
-        inverseJoinColumns = @JoinColumn(name = "zauber_id"))
-    protected Set<Zauber> alleZauber = new HashSet<>();
-
-    @ManyToMany( cascade = CascadeType.MERGE)
-    @JoinTable(
-        name = "akteur_angriff", 
-        joinColumns = @JoinColumn(name = "akteur_id"), 
-        inverseJoinColumns = @JoinColumn(name = "angriff_id"))
-    protected Set<WaffenAngriff> alleAngriffe = new HashSet<>();
-    
-    @ManyToMany( cascade = CascadeType.MERGE) //TODO: prüfen dass jedes im enum einmal da ist und nur einmal
-    @JoinTable(
-        name = "akteur_score", 
-        joinColumns = @JoinColumn(name = "akteur_id"), 
-        inverseJoinColumns = @JoinColumn(name = "score_id"))
-    protected Set<AbilityScore> abilityScores = new HashSet<>(); 
-
     @Transient @JsonIgnore
     protected List<Condition> conditions = new ArrayList<>();
+    @Transient
+    protected Set<WaffenAngriff> alleAngriffe = new HashSet<>();
+    @Transient
+    protected Set<Zauber> alleZauber = new HashSet<>();;
 
+    @Transient
+    protected Set<AbilityScore> abilityScores = new HashSet<>();; 
+    @Transient
+    protected Set<SavingThrow> savingThrows = new HashSet<>();; 
+    @Transient
+    private Set<Sprache> sprachen = new HashSet<>();;
     
-    
-    public Set<Zauber> getAlleZauber() {
-        return alleZauber;
-    }
-
-    public void setAlleZauber(Set<Zauber> alleZauber) {
-        this.alleZauber = alleZauber;
-    }
-
-    public Set<WaffenAngriff> getAlleAngriffe() {
-        return alleAngriffe;
-    }
-
-    public void setAlleAngriffe(Set<WaffenAngriff> alleAngriffe) {
-        this.alleAngriffe = alleAngriffe;
-    }
-
-    public void addAngriff(WaffenAngriff angriff) {
-        this.alleAngriffe.add(angriff);
-    }
-
     public Long getVersion() {
         return version;
+    }
+
+    public abstract Set<Sprache> getSprachen();
+
+    public void setSprachen(Set<Sprache> sprachen) {
+        this.sprachen = sprachen;
     }
 
     public String getName() {
@@ -125,14 +86,6 @@ public abstract class Akteur {
 
     public int getGeschwindigkeit_ft() {
         return geschwindigkeit_ft;
-    }
-
-    public Set<Sprache> getSprachen() {
-        return sprachen;
-    }
-
-    public Set<AbilityScore> getAbilityScores() {
-        return abilityScores;
     }
 
     public Akteur setName(String name) {
@@ -155,47 +108,20 @@ public abstract class Akteur {
         return this;
     }
 
-    public boolean macheSavingThrow(SavingThrow save) {
-        return Wuerfel.W20.wuerfle() > save.getSchwierigkeit(); //Add save mod from akteur
-    }
-
     public boolean trifftAngriff(int wurf) {
         return wurf >= this.ruestungsklasse;
     }
 
-    public Akteur angriffAusfuehren(AggressiveAktion aktion, Akteur gegner) {
-        Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == aktion.getAbilityScoreName()).findFirst();
-        aktion.ausfuehren(gegner, score.isPresent() ? score.get().getScore() : 0);
-        return gegner;
+    public Akteur aktionAusfuehren(AkteurAktion aktion, Akteur gegner) {
+       
+            Optional<AbilityScore> score = this.abilityScores.stream().filter(abilityScore -> abilityScore.getScoreName() == aktion.getAbilityScoreName()).findFirst();
+            aktion.ausfuehren(gegner, score.isPresent() ? score.get().getScore() : 0);
+            return gegner;
+        
     }
 
     public void bekommeSchaden(Schadensart art, int anzahl) {
         this.lebenspunkte -= anzahl;
-    }
-
-
-   public void setSprachen(Set<Sprache> sprachen) {
-        this.sprachen = sprachen;
-    }
-
-    public void addSprache(Sprache sprache) {
-        this.sprachen.add(sprache);
-    }
-
-    public void setAbilityScores(Set<AbilityScore> abilityScores) {
-        this.abilityScores = abilityScores;
-    }
-
-    public Akteur setAbilityScore(Set<AbilityScore> score) {
-        this.abilityScores = score;
-        return this;
-    }
-
-    public Akteur addAbilityScore(AbilityScore score) {
-        if(this.abilityScores.contains(score))
-            this.abilityScores.remove(score);
-        this.abilityScores.add(score);
-        return this;
     }
 
     public void setVersion(Long version) {
@@ -235,10 +161,6 @@ public abstract class Akteur {
         result = prime * result + geschwindigkeit_ft;
         result = prime * result + ((alignment == null) ? 0 : alignment.hashCode());
         result = prime * result + level;
-        result = prime * result + ((sprachen == null) ? 0 : sprachen.hashCode());
-        result = prime * result + ((alleZauber == null) ? 0 : alleZauber.hashCode());
-        result = prime * result + ((alleAngriffe == null) ? 0 : alleAngriffe.hashCode());
-        result = prime * result + ((abilityScores == null) ? 0 : abilityScores.hashCode());
         return result;
     }
 
@@ -276,26 +198,6 @@ public abstract class Akteur {
             return false;
         if (level != other.level)
             return false;
-        if (sprachen == null) {
-            if (other.sprachen != null)
-                return false;
-        } else if (!sprachen.equals(other.sprachen))
-            return false;
-        if (alleZauber == null) {
-            if (other.alleZauber != null)
-                return false;
-        } else if (!alleZauber.equals(other.alleZauber))
-            return false;
-        if (alleAngriffe == null) {
-            if (other.alleAngriffe != null)
-                return false;
-        } else if (!alleAngriffe.equals(other.alleAngriffe))
-            return false;
-        if (abilityScores == null) {
-            if (other.abilityScores != null)
-                return false;
-        } else if (!abilityScores.equals(other.abilityScores))
-            return false;
         return true;
     }
 
@@ -305,6 +207,18 @@ public abstract class Akteur {
 
     public void setId(Long id) {
         Id = id;
+    }
+
+    public abstract Set<Zauber> getAlleZauber();
+
+    public void setAlleZauber(Set<Zauber> alleZauber) {
+        this.alleZauber = alleZauber;
+    }
+
+    public abstract Set<WaffenAngriff> getAlleAngriffe();
+
+    public void setAlleAngriffe(Set<WaffenAngriff> alleAngriffe) {
+        this.alleAngriffe = alleAngriffe;
     }
 
     public List<Condition> getConditions() {
@@ -317,6 +231,43 @@ public abstract class Akteur {
 
     public void addCondition(Condition condition) {
         this.conditions.add(condition);
+    }
+
+    public Set<AbilityScore> getAbilityScores() {
+        return abilityScores;
+    }
+
+    public void setAbilityScores(Set<AbilityScore> abilityScores) {
+        this.abilityScores = abilityScores;
+    }
+
+    public abstract Set<SavingThrow> getSavingThrows();
+
+    public void setSavingThrows(Set<SavingThrow> savingThrows) {
+        this.savingThrows = savingThrows;
+    }
+
+    public void addAngriff(WaffenAngriff angriff) {
+        this.alleAngriffe.add(angriff);
+    }
+
+    public void addSprache(Sprache sprache) {
+        this.sprachen.add(sprache);
+    }
+
+    public Akteur addAbilityScore(AbilityScore score) {
+        this.abilityScores.add(score);
+        return this;
+    }
+
+    public abstract List<AkteurAktion> getAlleAktionen(); 
+
+    
+
+    public boolean macheSavingThrow(SavingThrow save) {
+        Optional<SavingThrow> savingThrow = this.savingThrows.stream().filter(s -> s.getTyp() == save.getTyp()).findFirst();
+        int mod = savingThrow.isPresent() ? savingThrow.get().getSchwierigkeit() : 0;
+        return Wuerfel.W20.wuerfle() + mod > save.getSchwierigkeit(); //Add save mod from akteur
     }
 
 }
