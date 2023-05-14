@@ -1,7 +1,7 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis;
 
 
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimState;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.service.SimState;
 
 public class TotChange implements StateChange{
 

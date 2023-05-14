@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.script.ScriptContext;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 
 import org.python.core.Options;
 import org.python.core.PyObject;
@@ -78,6 +80,25 @@ public class SimulationTests {
         assertTrue(aktion.getName() == "run");
         interpreter.close();
     }
+
+    @Test 
+    @DisplayName("call verhalten mit args und read return value")
+    public void testeArgs() throws Exception {
+        String path = "src/test/resources/Chaotic_Evil_Verhalten.py";
+        Monster mon = new Monster();
+        mon.setName("herbert");
+        Options.importSite = false;
+        String[] args = {path};
+        PythonInterpreter.initialize(System.getProperties(), System.getProperties(), args);
+        PythonInterpreter interpreter = new PythonInterpreter();
+        PyObject out = new PyObject();
+        interpreter.set("mon", mon);
+        interpreter.exec("import sys");
+        interpreter.exec("sys.argv = [Chaotic-Evil-Verhalten.py, mon]");
+        interpreter.execfile(path);
+        interpreter.close();
+    }
+
 
     @Test
     @DisplayName("Aufruf Python Skript mit ProcessBuilder")

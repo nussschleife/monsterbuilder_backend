@@ -1,6 +1,5 @@
+import sys
 # -*- coding: utf-8 -*-
-global alleCharaktere, alleMonster, aktuellesEreignis, state, akteur
-alleGegner = alleCharaktere if isinstance(akteur, Monster) else alleMonster
 class States:
    DEAD = 1
    ALIVE = 2
@@ -34,13 +33,12 @@ def findeBestenAngriffGegenMonster(gegner, charakter):
     return charakter.getAlleAngriffe().toArray()[0]
 
 def findeBestenAngriffGegenCharakter(gegner, monster):
-    if len(gegner.getConditions()) == 0 and len(monster.getAlleZauber()) > 0:
+    if len(gegner.getConditions()) is 0:
         return monster.getAlleZauber().toArray()[0]
     return monster.getAlleAngriffe().toArray()[0]
 
+def main(monster):
+    return monster.getName()
 
-##passiert bei Skriptaufruf##
-if(akteur.getLebenspunkte() < 10):
-    akteurstate = States.SCARED
 
-findeAktion(akteur, aktuellesEreignis)
+main(sys.argv[1])

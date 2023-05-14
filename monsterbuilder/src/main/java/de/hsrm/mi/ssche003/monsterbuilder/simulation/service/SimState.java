@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
+package de.hsrm.mi.ssche003.monsterbuilder.simulation.service;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -41,7 +41,7 @@ public class SimState {
         return this.lebendig;
     }
 
-    public void initChange(ArrayList<Akteur> lebend) {
+    public void aendereReihenfolge(ArrayList<Akteur> lebend) {
         this.lebendig = lebend;
     }
 

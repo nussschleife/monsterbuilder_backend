@@ -20,7 +20,7 @@ public class AktionEreignis implements AkteurEreignis {
     }
 
     @Override
-    public List<IEreignis> generiereFolEreignis() {
+    public List<IEreignis> generiereFolgeEreignis() {
         this.toedlich = false;
         this.gegner = "";
         return Arrays.asList(this);

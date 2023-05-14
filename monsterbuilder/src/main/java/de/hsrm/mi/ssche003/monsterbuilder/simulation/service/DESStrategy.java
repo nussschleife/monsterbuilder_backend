@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
+package de.hsrm.mi.ssche003.monsterbuilder.simulation.service;
 
 import java.util.ArrayList;
 

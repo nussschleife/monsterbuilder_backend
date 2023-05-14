@@ -7,7 +7,7 @@ import java.util.Optional;
 public class NeueRundeEreignis implements EncounterEreignis{
 
     @Override
-    public List<IEreignis> auslösen() {
+    public List<IEreignis> generiereFolgeEreignis() {
         List<IEreignis> folEreignisse = Arrays.asList(new NeueRundeEreignis());
         return folEreignisse; 
     }

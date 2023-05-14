@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
+package de.hsrm.mi.ssche003.monsterbuilder.simulation.service;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -93,11 +93,11 @@ public class DESimTask implements SimTask {
                     if(state.getLebende().stream().anyMatch((lebendiger) -> lebendiger.getName() == ((AkteurEreignis)aktuell).getAkteurName())) {
                         bearbeiteAkteurEreignis((AkteurEreignis)aktuell); 
                         verändereState(aktuell.getChange());
-                        folgeEreignisse =  ((AkteurEreignis)aktuell).generiereFolEreignis();
+                        folgeEreignisse =  ((AkteurEreignis)aktuell).generiereFolgeEreignis();
                     }
                 } else { 
                     verändereState(aktuell.getChange());
-                    folgeEreignisse = ((EncounterEreignis)aktuell).auslösen();
+                    folgeEreignisse = ((EncounterEreignis)aktuell).generiereFolgeEreignis();
                 }
                 addEreignisseZuWarteschlange(folgeEreignisse);
             }

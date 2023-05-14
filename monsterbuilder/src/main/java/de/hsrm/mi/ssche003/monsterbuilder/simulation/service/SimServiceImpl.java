@@ -1,4 +1,4 @@
-package de.hsrm.mi.ssche003.monsterbuilder.simulation.simService;
+package de.hsrm.mi.ssche003.monsterbuilder.simulation.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +102,7 @@ public class SimServiceImpl implements SimService{
 
     @Transactional
     private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) {
-        fromFrontend.getGruppe().getAllCharaktere().forEach(c -> c=erstelleKorrektenCharakter(c));
+       // fromFrontend.getGruppe().getAllCharaktere().forEach(c -> c=erstelleKorrektenCharakter(c));
         fromFrontend.getMonster().forEach(m -> m = erstelleKorrektesMonster(m));
         for(int i = 1; i < 5; i++) {
             fromFrontend.getValues().add(new Level(i));
@@ -113,7 +113,7 @@ public class SimServiceImpl implements SimService{
 
     @Transactional
     private Monster erstelleKorrektesMonster(Monster monster) {
-        monster.setId(generateIDBisFrontendGeht());
+     //   monster.setId(generateIDBisFrontendGeht());
         monster.setAlleZauber(Set.of(zauberRepo.findFirstEffektzauber().get()));
         return monster;
     }

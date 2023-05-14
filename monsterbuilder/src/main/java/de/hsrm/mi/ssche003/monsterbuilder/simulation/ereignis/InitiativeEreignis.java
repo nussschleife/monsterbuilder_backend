@@ -19,7 +19,7 @@ public class InitiativeEreignis implements EncounterEreignis {
     }
     
     @Override
-    public List<IEreignis> auslösen() {
+    public List<IEreignis> generiereFolgeEreignis() {
         alleTeilnehmer.sort(Comparator.comparingInt((akteur) -> akteur.wuerfleInitiative()));
         ArrayList<IEreignis> folEreignisse = new ArrayList<>(0);
         folEreignisse.add(new NeueRundeEreignis());

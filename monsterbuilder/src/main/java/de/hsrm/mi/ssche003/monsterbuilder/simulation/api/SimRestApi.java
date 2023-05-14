@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.simService.SimService;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.service.SimService;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 
 @RestController

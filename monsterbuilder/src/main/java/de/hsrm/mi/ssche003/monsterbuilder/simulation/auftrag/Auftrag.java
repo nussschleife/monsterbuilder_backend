@@ -11,16 +11,14 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter.Encounter;
 
 public class Auftrag {
-    SimStrategy strategy;
     ArrayList<SimTask> tasks;
     ArrayList<CompletableFuture<SimResult>> results = new ArrayList<>();
     String simID;
 
     public Auftrag(SimStrategy strategy, SimRequest request, String id) {
-        this.strategy = strategy;
         this.tasks = strategy.createSimTasks(id, request);
         this.simID = id;
-    } //TODO: Auftrag soll SimRequest ersetzen und nicht beinhalten
+    }
     
     public boolean istFertig() {
         return results.stream().allMatch((Future<SimResult> result) -> result.isDone()) || results.size() == 0;
@@ -28,13 +26,6 @@ public class Auftrag {
 
     public ArrayList<SimTask> getTasks() {
         return this.tasks;
-    }
-
-    public Optional<Encounter> erstelleEncounter() {
-        if(istFertig()) {
-            return Optional.of(new Encounter());
-        }
-        return Optional.empty();
     }
 
     public String getSimID() {
