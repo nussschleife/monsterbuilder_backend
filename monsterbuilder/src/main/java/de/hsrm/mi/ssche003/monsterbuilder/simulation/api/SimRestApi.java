@@ -69,11 +69,9 @@ public class SimRestApi {
         try {
             file.transferTo(skript);
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }

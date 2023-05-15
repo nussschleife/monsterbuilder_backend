@@ -15,6 +15,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.savingThrow.Saving
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Wuerfel;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -71,7 +72,7 @@ public class Akteur {
         name = "akteur_zauber", 
         joinColumns = @JoinColumn(name = "akteur_id"), 
         inverseJoinColumns = @JoinColumn(name = "zauber_id"))
-    protected Set<Zauber> alleZauber = new HashSet<>();
+    protected Set<Effektzauber> alleZauber = new HashSet<>();
 
     @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(
@@ -311,12 +312,12 @@ public class Akteur {
     }
 
 
-    public Set<Zauber> getAlleZauber() {
+    public Set<Effektzauber> getAlleZauber() {
         return alleZauber;
     }
 
 
-    public void setAlleZauber(Set<Zauber> alleZauber) {
+    public void setAlleZauber(Set<Effektzauber> alleZauber) {
         this.alleZauber = alleZauber;
     }
 

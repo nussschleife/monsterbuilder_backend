@@ -21,6 +21,7 @@ def findeAktion(akteur, ereignis):
         ##es wird geschaut ob der Gegner gestorben ist##
         ereignis.toedlich = gegner.lebenspunkte <= 0
         if ereignis.toedlich:
+            
             del alleGegner[str(gegner.getName())]
     ##nach der Aktion werden potentielle conditions runtergezaehlt##
     for con in akteur.getConditions():

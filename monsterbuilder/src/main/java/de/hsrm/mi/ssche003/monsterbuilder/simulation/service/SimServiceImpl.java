@@ -27,6 +27,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AngriffRep
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.SpracheRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.ZauberRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
@@ -93,8 +94,8 @@ public class SimServiceImpl implements SimService{
         try {
             result = writer.writeValueAsString(res);
         } catch (JsonProcessingException e) {
-           //TODO: SimServiceException
-            e.printStackTrace();
+           logger.error(e.getMessage());
+           throw new SimServiceException();
         }
         template.convertAndSend("/queue/user/sim/update/"+simID_SessionID.get(res.getSimID()), result); 
         logger.info(simID_SessionID.get(res.getSimID()));
@@ -103,7 +104,7 @@ public class SimServiceImpl implements SimService{
     @Transactional
     private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) {
        // fromFrontend.getGruppe().getAllCharaktere().forEach(c -> c=erstelleKorrektenCharakter(c));
-        fromFrontend.getMonster().forEach(m -> m = erstelleKorrektesMonster(m));
+      //  fromFrontend.getMonster().forEach(m -> m = erstelleKorrektesMonster(m));
         for(int i = 1; i < 5; i++) {
             fromFrontend.getValues().add(new Level(i));
         }
@@ -114,6 +115,7 @@ public class SimServiceImpl implements SimService{
     @Transactional
     private Monster erstelleKorrektesMonster(Monster monster) {
      //   monster.setId(generateIDBisFrontendGeht());
+        Effektzauber zauber = (Effektzauber) monster.getAlleZauber().iterator().next();
         monster.setAlleZauber(Set.of(zauberRepo.findFirstEffektzauber().get()));
         return monster;
     }

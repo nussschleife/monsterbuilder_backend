@@ -38,7 +38,6 @@ public class Effektzauber extends Zauber implements AkteurAktion {
 
     @Override
     public Akteur ausfuehren(Akteur gegner, int modifikator) {
-        //modifikator beeinflusst save dc
         this.save.setSchwierigkeit(this.save.getSchwierigkeit() + modifikator);
         if(!gegner.macheSavingThrow(save)) {
             condition.wirkeCondition(gegner);

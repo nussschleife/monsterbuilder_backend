@@ -38,9 +38,12 @@ public class SimResult {
     }
 
     public String getNachricht() {
+        if(this.nachricht.contains("Fehler"))
+            return this.nachricht;
         return this.nachricht + "runden: "+ runden + " "+ value.toString();
     }
-    @JsonIgnore //TODO: json kann level noch nicht verarbeiten
+
+    @JsonIgnore 
     public SimValue getValue() {
         return value;
     }

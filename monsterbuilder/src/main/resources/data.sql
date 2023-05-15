@@ -12,6 +12,7 @@ INSERT INTO condition(dauer, name) VALUES ( 3, 'PETRIFIED');
 insert into PRONE(id) VALUES (1);
 insert into ENFEEBLED(id) VALUES(2);
 insert into PETRIFIED(id) values(3);
+INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (16, 'WILL');
 INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (3, 'WILL'), (8, 'FORTITUDE'), (7, 'REFLEX');
 INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (4, 'WILL'), (10, 'FORTITUDE'), (8, 'REFLEX');
 INSERT INTO Saving_Throw (schwierigkeit, typ) VALUES (7, 'WILL'), (9, 'FORTITUDE'), (6, 'REFLEX');

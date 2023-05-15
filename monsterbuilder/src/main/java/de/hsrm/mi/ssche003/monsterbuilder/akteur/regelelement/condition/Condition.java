@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
@@ -22,13 +23,16 @@ import jakarta.persistence.Transient;
 /* @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
-    property = "type")
+    property = "type",
+    visible = true)
 
 @JsonSubTypes({
-    @Type(value = Prone.class, name = "Prone"),
-    @Type(value = Enfeebled.class, name = "Enfeebled")}) */
+    @Type(value = Prone.class, type = "PRONE"),
+    @Type(value = Enfeebled.class, type = "ENFEEBLED"),
+    @Type(value = Petrified.class, type = "PETIRIFIED")}) */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonDeserialize(using = ConditionDeserializer.class)
 public abstract class Condition extends Regelelement{ 
     
     protected int dauer;

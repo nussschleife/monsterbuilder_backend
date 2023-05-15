@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.python.core.PyException;
+import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +37,9 @@ public class DESimTask implements SimTask {
     private SimValue value;
     private PythonInterpreter interpreter;
     private int anzahlDurchläufe;
-    private final String PFAD = "src/main/resources/skripts/"; //TODO: aus properties
-    private HashMap<Alignment, String> alignment_Pfad = new HashMap<>(Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py", Alignment.NEUTRAL, PFAD + "Neutral_Verhalten.py"));
+    private final String PFAD = "src/main/resources/skripts/";
+    private boolean istFehlerAufgetreten;
+    private HashMap<Alignment, String> alignment_Pfad = new HashMap<>(Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py"));
     private final String MAINSKRIPT = PFAD + "HauptSkript.py";
 
     public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value, int anzahlDurchläufe, String customSkriptName) {
@@ -46,26 +49,27 @@ public class DESimTask implements SimTask {
         this.ereignisse = new ArrayDeque<IEreignis>();
         this.anzahlDurchläufe = anzahlDurchläufe;
         this.state = new SimState().initSimState(gruppe.getAllCharaktere(), monster);
-        this.alignment_Pfad.put(Alignment.CUSTOM, customSkriptName); //TODO: system.dir von hier aufrufen
+        this.alignment_Pfad.put(Alignment.CUSTOM, customSkriptName);
     }
 
     public void initTask() {
+        boolean istFehlerAufgetreten = false;
         InitiativeEreignis ini = new InitiativeEreignis(state.getMonster(), state.getCharaktere());
         this.ereignisse.add(ini); //Startereignis
-        //TODO: erst checken ob custom template ini methode hat und Python errors fangen, default template verwenden
+
         //initialisiere Python Umgebung
         interpreter.set("state", this.state);
         interpreter.set("aktuellesEreignis", ini);
         interpreter.set("encounter", new Encounter());
         interpreter.execfile(MAINSKRIPT); 
 
-        //Setze korrektes behavior-Objekt fuer jedes Monster
+        //Setze Monster
         for(Monster monster : state.getMonster()) {
             interpreter.set("toInit", monster);
             interpreter.get("initialisiere").__call__();
         }
 
-        //Setze korrektes behavior-Objekt fuer jeden Charakter
+        //Setze  Charakter
         for(Charakter chara : state.getCharaktere()) {
             interpreter.set("toInit", chara);
             interpreter.get("initialisiere").__call__();
@@ -73,9 +77,8 @@ public class DESimTask implements SimTask {
     }
 
     private String getSkriptPath(Alignment alignment) {
-        if(!alignment_Pfad.containsKey(alignment))
+        if(!alignment_Pfad.containsKey(alignment)) //TODO: file not found
             return alignment_Pfad.get(Alignment.CHAOTIC_EVIL);
-        //TODO: pruefen ob Datei existiert fuer custom alignment
         return alignment_Pfad.get(alignment);
     }
 
@@ -127,18 +130,25 @@ public class DESimTask implements SimTask {
     }
 
     private void bearbeiteAkteurEreignis(AkteurEreignis aktuell) {
-        //TODO: errorhandling
-            Akteur mon = state.getLebende().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst().get();
+        
+        Akteur mon = state.getLebende().stream().filter((akteur) -> akteur.getName().equals(aktuell.getAkteurName())).findFirst().get();
             interpreter.set("aktuellesEreignis", aktuell);
             interpreter.set("state", state);
             interpreter.set("akteur", mon);
-            interpreter.execfile(getSkriptPath(mon.getAlignment())); 
+            try{
+                interpreter.execfile(getSkriptPath(mon.getAlignment())); 
+            } catch(PyException py) {
+                logger.error(py.getMessage());
+              
+                istFehlerAufgetreten = true;
+            }
+            
     }
 
     private SimResult beendeEncounter() {
         interpreter.close();
         SimResult result = new SimResult(state.getRunden(), value, simID);
-        result.setNachricht("Gewinner: " + (state.istGruppeBesiegt() ? "Monster " : "Gruppe "));
+        result.setNachricht(!istFehlerAufgetreten ? ("Gewinner: " + (state.istGruppeBesiegt() ? "Monster " : "Gruppe ")) : "Fehler beim Ausführen des Skripts.");
         return result;
     }
 
@@ -147,7 +157,7 @@ public class DESimTask implements SimTask {
     }
 
     private boolean istEncounterVorbei() {
-        return state.getRunden() >= 1 && ( keineErgeinisseÜbrig() || state.istGruppeBesiegt() || state.istMonsterBesiegt());
+        return istFehlerAufgetreten || ( state.getRunden() >= 1 && ( keineErgeinisseÜbrig() || state.istGruppeBesiegt() || state.istMonsterBesiegt()));
     }
 
     @Override

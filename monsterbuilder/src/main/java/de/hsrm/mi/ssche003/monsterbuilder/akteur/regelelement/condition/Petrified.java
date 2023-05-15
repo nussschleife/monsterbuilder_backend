@@ -8,17 +8,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Zauber;
+import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 
-@Entity
+@Entity @DiscriminatorValue("PETRIFIED")
 public class Petrified extends Condition{
 
     private String name = "PETRIFIED";
     @Transient @JsonIgnore
-    private Set<Zauber> zauber;
+    private Set<Effektzauber> zauber;
     @Transient @JsonIgnore
     private Set<WaffenAngriff> angriffe;
 
@@ -30,7 +30,7 @@ public class Petrified extends Condition{
         gegner.addCondition(kopie); 
         zauber = gegner.getAlleZauber();
         angriffe = gegner.getAlleAngriffe();
-        gegner.setAlleZauber(Collections.<Zauber>emptySet());
+        gegner.setAlleZauber(Collections.<Effektzauber>emptySet());
         gegner.setAlleAngriffe(Collections.<WaffenAngriff>emptySet());
         return gegner;
     }

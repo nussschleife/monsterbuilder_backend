@@ -101,7 +101,7 @@ public class WaffenAngriff extends Regelelement implements AkteurAktion{
     }
 
     public Akteur ausfuehren(Akteur gegner, int modifikator) {
-        int wurf = Wuerfel.W20.wuerfle()  + modifikator;
+        int wurf = Wuerfel.W20.wuerfle()  + modifikator + this.angriffModifikator;
         
         if(gegner.trifftAngriff(wurf)) 
             gegner.bekommeSchaden(schadensart, berechneSchaden());
@@ -135,7 +135,7 @@ public class WaffenAngriff extends Regelelement implements AkteurAktion{
         for( int i = 0; i < this.wuerfelanzahl; i++) {
             schadenswert += this.wuerfel.wuerfle();
         }
-        return schadenswert;
+        return schadenswert + schadenModifikator;
     }
 
     @Override @JsonIgnore

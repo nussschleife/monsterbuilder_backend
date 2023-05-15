@@ -7,7 +7,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.Regelelement;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
-@Entity
+@Entity @DiscriminatorValue("PRONE")
 public class Prone extends Condition {
     private String name = "PRONE";
     @Override
