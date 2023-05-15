@@ -24,6 +24,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.api.AkteurRestApi;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.dto.MonsterDTO;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.MonsterRepo;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.monsterService.MonsterService;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.trait.Trait;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.trait.TraitRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.abilityScore.AbilityScore;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.abilityScore.AbilityScoreName;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.abilityScore.AbilityScoreRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.angriff.Angriff;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.angriff.AngriffRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.regelelementService.RegelelementService;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.sprache.Sprache;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.sprache.SpracheRepository;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,22 +51,6 @@ import java.util.HashSet;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.api.AkteurRestApi;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.MonsterRepo;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.monsterService.MonsterService;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.Trait;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.TraitRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScore;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreName;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AngriffRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.Sprache;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.SpracheRepository;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest(
@@ -184,7 +185,7 @@ public class MonsterRestApiTests {
         Trait trait = traitRepo.findAll().get(0);
         dto.setTraits(new Trait[]{trait});
         dto.setAbilityScores(new AbilityScore[]{abilityScoreRepo.findAll().get(0)});
-        dto.setAngriffe(new WaffenAngriff[]{angriffRepo.findAll().get(0)});
+        dto.setAngriffe(new Angriff[]{angriffRepo.findAll().get(0)});
         dto.setSprachen(new String[]{sprachRepo.findAll().get(0).getName()});
 
         return dto;

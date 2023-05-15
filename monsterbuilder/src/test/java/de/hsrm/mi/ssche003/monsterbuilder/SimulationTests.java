@@ -27,9 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.dto.MonsterDTO;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.dto.MonsterDTO;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.Monster;
 
 import org.python.core.Options;
 import org.python.core.PyObject;

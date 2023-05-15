@@ -34,7 +34,7 @@ def findeAktion(akteur, ereignis):
         aktion = akteur.getAlleAktionen()[0]
         gegner = alleGegner.values()[0]
         ereignis.gegner = gegner.getName()
-        akteur.aktionAusfuehren(aktion, gegner) 
+        gegner = akteur.aktionAusfuehren(aktion, gegner) 
         ##es wird geschaut ob der Gegner gestorben ist##
         ereignis.toedlich = gegner.lebenspunkte <= 0
         if ereignis.toedlich:

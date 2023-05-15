@@ -2,7 +2,6 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -16,24 +15,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.trait.TraitRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.RegelelementRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.abilityScore.AbilityScoreRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.AngriffRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff.WaffenAngriff;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.regelelementService.RegelelementService;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.sprache.SpracheRepository;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.ZauberRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.charakter.Charakter;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.trait.TraitRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.abilityScore.AbilityScoreRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.angriff.AngriffRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.regelelementService.RegelelementService;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.sprache.SpracheRepository;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.zauber.Effektzauber;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.zauber.ZauberRepository;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResponse;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.Level;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter.Encounter;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 
@@ -47,7 +41,6 @@ public class SimServiceImpl implements SimService{
     ObjectMapper mapper;
     ObjectWriter writer;
 
-    //wieder löschen wenn es aus Frontend kommt
     @Autowired TraitRepository traitRepo;
     @Autowired SpracheRepository sprachRepo;
     @Autowired RegelelementService regelService;
@@ -69,22 +62,15 @@ public class SimServiceImpl implements SimService{
 
     @Override
     public void beendeSimulation(String simID) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'beendeSimulation'");
+       MASTER.beendeAuftrag(simID);
     }
 
-    @Override @Transactional//TODO: SimException usw.
+    @Override @Transactional
     public SimResponse starteSimulation(SimRequest request) {
         request = erstelleRequestZumTestBisFrontendGeht(request);
         String simID = MASTER.addAuftrag(request, new DESStrategy(), (SimResult res) -> sendeUpdate(res));
         simID_SessionID.put(simID, request.getUserName());
         return new SimResponse(simID);
-    }
-
-    @Override
-    public Optional<Encounter> findeEncounterMitId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findeEncounterMitId'");
     }
     
     private void sendeUpdate(SimResult res) {
@@ -103,8 +89,6 @@ public class SimServiceImpl implements SimService{
 
     @Transactional
     private SimRequest erstelleRequestZumTestBisFrontendGeht(SimRequest fromFrontend) {
-       // fromFrontend.getGruppe().getAllCharaktere().forEach(c -> c=erstelleKorrektenCharakter(c));
-      //  fromFrontend.getMonster().forEach(m -> m = erstelleKorrektesMonster(m));
         for(int i = 1; i < 5; i++) {
             fromFrontend.getValues().add(new Level(i));
         }
@@ -112,25 +96,4 @@ public class SimServiceImpl implements SimService{
 
     }
 
-    @Transactional
-    private Monster erstelleKorrektesMonster(Monster monster) {
-     //   monster.setId(generateIDBisFrontendGeht());
-        Effektzauber zauber = (Effektzauber) monster.getAlleZauber().iterator().next();
-        monster.setAlleZauber(Set.of(zauberRepo.findFirstEffektzauber().get()));
-        return monster;
-    }
-
-    @Transactional
-    private Charakter erstelleKorrektenCharakter(Charakter fromfrontend) {
-        fromfrontend.setName(fromfrontend.getName()).setLebenspunkte(hp).setRuestungsklasse(ac).setGeschwindigkeit_ft(geschwindigkeit);
-        fromfrontend.setAlleAngriffe(Set.of(angriffRepo.findFirstByOrderByIdAsc().get())); 
-        fromfrontend.setId(generateIDBisFrontendGeht());
-        return fromfrontend;
-    }
-
-    public Long generateIDBisFrontendGeht() {
-        long leftLimit = 1L;
-        long rightLimit = 420L;
-        return leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-    }
 }

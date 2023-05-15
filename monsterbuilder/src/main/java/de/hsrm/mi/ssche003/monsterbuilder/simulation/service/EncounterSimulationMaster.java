@@ -22,7 +22,6 @@ import de.hsrm.mi.ssche003.monsterbuilder.simulation.auftrag.Auftrag;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.auftrag.SimStrategy;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.exception.EncounterSimulationException;
 @Component
 public class EncounterSimulationMaster {
     private static EncounterSimulationMaster MASTER;
@@ -44,7 +43,7 @@ public class EncounterSimulationMaster {
             CompletableFuture<SimResult> result = CompletableFuture.supplyAsync(() -> {
                 try { return task.call(); }
                 catch (Exception ex) { 
-                    logger.info(ex.getMessage()); 
+                    logger.info(ex.toString()); 
                     throw new EncounterSimulationException(ex.getMessage()); 
                 } 
             }, executor);

@@ -1,14 +1,12 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.auftrag;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.SimTask;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimRequest;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter.Encounter;
 
 public class Auftrag {
     ArrayList<SimTask> tasks;

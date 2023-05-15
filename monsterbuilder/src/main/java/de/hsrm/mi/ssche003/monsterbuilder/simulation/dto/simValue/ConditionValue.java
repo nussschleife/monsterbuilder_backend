@@ -1,9 +1,7 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue;
 
-import java.util.List;
-
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.condition.Condition;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.zauber.Effektzauber;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.condition.Condition;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.zauber.Effektzauber;
 
 public class ConditionValue implements SimValue{
 

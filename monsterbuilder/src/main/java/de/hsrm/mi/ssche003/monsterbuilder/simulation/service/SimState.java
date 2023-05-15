@@ -3,9 +3,9 @@ package de.hsrm.mi.ssche003.monsterbuilder.simulation.service;
 import java.util.ArrayList;
 import java.util.Set;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.charakter.Charakter;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.Monster;
 
 
 public class SimState {

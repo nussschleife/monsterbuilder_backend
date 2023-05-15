@@ -1,12 +1,10 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.charakter.gruppe.Gruppe;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.SimValue;
 
 public class SimRequest {
@@ -15,7 +13,7 @@ public class SimRequest {
     ArrayList<SimValue> values = new ArrayList<>();
     String userName;
     String simName;
-    int durchlaeufe; //in frontend zufuegen
+    int durchlaeufe; 
     String customSkriptName;
 
     

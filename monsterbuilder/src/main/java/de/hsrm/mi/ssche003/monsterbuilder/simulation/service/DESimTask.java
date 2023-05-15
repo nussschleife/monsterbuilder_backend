@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.python.core.PyException;
 import org.python.core.PyObject;
@@ -14,20 +13,20 @@ import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Akteur;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.Alignment;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.Charakter;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.Akteur;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.Alignment;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.charakter.Charakter;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.charakter.gruppe.Gruppe;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.SimTask;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.SimResult;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.SimValue;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.encounter.Encounter;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.AkteurEreignis;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.EncounterEreignis;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.IEreignis;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.InitiativeEreignis;
-import de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis.StateChange;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.service.ereignis.AkteurEreignis;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.service.ereignis.EncounterEreignis;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.service.ereignis.IEreignis;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.service.ereignis.InitiativeEreignis;
+import de.hsrm.mi.ssche003.monsterbuilder.simulation.service.ereignis.StateChange;
 
 public class DESimTask implements SimTask {
     private SimState state;
@@ -137,7 +136,7 @@ public class DESimTask implements SimTask {
             try{
                 interpreter.execfile(getSkriptPath(mon.getAlignment())); 
             } catch(PyException py) {
-                logger.error(py.getMessage());
+                logger.error(py.toString());
                 istFehlerAufgetreten = true;
             }
             

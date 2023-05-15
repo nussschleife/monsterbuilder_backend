@@ -1,6 +1,6 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue;
 
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter.gruppe.Gruppe;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.charakter.gruppe.Gruppe;
 
 public class Level extends Number implements SimValue{
     int level; 

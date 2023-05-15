@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-from de.hsrm.mi.ssche003.monsterbuilder.akteur import Akteur
-from de.hsrm.mi.ssche003.monsterbuilder.akteur.monster import Monster
-from de.hsrm.mi.ssche003.monsterbuilder.akteur.charakter import Charakter
-from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.angriff import WaffenAngriff as Angriff
-from de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden import Wuerfel
+from de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung import Akteur
+from de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.monster import Monster
+from de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.charakter import Charakter
 from  de.hsrm.mi.ssche003.monsterbuilder.simulation.service import SimState
-from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import EreignisCode
-from  de.hsrm.mi.ssche003.monsterbuilder.simulation.ereignis import AkteurEreignis
+from  de.hsrm.mi.ssche003.monsterbuilder.simulation.service.ereignis import AkteurEreignis
 
 if not "alleCharaktere" in globals():
     alleCharaktere = {}

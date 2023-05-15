@@ -1,9 +1,7 @@
 package de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue;
 
-import java.util.List;
-
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.AkteurAktion;
-import de.hsrm.mi.ssche003.monsterbuilder.akteur.regelelement.schaden.Schadensart;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.AkteurAktion;
+import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.schaden.Schadensart;
 
 public class SchadenValue {
     AkteurAktion aktion;
