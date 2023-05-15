@@ -42,7 +42,7 @@ public class DESimTask implements SimTask {
     private HashMap<Alignment, String> alignment_Pfad = new HashMap<>(Map.of(Alignment.CHAOTIC_EVIL, PFAD +"Chaotic_Evil_Verhalten.py"));
     private final String MAINSKRIPT = PFAD + "HauptSkript.py";
 
-    public DESimTask(Gruppe gruppe, Set<Monster> monster, String id, SimValue value, int anzahlDurchläufe, String customSkriptName) {
+    public DESimTask(Gruppe gruppe, Monster monster, String id, SimValue value, int anzahlDurchläufe, String customSkriptName) {
         this.simID = id;
         this.value = value;
         this.interpreter = new PythonInterpreter();
@@ -64,10 +64,9 @@ public class DESimTask implements SimTask {
         interpreter.execfile(MAINSKRIPT); 
 
         //Setze Monster
-        for(Monster monster : state.getMonster()) {
-            interpreter.set("toInit", monster);
-            interpreter.get("initialisiere").__call__();
-        }
+        interpreter.set("toInit", state.getMonster());
+        interpreter.get("initialisiere").__call__();
+        
 
         //Setze  Charakter
         for(Charakter chara : state.getCharaktere()) {
@@ -77,7 +76,7 @@ public class DESimTask implements SimTask {
     }
 
     private String getSkriptPath(Alignment alignment) {
-        if(!alignment_Pfad.containsKey(alignment)) //TODO: file not found
+        if(!alignment_Pfad.containsKey(alignment)) 
             return alignment_Pfad.get(Alignment.CHAOTIC_EVIL);
         return alignment_Pfad.get(alignment);
     }
@@ -139,7 +138,6 @@ public class DESimTask implements SimTask {
                 interpreter.execfile(getSkriptPath(mon.getAlignment())); 
             } catch(PyException py) {
                 logger.error(py.getMessage());
-              
                 istFehlerAufgetreten = true;
             }
             

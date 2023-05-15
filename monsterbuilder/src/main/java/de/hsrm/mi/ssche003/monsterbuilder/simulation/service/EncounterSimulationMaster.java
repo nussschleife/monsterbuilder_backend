@@ -44,7 +44,7 @@ public class EncounterSimulationMaster {
             CompletableFuture<SimResult> result = CompletableFuture.supplyAsync(() -> {
                 try { return task.call(); }
                 catch (Exception ex) { 
-                    logger.info(ex.getMessage()); //index out of range 0: Monster hat wahrscheinlich keinen Angriff
+                    logger.info(ex.getMessage()); 
                     throw new EncounterSimulationException(ex.getMessage()); 
                 } 
             }, executor);
@@ -61,13 +61,12 @@ public class EncounterSimulationMaster {
         return MASTER;
     }
 
-    public synchronized void stoppeAuftragMitId(String simID) {
+    public synchronized void beendeAuftrag(String simID) {
         Stream<Auftrag> zuLöschenStream = this.auftraege.stream().filter((Auftrag a) -> {return a.getSimID() == simID;});
         Optional<Auftrag> zulöschenOpt = zuLöschenStream.findFirst(); 
         if(zulöschenOpt.isPresent()) {
             Auftrag zuLöschen = zulöschenOpt.get();
             auftraege.remove(zuLöschen);
-           // zuLöschen.getTasks().forEach((ComletableFuture<SimResult> t) -> t.cancel());
 
         }
     }

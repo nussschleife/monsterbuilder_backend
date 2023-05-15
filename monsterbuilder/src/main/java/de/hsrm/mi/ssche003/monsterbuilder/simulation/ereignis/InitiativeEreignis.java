@@ -13,9 +13,9 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 public class InitiativeEreignis implements EncounterEreignis {
     
     ArrayList<Akteur> alleTeilnehmer;
-    public InitiativeEreignis(Set<Monster> monster, Set<Charakter> charaktere) {
-        alleTeilnehmer = new ArrayList<Akteur>(monster);
-        alleTeilnehmer.addAll(charaktere);
+    public InitiativeEreignis(Monster monster, Set<Charakter> charaktere) {
+        alleTeilnehmer = new ArrayList<Akteur>(charaktere);
+        alleTeilnehmer.add(monster);
     }
     
     @Override

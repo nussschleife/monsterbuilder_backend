@@ -1,4 +1,21 @@
 # -*- coding: utf-8 -*-
+
+### INFO ###
+#
+#Angriffe:
+#akteur.getAlleAngriffe()
+#
+#Zauber:
+#akteur.getAlleZauber()
+#
+#Aktionen:
+#akteur.getAlleAktionen()
+#
+#Lebenspunkte:
+#akteur.getAlleLebenspunkte()
+###
+
+
 global alleCharaktere, alleMonster, aktuellesEreignis, state, akteur    
 alleGegner = alleCharaktere if isinstance(akteur, Monster) else alleMonster
 #koennen beliebig erweitert werden

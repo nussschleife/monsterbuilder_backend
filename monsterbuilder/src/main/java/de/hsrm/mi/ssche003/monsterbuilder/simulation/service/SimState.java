@@ -11,13 +11,12 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 public class SimState {
     private ArrayList<Akteur> lebendig;
     private Set<Charakter> charaktere;
-    private Set<Monster> monster;
+    private Monster monster;
     private int kampfrunden;
-    //Battlemap usw.
 
     public SimState(){}
 
-    public SimState initSimState(Set<Charakter> gruppe, Set<Monster> monster) {
+    public SimState initSimState(Set<Charakter> gruppe, Monster monster) {
         this.lebendig = new ArrayList<>();
         this.charaktere = gruppe;
         this.monster = monster;
@@ -30,7 +29,7 @@ public class SimState {
     }
 
     public boolean istMonsterBesiegt() {
-      return !lebendig.stream().anyMatch(mon -> monster.stream().anyMatch(m -> m.getName().equals(mon.getName())));
+      return !lebendig.stream().anyMatch(mon -> mon.getName().equals(monster.getName()));
     }
 
     public boolean istGruppeBesiegt() {
@@ -53,7 +52,7 @@ public class SimState {
         return charaktere;
     }
 
-    public Set<Monster> getMonster() {
+    public Monster getMonster() {
         return monster;
     }
 

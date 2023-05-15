@@ -10,7 +10,7 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteur.monster.Monster;
 import de.hsrm.mi.ssche003.monsterbuilder.simulation.dto.simValue.SimValue;
 
 public class SimRequest {
-    Set<Monster> monster = new HashSet<>();
+    Monster monster;
     Gruppe gruppe;
     ArrayList<SimValue> values = new ArrayList<>();
     String userName;
@@ -27,11 +27,11 @@ public class SimRequest {
         return userName;
     }
 
-    public Set<Monster> getMonster() {
+    public Monster getMonster() {
         return monster;
     }
 
-    public void setMonster(Set<Monster> monster) {
+    public void setMonster(Monster monster) {
         this.monster = monster;
     }
 
