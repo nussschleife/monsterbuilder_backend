@@ -6,29 +6,25 @@ import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.Akteur;
 import de.hsrm.mi.ssche003.monsterbuilder.akteurverwaltung.regelelement.Regelelement;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Transient;
 
 @Entity @DiscriminatorValue("PRONE")
 public class Prone extends Condition {
     private String name = "PRONE";
     
-    @Transient
-    int ruestungsklasse;
-
     @Override
     public Akteur wirkeCondition(Akteur gegner) {
         Condition kopie = new Prone();
         kopie.setDauer(dauer);
         kopie.getBetroffeneAkteure().add(gegner);
         gegner.addCondition(kopie); 
-        gegner.setRuestungsklasse(0);
+        gegner.setRuestungsklasse(gegner.getRuestungsklasse()-2);
         return gegner;
     }
 
     @Override
     public void beendeCondition(Akteur gegner) {
         super.beendeCondition(gegner);
-        gegner.setRuestungsklasse(ruestungsklasse);
+        gegner.setRuestungsklasse(gegner.getRuestungsklasse()+2);
     }
 
     @Override @JsonIgnore

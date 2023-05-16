@@ -43,7 +43,7 @@ public class EncounterSimulationMaster {
             CompletableFuture<SimResult> result = CompletableFuture.supplyAsync(() -> {
                 try { return task.call(); }
                 catch (Exception ex) { 
-                    logger.info(ex.toString()); 
+                    logger.error(ex.toString()); 
                     throw new EncounterSimulationException(ex.getMessage()); 
                 } 
             }, executor);
