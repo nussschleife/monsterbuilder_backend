@@ -26,9 +26,6 @@ class States:
    SCARED = 4
 
 def findeAktion(akteur, ereignis):
-    global alleGegner
-    global aktuellesEreignis
-    ereignis = aktuellesEreignis
     if len(akteur.getAlleAktionen()) > 0:
     ##aktion aussuchen und verwenden##
         aktion = akteur.getAlleAktionen()[0]
@@ -46,7 +43,11 @@ def findeAktion(akteur, ereignis):
 ##hier koennen States gesetzt werden##
 akteurstate = States.ALIVE
 ##Aktion wird waehren der Simulation ausgefuehrt##
-findeAktion(akteur, aktuellesEreignis)
 
-def log():
-    return alleGegner.values()
+def findeAkteur():
+    for key in alleAkteure.keys():
+        if key == str(akteur.getName()):
+            return alleAkteure[key]
+        
+akteurKopie = findeAkteur()       
+findeAktion(akteurKopie, aktuellesEreignis)
