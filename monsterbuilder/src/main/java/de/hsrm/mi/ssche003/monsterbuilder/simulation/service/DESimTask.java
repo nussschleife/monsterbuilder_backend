@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.python.core.PyException;
+import org.python.core.PyList;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
@@ -72,6 +73,7 @@ public class DESimTask implements SimTask {
             interpreter.set("toInit", chara);
             interpreter.get("initialisiere").__call__();
         }
+        //TODO: lebende = alleAkteure aus Python, dann wird nie Original reingegeben!
     }
 
     private String getSkriptPath(Alignment alignment) {
@@ -133,10 +135,18 @@ public class DESimTask implements SimTask {
             interpreter.set("aktuellesEreignis", aktuell);
             interpreter.set("state", state);
             interpreter.set("akteur", mon);
+            PyObject py1 = interpreter.get("gegner");
+            PyObject py2 = interpreter.get("akteurKopie");
+            PyObject py3 = interpreter.get("alleGegner");
+           
             try{
                 interpreter.execfile(getSkriptPath(mon.getAlignment())); 
+                py1 = interpreter.get("gegner");
+                py2 = interpreter.get("akteurKopie");
+                py3 = interpreter.get("alleGegner");
+                logger.info("hi");
             } catch(PyException py) {
-                logger.error(py.toString());
+                logger.error(py.toString() + "\n" + "Dran war: "+ mon.getClass());
                 istFehlerAufgetreten = true;
             }
             
